@@ -15,7 +15,6 @@ if (process.env.MONGODB_PASSWORD) {
     process.env[mongoServiceName + '_SERVICE_HOST'] + ':' +
     process.env[mongoServiceName + '_SERVICE_PORT'] + '/' +
     process.env.MONGODB_DATABASE
-   
 }
 
 var config = {

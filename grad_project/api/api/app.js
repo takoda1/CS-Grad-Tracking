@@ -37,3 +37,5 @@ app.use(function (err, req, res) {
   res.status(err.status || 500)
   res.json({ 'error': err.message })
 })
+
+module.exports = app
