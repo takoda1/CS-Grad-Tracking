@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+// Edit this place to set the port number and ip addess of the server that is running the application.
+// It defaults to localhost:3000
+var mongoose = require('mongoose')
+var app = require('../api/app')
+global.server = {}
+
+var connectionString = null
+if (process.env.MONGODB_PASSWORD) {
+  var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase()
+  connectionString = 'mongodb://' +
+    process.env.MONGODB_USER + ':' +
+    process.env.MONGODB_PASSWORD + '@' +
+    process.env[mongoServiceName + '_SERVICE_HOST'] + ':' +
+    process.env[mongoServiceName + '_SERVICE_PORT'] + '/' +
+    process.env.MONGODB_DATABASE
+   
+}
+
+var config = {
+  production: connectionString || 'mongodb://localhost/grad_project',
+  development: connectionString || 'mongodb://localhost/grad_project',
+  test: connectionString || 'mongodb://localhost/grad_project-test',
+  port: (process.env.MONGODB_PASSWORD) ? 8080 : 3000,
+  host: (process.env.MONGODB_PASSWORD) ? '0.0.0.0' : '127.0.0.1'
+//   port: 8080,
+//   host: '0.0.0.0'
+}
+
+mongoose.connect(config[app.settings.env])
+mongoose.connection
+  .on('error', console.error.bind(console, 'connection error:'))
+  .once('open', function () {
+    global.server = app.listen(config.port, config.host)
+    console.log('api started')
+  })
