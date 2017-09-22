@@ -27,7 +27,7 @@ app
 
 // catch 404 and forward to error handler
 app.use(function (req, res) {
-  var err = new Error('Not Fount')
+  var err = new Error('Not Found')
   err.status = 404
 })
 
