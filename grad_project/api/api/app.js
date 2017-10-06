@@ -5,7 +5,7 @@ var compress = require('compress')
 
 var app = express()
 
-// express apI setup
+// express api setup
 app
   .use(compress())
   .use(bodyParser.json())
