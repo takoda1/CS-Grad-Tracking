@@ -21,7 +21,7 @@ var studentSchema = mongoose.Schema({
   username: String,
   firstName: String,
   lastName: String,
-  PID: Number,
+  pid: Number,
   alternativeName: String,
   gender: { enum: ['MALE', 'FEMALE', 'OTHER'] },
   ethnicity: { enum: ['AIAN', 'ASIAN', 'BLACK', 'HISPANIC', 'PACIFIC', 'WHITE'] },
@@ -81,5 +81,13 @@ var jobSchema = mongoose.Schema({
   course: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
   student: {type: mongoose.Schema.Types.ObjectId, ref: 'Student'},
 })
+
+schema.Admin = mongoose.model('Admin', adminSchema)
+schema.Faculty = mongoose.model('Faculty', facultySchema, 'Faculty')
+schema.Student = mongoose.model('Student', studentSchema)
+schema.Document = mongoose.model('Document', documentSchema)
+schema.Semester = mongoose.model('Semester', semesterSchema)
+schema.Course = mongoose.model('Course', courseSchema)
+schema.Joba = mongoose.model('Job', jobSchema)
 
 module.exports = schema
