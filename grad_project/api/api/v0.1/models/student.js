@@ -8,7 +8,7 @@ var regexSlashes = /\/*\//ig
  * @api {post} /api/student
  * @class Student
  *
- * @description userame, name and pid required
+ * @description username, name and pid required
  *
  * @param {String} username (Required)
  * @param {String} firstName Students's first name (Required)
@@ -44,39 +44,25 @@ var regexSlashes = /\/*\//ig
  * @throws {Object} RequiredParamNotFound Required parameter is missing
  */
 _.post = function (input, res) {
-  schema.Student.findOne({username: input.username}, function (err, result) {
-    if (err) {
-      res.json({
-        'error': err.message,
-        'origin': 'student.post'
-      })
-    } else {
-      if (result) {
-        res.json({
-          'error': 'DuplicateStudent',
-          'origin': 'student.post'
-        })
-      } else {
+  schema.Student.findOne({username: input.username}).exec().then(function (result) {
+    if (result) reject(new Error('DuplicateStudent'))
+    else {
+      schema.Student.findOne({pid: input.pid}).exec().then(function (result) {
+        if (result) reject(new Error('DuplicateStudent'))
+      }).then(function () {
         if (input.username && input.firstName && input.lastName && input.pid) {
           var inputStudent = new schema.Student(util.validateModelData(input, schema.Student))
-          inputStudent.save(function (err, result) {
-            if (err) {
-              res.json({
-                'error': err.message,
-                'origin': 'student.post'
-              })
-            } else {
-              res.json(result)
-            }
-          })
-        } else {
-          res.send({
-            'error': 'RequiredParamNotFound',
-            'origin': 'student.post'
-          })
-        }
-      }
+          return inputStudent.save()
+        } else reject(new Error('RequiredParamNotFound'))
+      })
     }
+  }).then(function (student) {
+    res.json(user)
+  }).catch(function (err) {
+    res.json({
+      'error': err.message,
+      'origin': 'student.post'
+    })
   })
 }
 
@@ -84,7 +70,7 @@ _.post = function (input, res) {
  * @api {get} /api/student
  * @class Student
  * 
- * @description At least one argument required
+ * @description All params optional
  * 
  * @param {String} username 
  * @param {String} firstName Students's first name
@@ -117,22 +103,17 @@ _.post = function (input, res) {
  * @returns {Object} success Matching students
  */
 _.get = function (input, res) {
-  var query = util.validateModelData(input)
+  var query = util.validateModelData(input, schema.Student)
   if (input.username || input.firstName || input.lastName) {
     query.username = (input.username.match(regexSlashes)) ? new RegExp(input.username.substring(1, input.username.length - 1), 'ig') : input.username
     query.firstName = (input.firstName.match(regexSlashes)) ? new RegExp(input.firstName.substring(1, input.firstName.length - 1), 'ig') : input.firstName
     query.lastName = (input.lastName.match(regexSlashes)) ? new RegExp(input.lastName.substring(1, input.lastName.length - 1), 'ig') : input.lastName
   }
 
-  schema.Student.find(query).exec(function (err, result) {
-    if (err) {
-      res.json({
-        'error': err.message,
-        'origin': 'student.get'
-      })
-    } else {
-      res.json(result)
-    }
+  schema.Student.find(query).exec().then(function (result) {
+    res.json(result)
+  }).catch(function (err) {
+    res.json({'error': err.message, 'origin': 'student.get'})
   })
 }
 
@@ -178,30 +159,18 @@ _.get = function (input, res) {
  */
 _.put = function (input, res) {
   if (input.username) {
-    schema.Student.findOne({username: input.username}, function (err, result) {
-      if (err) {
-        res.json({
-          'error': 'StudentNotFound',
-          'origin': 'student.put'
-        })
-      } else {
-        schema.Student.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Student), {new: true})
-          .exec(function (err, result) {
-            if (err) {
-              res.json({
-                'error': err.message,
-                'origin': 'student.put'
-              })
-            } else {
-              res.json(result)
-            }
-          })
-      }
+    schema.Student.findOne({username: input.username}).exec().then(function (result) {
+      if (!result) reject(new Error('StudentNotFound'))
+      else 
+        return schema.Student.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Student), {new: true}).exec()
+    }).then(function (result) {
+      res.json(result)
+    }).catch(function (err) {
+      res.json({'error': err.message, 'origin': 'student.put'})
     })
   } else {
-    res.json({
-      'error': 'RequiredParamNotFound',
-      'origin': 'student.put'
+    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+      res.json({'error': err.message, 'origin': 'student.put'})
     })
   }
 }
@@ -221,11 +190,17 @@ _.put = function (input, res) {
  */
 _.delete = function (input, res) {
   if (input.username) {
-    schema.Student.findOneAndRemove({})
+    schema.Student.findOne({username: input.username}).exec().then(function (result) {
+      if (result) return schema.findOneAndRemove({username: input.username}).exec()
+      else reject(new Error('StudentNotFound'))
+    }).then(function (result) {
+      res.json(result)
+    }).catch(function (err) {
+      res.json({'error': err.message, 'origin': 'student.delete'})
+    })
   } else {
-    res.json({
-      'error': 'RequiredParamNotFound',
-      'origin': 'student.delete'
+    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+      res.json({'error': err.message, 'origin': 'student.delete'})
     })
   }
 }

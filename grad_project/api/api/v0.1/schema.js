@@ -11,9 +11,9 @@ var adminSchema = mongoose.Schema({
 // Faculty
 var facultySchema = mongoose.Schema({
   username: String,
-  PID: Number,
   firstName: String,
   lastName: String,
+  pid: Number,
 })
 
 // Students
@@ -23,18 +23,34 @@ var studentSchema = mongoose.Schema({
   lastName: String,
   pid: Number,
   alternativeName: String,
-  gender: { enum: ['MALE', 'FEMALE', 'OTHER'] },
-  ethnicity: { enum: ['AIAN', 'ASIAN', 'BLACK', 'HISPANIC', 'PACIFIC', 'WHITE'] },
+  gender: { 
+    type: String,
+    enum: ['MALE', 'FEMALE', 'OTHER'],
+    default: 'OTHER' 
+  },
+  ethnicity: { 
+    type: String,
+    enum: ['AIAN', 'ASIAN', 'BLACK', 'HISPANIC', 'PACIFIC', 'WHITE', 'OTHER'],
+    default: 'OTHER' 
+  },
   status: String,
   citizenship: Boolean,
-  residency: { enum: ['YES', 'NO', 'APPLIED'] },
+  residency: { 
+    type: String,
+    enum: ['YES', 'NO', 'APPLIED'],
+    default: 'NO' 
+  },
   enteringStatus: String,
   researchArea: String,
   backgroundApproved: Boolean,
   leaveExtension: String,
   fundingEligibility: Boolean,
   fundingStatus: Boolean,
-  intendedDegree: { enum: ['MASTERS', 'PHD', 'BOTH'] },
+  intendedDegree: { 
+    type: String,
+    enum: ['MASTERS', 'PHD', 'BOTH'],
+    default: 'MASTERS' 
+  },
   hoursCompleted: Number,
   prp: Boolean,
   oralExam: Boolean,
