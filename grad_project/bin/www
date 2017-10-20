@@ -3,6 +3,9 @@
 // Edit this place to set the port number and ip addess of the server that is running the application.
 // It defaults to localhost:3000
 var mongoose = require('mongoose')
+mongoose.Promise = require('bluebird')
+assert.equal(query.exec().constructor, require('bluebird'))
+
 var app = require('../api/app')
 global.server = {}
 

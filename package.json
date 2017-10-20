@@ -6,6 +6,7 @@
   "instances": "max",
   "exec_mode": "cluster",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "body-parser": "^1.17.0",
     "compression": "^1.6.2",
     "connect-multiparty": "^2.0.0",

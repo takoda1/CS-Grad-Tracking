@@ -34,7 +34,7 @@ var studentSchema = mongoose.Schema({
   leaveExtension: String,
   fundingEligibility: Boolean,
   fundingStatus: Boolean,
-  intendedDegree: { enum: ['MASTERS', 'PHD'] },
+  intendedDegree: { enum: ['MASTERS', 'PHD', 'BOTH'] },
   hoursCompleted: Number,
   prp: Boolean,
   oralExam: Boolean,
