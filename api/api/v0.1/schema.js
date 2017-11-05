@@ -1,4 +1,5 @@
 var mongoose = require('mongoose')
+var util = require('./util')
 var schema = {}
 
 // Administrators
@@ -66,7 +67,6 @@ var studentSchema = mongoose.Schema({
 // Documents
 var documentSchema = mongoose.Schema({
   title: String,
-  location: String,
   backgroundSheet: Boolean,
   student: {type: mongoose.Schema.Types.ObjectId, ref: 'Student'}
 })
@@ -82,12 +82,13 @@ var semesterSchema = mongoose.Schema({
 
 // Courses
 var courseSchema = mongoose.Schema({
+  department: String,
   number: Number,
   name: String,
   category: String,
   hours: Number,
-  department: String,
-  faculty: {type: mongoose.Schema.Types.ObjectId, ref: 'Faculty'}
+  faculty: {type: mongoose.Schema.Types.ObjectId, ref: 'Faculty'},
+  semester: {type: mongoose.Schema.Types.ObjectId, ref: 'Semester'}
 })
 
 // Jobs
@@ -98,12 +99,83 @@ var jobSchema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref: 'Student'},
 })
 
+// Schema pre-hooks
+
+facultySchema.pre('save', function (next) {
+  if (this.username && this.firstName && this.lastName && this.pid) next()
+  else next(new Error('RequiredParamNotFound'))
+})
+
+facultySchema.pre('findOneAndUpdate', function (next) {
+  if (this.username) next()
+  else next(new Error('RequiredParamNotFound'))
+})
+
+facultySchema.pre('findOneAndRemove', function (next) {
+  if (this.username) next() 
+  else next(new Error('RequiredParamNotFound'))
+})
+
+studentSchema.pre('save', function (next) {
+  if (this.username && this.firstName && this.lastName && this.pid) next()
+  else next(new Error('RequiredParamNotFound'))
+})
+
+studentSchema.pre('find', function (next) {
+  if (this.student) {
+    studentSchema.find({})
+  }
+})
+
+studentSchema.pre('findOneAndUpdate', function (next) {
+  if (this.username) next()
+  else next(new Error('RequiredParamNotFound'))
+})
+
+documentSchema.pre('save', function (next) {
+  if (this.title && this.student) {
+    schema.Student.findOne({username: this.student}).exec().then(function (result) {
+      if (result) next()
+      else reject(new Error('InvalidStudent'))
+    })
+    next()
+  }
+  else next(new Error('RequiredParamNotFound'))
+})
+
+semesterSchema.pre('save', function (next) {
+  if (this.year && this.season) next()
+  else next(new Error('RequiredParamNotFound'))
+})
+
+courseSchema.pre('save', function (next) {
+  if (this.department && this.number && this.name && this.category && this.hours && this.faculty && this.semester) {
+    if (this.department.length == 4) next()
+    else next(new Error('InvalidDepartment'))
+  } else next(new Error('RequiredParamNotFound'))
+})
+
+courseSchema.pre('find', function (next) {
+  if (this.faculty) {
+    facultySchema.findOne({'username': this.faculty}).exec().then(function (result) {
+      if (result) this.faculty = result._id
+      else reject(new Error('UnknownFaculty'))
+    })
+  }
+  if (this.semester) {
+    semesterSchema.findOne(this.semester).exec().then(function (result) {
+      if (result) this.semester = result._id
+      else reject(new Error('UnknownSemester'))
+    })
+  }
+})
+
 schema.Admin = mongoose.model('Admin', adminSchema)
 schema.Faculty = mongoose.model('Faculty', facultySchema, 'Faculty')
 schema.Student = mongoose.model('Student', studentSchema)
 schema.Document = mongoose.model('Document', documentSchema)
 schema.Semester = mongoose.model('Semester', semesterSchema)
 schema.Course = mongoose.model('Course', courseSchema)
-schema.Joba = mongoose.model('Job', jobSchema)
+schema.Job = mongoose.model('Job', jobSchema)
 
 module.exports = schema

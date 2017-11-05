@@ -4,7 +4,7 @@
 // It defaults to localhost:3000
 var mongoose = require('mongoose')
 mongoose.Promise = require('bluebird')
-assert.equal(query.exec().constructor, require('bluebird'))
+//assert.equal(query.exec().constructor, require('bluebird'))
 
 var app = require('../api/app')
 global.server = {}
@@ -21,9 +21,9 @@ if (process.env.MONGODB_PASSWORD) {
 }
 
 var config = {
-  production: connectionString || 'mongodb://localhost/grad_project',
-  development: connectionString || 'mongodb://localhost/grad_project',
-  test: connectionString || 'mongodb://localhost/grad_project-test',
+  production: connectionString || 'mongodb://localhost/blockchain_wifi',
+  development: connectionString || 'mongodb://localhost/blockchain_wifi',
+  test: connectionString || 'mongodb://localhost/blockchain_wifi-test',
   port: (process.env.MONGODB_PASSWORD) ? 8080 : 3000,
   host: (process.env.MONGODB_PASSWORD) ? '0.0.0.0' : '127.0.0.1'
 //   port: 8080,

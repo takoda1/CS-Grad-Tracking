@@ -87,7 +87,10 @@ _.get = function (input, res) {
  */
 _.put = function (input, res) {
   if (input.username) {
-
+    schema.Faculty.findOne({username: input.username}).exec().then(function (result) {
+      if (result) return schema.Faculty.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Faculty)).exec()
+      else reject(new Error('FacultyNotFound'))
+    })
   } else {
     reject(new Error('RequiredParamNotFound')).catch(function (err) {
       res.json({'error': err.message, 'origin': 'faculty.put'})

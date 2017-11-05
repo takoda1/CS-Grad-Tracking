@@ -35,7 +35,7 @@ function routeHandler (req, res, callback) {
   }
 }
 
-// admin 
+// admin
 router.use('/admin/:username?', function (req, res, next) {
   routeHandler(req, res, admin[req.method.toLowerCase()])
 })
@@ -126,3 +126,5 @@ router.get('/download/:id', function (req, res) {
     }
   })
 })
+
+module.exports = router

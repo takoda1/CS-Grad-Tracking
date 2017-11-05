@@ -34,8 +34,8 @@ var regexSlashes = /\/*\//ig
  * @param {Boolean} allButDissertation
  * @param {Boolean} dissertationDefence
  * @param {Boolean} finalDissertation
- * @param {String} semesterStarted (MongoID)
- * @param {String} advisor (MongoID)
+ * @param {Object} semesterStarted
+ * @param {String} advisor
  * @param {Object} courseHistory (MongoID array)
  * 
  * @returns {Object} success The newly created or updated student data
