@@ -1,4 +1,5 @@
 var express = require('express')
+var sessions = require('client-sessions')
 var path = require('path')
 var bodyParser = require('body-parser')
 var compress = require('compression')
@@ -8,6 +9,12 @@ var app = express()
 // express api setup
 app
   .use(compress())
+  .use(sessions({
+    cookieName: 'gradInfoSession',
+    secret: 'ugzEbQSRk7YM23PAJn1yOeG9GkTak1xah70dF0ePF3PmsEMxoWan4ihH0ZLVfhdYDpWF6egzAhPHztW7dGxzkY6jMzjBsr3kQzlW',
+    duration: 3 * 60 * 60 * 1000,
+    activeDuration: 2 * 60 * 1000
+  }))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .set('view cache', true)

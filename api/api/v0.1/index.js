@@ -35,6 +35,11 @@ function routeHandler (req, res, callback) {
   }
 }
 
+// login
+router.use('/login', function (req, res, next) {
+  
+})
+
 // admin
 router.use('/admin/:username?', function (req, res, next) {
   routeHandler(req, res, admin[req.method.toLowerCase()])
@@ -74,7 +79,7 @@ router.use('/document/:id?', function (req, res, next) {
 router.post('/upload/:id', multiparty, function (req, res) {
   var gfs = new Gridfs(mongoose.connection.db, mongoose.mongo)
 
-  schema.Image.findOne({_id: req.params.id}).exec(function (err, result) {
+  schema.Document.findOne({_id: req.params.id}).exec(function (err, result) {
     if (err) {
       res.send({
         'error': 'UnknownID',
@@ -111,7 +116,7 @@ router.post('/upload/:id', multiparty, function (req, res) {
 router.get('/download/:id', function (req, res) {
   var gfs = new Gridfs(mongoose.connection.db, mongoose.mongo)
 
-  schema.Image.findOne({_id: req.params.id}).exec(function (err, result) {
+  schema.Document.findOne({_id: req.params.id}).exec(function (err, result) {
     if (err) {
       res.send({
         'error': 'UnknownID',

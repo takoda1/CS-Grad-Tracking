@@ -1,20 +1,21 @@
+/* global reject */
+
 var schema = require('../schema')
 var util = require('../util')
 
-var _  = {}
-var regexSlashes = /\/*\//ig
+var _ = {}
 
 /**
  * @api {post} /api/semester
  * @class Semester
- * 
- * @description All params required 
- * 
- * @param {Number} year 
+ *
+ * @description All params required
+ *
+ * @param {Number} year
  * @param {enum ['FALL', 'SPRING']} season
  *
  * @returns {Object} success Newly created semester
- * 
+ *
  * @throws {Object} DuplicateSemester
  * @throws {Object} RequiredParamNotFound
  */
@@ -22,7 +23,7 @@ _.post = function (input, res) {
   schema.Semester.findOne(util.validateModelData(input, schema.Semester)).exec().then(function (result) {
     if (result) reject(new Error('DuplicateSemester'))
     else {
-      inputSemester = new schema.Semester(util.validateModelData(input, schema.Semester))
+      var inputSemester = new schema.Semester(util.validateModelData(input, schema.Semester))
       return inputSemester.save()
     }
   }).then(function (semester) {
@@ -35,12 +36,12 @@ _.post = function (input, res) {
 /**
  * @api {get} /api/semester
  * @class Semester
- * 
+ *
  * @description All params optional
- * 
+ *
  * @param {Number} year
  * @param {enum ['FALL', 'SPRING']} season
- * 
+ *
  * @returns {Object} success Matching semesters
  */
 _.get = function (input, res) {
@@ -54,14 +55,14 @@ _.get = function (input, res) {
 /**
  * @api {delete} /api/semester
  * @class Semester
- * 
+ *
  * @description All params required
- * 
+ *
  * @param {Number} year (Required)
  * @param {enum ['FALL', 'SPRING']} season (Required)
- * 
- * @returns {Object} success 
- * 
+ *
+ * @returns {Object} success
+ *
  * @throws {Object} SemesterNotFound
  * @throws {Object} RequiredParamNotFound
  */

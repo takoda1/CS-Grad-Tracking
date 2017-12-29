@@ -1,3 +1,4 @@
+/* global reject */
 var mongoose = require('mongoose')
 var util = require('./util')
 var schema = {}
@@ -6,7 +7,7 @@ var schema = {}
 var adminSchema = mongoose.Schema({
   username: String,
   firstName: String,
-  lastName: String,
+  lastName: String
 })
 
 // Faculty
@@ -14,7 +15,7 @@ var facultySchema = mongoose.Schema({
   username: String,
   firstName: String,
   lastName: String,
-  pid: Number,
+  pid: Number
 })
 
 // Students
@@ -24,22 +25,22 @@ var studentSchema = mongoose.Schema({
   lastName: String,
   pid: Number,
   alternativeName: String,
-  gender: { 
+  gender: {
     type: String,
     enum: ['MALE', 'FEMALE', 'OTHER'],
-    default: 'OTHER' 
+    default: 'OTHER'
   },
-  ethnicity: { 
+  ethnicity: {
     type: String,
     enum: ['AIAN', 'ASIAN', 'BLACK', 'HISPANIC', 'PACIFIC', 'WHITE', 'OTHER'],
-    default: 'OTHER' 
+    default: 'OTHER'
   },
   status: String,
   citizenship: Boolean,
-  residency: { 
+  residency: {
     type: String,
     enum: ['YES', 'NO', 'APPLIED'],
-    default: 'NO' 
+    default: 'NO'
   },
   enteringStatus: String,
   researchArea: String,
@@ -47,10 +48,10 @@ var studentSchema = mongoose.Schema({
   leaveExtension: String,
   fundingEligibility: Boolean,
   fundingStatus: Boolean,
-  intendedDegree: { 
+  intendedDegree: {
     type: String,
     enum: ['MASTERS', 'PHD', 'BOTH'],
-    default: 'MASTERS' 
+    default: 'MASTERS'
   },
   hoursCompleted: Number,
   prp: Boolean,
@@ -96,7 +97,7 @@ var jobSchema = mongoose.Schema({
   position: String,
   supervisor: {type: mongoose.Schema.Types.ObjectId, ref: 'Faculty'},
   course: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
-  student: {type: mongoose.Schema.Types.ObjectId, ref: 'Student'},
+  students: [{type: mongoose.Schema.Types.ObjectId, ref: 'Student'}]
 })
 
 // Schema pre-hooks
@@ -112,7 +113,7 @@ facultySchema.pre('findOneAndUpdate', function (next) {
 })
 
 facultySchema.pre('findOneAndRemove', function (next) {
-  if (this.username) next() 
+  if (this.username) next()
   else next(new Error('RequiredParamNotFound'))
 })
 
@@ -139,8 +140,7 @@ documentSchema.pre('save', function (next) {
       else reject(new Error('InvalidStudent'))
     })
     next()
-  }
-  else next(new Error('RequiredParamNotFound'))
+  } else next(new Error('RequiredParamNotFound'))
 })
 
 semesterSchema.pre('save', function (next) {
@@ -150,7 +150,7 @@ semesterSchema.pre('save', function (next) {
 
 courseSchema.pre('save', function (next) {
   if (this.department && this.number && this.name && this.category && this.hours && this.faculty && this.semester) {
-    if (this.department.length == 4) next()
+    if (this.department.length === 4) next()
     else next(new Error('InvalidDepartment'))
   } else next(new Error('RequiredParamNotFound'))
 })

@@ -1,8 +1,8 @@
+/* global reject */
 var schema = require('../schema')
 var util = require('../util')
 
 var _ = {}
-var regexSlashes = /\/*\//ig
 
 /**
  * @api {post} /api/student
@@ -37,7 +37,7 @@ var regexSlashes = /\/*\//ig
  * @param {Object} semesterStarted
  * @param {String} advisor
  * @param {Object} courseHistory (MongoID array)
- * 
+ *
  * @returns {Object} success The newly created or updated student data
  *
  * @throws {Object} DuplicateStudent Student already exists
@@ -57,7 +57,7 @@ _.post = function (input, res) {
       })
     }
   }).then(function (student) {
-    res.json(user)
+    res.json(student)
   }).catch(function (err) {
     res.json({
       'error': err.message,
@@ -69,10 +69,10 @@ _.post = function (input, res) {
 /**
  * @api {get} /api/student
  * @class Student
- * 
+ *
  * @description All params optional
- * 
- * @param {String} username 
+ *
+ * @param {String} username
  * @param {String} firstName Students's first name
  * @param {String} lastName Students's last name
  * @param {Number} pid Student's PID
@@ -99,32 +99,24 @@ _.post = function (input, res) {
  * @param {String} semesterStarted (MongoID)
  * @param {String} advisor (MongoID)
  * @param {Object} courseHistory (MongoID array)
- * 
+ *
  * @returns {Object} success Matching students
  */
 _.get = function (input, res) {
-  var query = util.validateModelData(input, schema.Student)
-  if (input.username || input.firstName || input.lastName) {
-    query.username = (input.username.match(regexSlashes)) ? new RegExp(input.username.substring(1, input.username.length - 1), 'ig') : input.username
-    query.firstName = (input.firstName.match(regexSlashes)) ? new RegExp(input.firstName.substring(1, input.firstName.length - 1), 'ig') : input.firstName
-    query.lastName = (input.lastName.match(regexSlashes)) ? new RegExp(input.lastName.substring(1, input.lastName.length - 1), 'ig') : input.lastName
-  }
-
-  schema.Student.find(query).exec().then(function (result) {
+  schema.Student.find(util.regexTransform(input, schema.Student)).exec().then(function (result) {
     res.json(result)
   }).catch(function (err) {
     res.json({'error': err.message, 'origin': 'student.get'})
   })
 }
 
-
 /**
  * @api {put} /api/student
  * @class Student
- * 
+ *
  * @description username required
- * 
- * @param {String} username 
+ *
+ * @param {String} username
  * @param {String} firstName Students's first name
  * @param {String} lastName Students's last name
  * @param {Number} pid Student's PID
@@ -151,18 +143,19 @@ _.get = function (input, res) {
  * @param {String} semesterStarted (MongoID)
  * @param {String} advisor (MongoID)
  * @param {Object} courseHistory (MongoID array)
- * 
+ *
  * @returns {Object} success Newly updated student data
- * 
- * @throws {Object} StudentNotFound 
+ *
+ * @throws {Object} StudentNotFound
  * @throws {Object} RequiredParamNotFound Required parameter is missing
  */
 _.put = function (input, res) {
   if (input.username) {
     schema.Student.findOne({username: input.username}).exec().then(function (result) {
       if (!result) reject(new Error('StudentNotFound'))
-      else 
+      else {
         return schema.Student.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Student), {new: true}).exec()
+      }
     }).then(function (result) {
       res.json(result)
     }).catch(function (err) {
@@ -178,13 +171,13 @@ _.put = function (input, res) {
 /**
  * @api {delete} /api/student
  * @class Student
- * 
+ *
  * @description username is required
- * 
+ *
  * @param {String} username
- * 
+ *
  * @returns {Object} success Deleted student data
- * 
+ *
  * @throws {Object} StudentNotFound
  * @throws {Object} RequiredParamNotFound Required paramter is missing
  */
