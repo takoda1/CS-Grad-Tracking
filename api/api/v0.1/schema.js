@@ -1,6 +1,5 @@
 /* global reject */
 var mongoose = require('mongoose')
-var util = require('./util')
 var schema = {}
 
 // Administrators

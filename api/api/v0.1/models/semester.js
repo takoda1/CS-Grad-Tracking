@@ -69,8 +69,8 @@ _.get = function (input, res) {
 _.delete = function (input, res) {
   if (input.year && input.season) {
     schema.Semester.findOne(util.validateModelData(input, schema.Semester)).exec().then(function (result) {
-      if (result) return schema.Semester.findOneAndRemove(util.validateModelData(input, schema.Semester))
-      else reject(new Error('SemesterNotFound'))
+      if (!result) reject(new Error('SemesterNotFound'))
+      else return schema.Semester.findOneAndRemove(util.validateModelData(input, schema.Semester))
     }).then(function (semester) {
       res.json(semester)
     }).catch(function (err) {

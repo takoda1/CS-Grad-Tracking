@@ -12,7 +12,6 @@ global.chai.use(require('chai-fs'))
 process.env.NODE_ENV = 'test'
 
 global.www = require('../bin/www')
-global.user = require('../api/api/v0.1/models/user')
-global.image = require('../api/api/v0.1/models/image')
+require('../test/models/faculty')
 
 global.uri = 'http://localhost:3000'

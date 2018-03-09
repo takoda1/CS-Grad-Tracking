@@ -30,7 +30,7 @@ _.post = function (input, res) {
         else {
           if (input.username && input.firstName && input.lastName && input.pid) {
             var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))
-            return inputFaculty
+            return inputFaculty.save()
           } else reject(new Error('RequiredParamNotFound'))
         }
       })
@@ -82,7 +82,7 @@ _.get = function (input, res) {
 _.put = function (input, res) {
   if (input.username) {
     schema.Faculty.findOne({username: input.username}).exec().then(function (result) {
-      if (result) return schema.Faculty.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Faculty)).exec()
+      if (result) return schema.Faculty.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Faculty), {new: true}).exec()
       else reject(new Error('FacultyNotFound'))
     })
   } else {

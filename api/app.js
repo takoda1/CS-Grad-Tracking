@@ -23,7 +23,8 @@ app
       res.cookie('onyen', req.headers.uid, { httponly: false })
     }
     res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE')
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
+    next()
   })
 
 // routes to use for api
