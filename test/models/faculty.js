@@ -19,7 +19,6 @@ describe('POST requests for /faculty', function () {
       })
       .end(function (err, res) {
         if (err) throw err
-        console.log(res)
         expect(res).to.have.status(200)
         expect(res.body).to.have.property('error').equal('RequiredParamNotFound')
         done()
@@ -35,7 +34,6 @@ describe('POST requests for /faculty', function () {
       })
       .end(function (err, res) {
         if (err) throw err
-        console.log(res.body)
         expect(res).to.have.status(200)
         expect(res.body).to.have.property('error').equal('RequiredParamNotFound')
         done()
@@ -66,7 +64,6 @@ describe('POST requests for /faculty', function () {
       })
       .end(function (err, res) {
         if (err) throw err
-        console.log(res.body)
         expect(res).to.have.status(200)
         expect(res.body).to.have.property('error').equal('RequiredParamNotFound')
         done()
@@ -84,9 +81,8 @@ describe('POST requests for /faculty', function () {
       .end(function (err, res) {
         if (err) throw err
         expect(res).to.have.status(200)
-        assert.isObject(res.body, 'Response is an object')
+        expect(res.body).to.not.have.property('error')
         testFacultyId = res.body._id
-        console.log(testFacultyId)
         done()
       })
   })
@@ -104,9 +100,8 @@ describe('GET requests for /faculty', function () {
     .end(function (err, res) {
       if (err) throw err
       expect(res).to.have.status(200)
-      console.log(res.body)
-      assert.isObject(res.body, 'Response is an object')
-      assert.equal(res.body._id, testFacultyId, 'Response matches known entry')
+      assert.equal(res.body.length, 1, 'Response is incorrect length')
+      assert.equal(res.body[0]._id, testFacultyId, 'Response has unknown id')
       done()
     })
   })

@@ -1,5 +1,3 @@
-/* global reject */
-
 var schema = require('../schema')
 var util = require('../util')
 
@@ -21,7 +19,7 @@ var _ = {}
  */
 _.post = function (input, res) {
   schema.Semester.findOne(util.validateModelData(input, schema.Semester)).exec().then(function (result) {
-    if (result) reject(new Error('DuplicateSemester'))
+    if (result !== null) throw new Error('DuplicateSemester')
     else {
       var inputSemester = new schema.Semester(util.validateModelData(input, schema.Semester))
       return inputSemester.save()
@@ -69,7 +67,7 @@ _.get = function (input, res) {
 _.delete = function (input, res) {
   if (input.year && input.season) {
     schema.Semester.findOne(util.validateModelData(input, schema.Semester)).exec().then(function (result) {
-      if (!result) reject(new Error('SemesterNotFound'))
+      if (result === null) throw new Error('SemesterNotFound')
       else return schema.Semester.findOneAndRemove(util.validateModelData(input, schema.Semester))
     }).then(function (semester) {
       res.json(semester)
@@ -77,7 +75,7 @@ _.delete = function (input, res) {
       res.json({'error': err.message, 'origin': 'semester.delete'})
     })
   } else {
-    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+    throw new Error('RequiredParamNotFound').catch(function (err) {
       res.json({'error': err.message, 'origin': 'semester.delete'})
     })
   }

@@ -1,4 +1,3 @@
-/* global reject */
 var schema = require('../schema')
 var util = require('../util')
 
@@ -44,25 +43,18 @@ var _ = {}
  * @throws {Object} RequiredParamNotFound Required parameter is missing
  */
 _.post = function (input, res) {
-  schema.Student.findOne({username: input.username}).exec().then(function (result) {
-    if (result) reject(new Error('DuplicateStudent'))
+  schema.Student.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
+    if (result !== null) throw new Error('DuplicateStudent')
     else {
-      schema.Student.findOne({pid: input.pid}).exec().then(function (result) {
-        if (result) reject(new Error('DuplicateStudent'))
-      }).then(function () {
-        if (input.username && input.firstName && input.lastName && input.pid) {
-          var inputStudent = new schema.Student(util.validateModelData(input, schema.Student))
-          return inputStudent.save()
-        } else reject(new Error('RequiredParamNotFound'))
-      })
+      if (input.username && input.firstName && input.lastName && input.pid) {
+        var inputStudent = new schema.Student(util.validateModelData(input, schema.Student))
+        return inputStudent.save()
+      } else throw new Error('RequiredParamNotFound')
     }
   }).then(function (student) {
     res.json(student)
   }).catch(function (err) {
-    res.json({
-      'error': err.message,
-      'origin': 'student.post'
-    })
+    res.json({'error': err.message, 'origin': 'student.post'})
   })
 }
 
@@ -152,7 +144,7 @@ _.get = function (input, res) {
 _.put = function (input, res) {
   if (input.username) {
     schema.Student.findOne({username: input.username}).exec().then(function (result) {
-      if (!result) reject(new Error('StudentNotFound'))
+      if (result === null) throw new Error('StudentNotFound')
       else {
         return schema.Student.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Student), {new: true}).exec()
       }
@@ -162,7 +154,7 @@ _.put = function (input, res) {
       res.json({'error': err.message, 'origin': 'student.put'})
     })
   } else {
-    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+    throw new Error('RequiredParamNotFound').catch(function (err) {
       res.json({'error': err.message, 'origin': 'student.put'})
     })
   }
@@ -184,15 +176,15 @@ _.put = function (input, res) {
 _.delete = function (input, res) {
   if (input.username) {
     schema.Student.findOne({username: input.username}).exec().then(function (result) {
-      if (result) return schema.findOneAndRemove({username: input.username}).exec()
-      else reject(new Error('StudentNotFound'))
+      if (result !== null) return schema.findOneAndRemove({username: input.username}).exec()
+      else throw new Error('StudentNotFound')
     }).then(function (result) {
       res.json(result)
     }).catch(function (err) {
       res.json({'error': err.message, 'origin': 'student.delete'})
     })
   } else {
-    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+    throw new Error('RequiredParamNotFound').catch(function (err) {
       res.json({'error': err.message, 'origin': 'student.delete'})
     })
   }

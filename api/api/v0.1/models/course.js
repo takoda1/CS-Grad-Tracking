@@ -1,5 +1,3 @@
-/* global reject */
-
 var schema = require('../schema')
 var util = require('../util')
 
@@ -29,7 +27,7 @@ var _ = {}
  */
 _.post = function (input, res) {
   schema.Semester.findOne(util.validateModelData(input, schema.Semester)).exec().then(function (result) {
-    if (result) reject(new Error('DuplicateCourse'))
+    if (result !== null) throw new Error('DuplicateCourse')
     else {
       var inputCourse = new schema.Semester(util.validateModelData(input, schema.Semester))
       return inputCourse.save()
@@ -88,7 +86,7 @@ _.get = function (input, res) {
  */
 _.put = function (input, res) {
   schema.Course.findOne({_id: input.id}).exec().then(function (result) {
-    if (!result) reject(new Error('CourseNotFound'))
+    if (result === null) throw new Error('CourseNotFound')
     else return schema.Course.findOneAndUpdate({_id: input.id}, util.validateModelData(input, schema.Course), {new: true}).exec()
   }).then(function (result) {
     res.json(result)
@@ -111,7 +109,7 @@ _.put = function (input, res) {
  */
 _.delete = function (input, res) {
   schema.Course.findOne({_id: input.id}).exec().then(function (result) {
-    if (!result) reject(new Error('CourseNotFound'))
+    if (result === null) throw new Error('CourseNotFound')
     else return schema.Course.findOneAndRemove({_id: input.id}).exec()
   }).then(function (result) {
     res.json(result)

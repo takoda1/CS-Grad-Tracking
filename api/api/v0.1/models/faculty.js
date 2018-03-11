@@ -1,5 +1,3 @@
-/* global reject */
-
 var schema = require('../schema')
 var util = require('../util')
 
@@ -22,18 +20,13 @@ var _ = {}
  * @throws {Object} RequiredParamNotFound
  */
 _.post = function (input, res) {
-  schema.Faculty.findOne({username: input.username}).exec().then(function (result) {
-    if (result) reject(new Error('DuplicateFaculty'))
+  schema.Faculty.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
+    if (result !== null) throw new Error('DuplicateFaculty')
     else {
-      schema.Faculty.findOne({pid: input.pid}).exec().then(function (result) {
-        if (result) reject(new Error('DuplicateFaculty'))
-        else {
-          if (input.username && input.firstName && input.lastName && input.pid) {
-            var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))
-            return inputFaculty.save()
-          } else reject(new Error('RequiredParamNotFound'))
-        }
-      })
+      if (input.username && input.firstName && input.lastName && input.pid) {
+        var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))
+        return inputFaculty.save()
+      } else throw new Error('RequiredParamNotFound')
     }
   }).then(function (faculty) {
     res.json(faculty)
@@ -83,10 +76,10 @@ _.put = function (input, res) {
   if (input.username) {
     schema.Faculty.findOne({username: input.username}).exec().then(function (result) {
       if (result) return schema.Faculty.findOneAndUpdate({username: input.username}, util.validateModelData(input, schema.Faculty), {new: true}).exec()
-      else reject(new Error('FacultyNotFound'))
+      else throw new Error('FacultyNotFound')
     })
   } else {
-    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+    throw new Error('RequiredParamNotFound').catch(function (err) {
       res.json({'error': err.message, 'origin': 'faculty.put'})
     })
   }
@@ -109,14 +102,14 @@ _.delete = function (input, res) {
   if (input.username) {
     schema.Faculty.findOne({username: input.username}).exec().then(function (result) {
       if (result) return schema.Faculty.findOneAndRemove({username: input.username}).exec()
-      else reject(new Error('FacultyNotFound'))
+      else throw new Error('FacultyNotFound')
     }).then(function (result) {
       res.json(result)
     }).catch(function (err) {
       res.json({'error': err.message, 'origin': 'faculty.delete'})
     })
   } else {
-    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+    throw new Error('RequiredParamNotFound').catch(function (err) {
       res.json({'error': err.message, 'origin': 'faculty.delete'})
     })
   }

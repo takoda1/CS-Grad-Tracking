@@ -24,7 +24,7 @@ var _ = {}
 _.post = function (input, res) {
   input.students = null
   schema.Job.findOne(util.validateModelData(input, schema.Job)).exec().then(function (result) {
-    if (result) reject(new Error('DuplicateJob'))
+    if (result !== null) throw new Error('DuplicateJob')
     else {
       var inputJob = new schema.Job(util.validateModelData(input, schema.Job))
       return inputJob.save()
@@ -77,15 +77,15 @@ _.get = function (input, res) {
 _.put = function (input, res) {
   if (input.id) {
     schema.Job.findOne({_id: input.id}).exec().then(function (result) {
-      if (result) return schema.Job.findOneAndUpdate({_id: input.id}, util.validateModelData(input, schema.Job), {new: true}).exec()
-      else reject(new Error('JobNotFound'))
+      if (result !== null) return schema.Job.findOneAndUpdate({_id: input.id}, util.validateModelData(input, schema.Job), {new: true}).exec()
+      else throw new Error('JobNotFound')
     }).then(function (result) {
       res.json(result)
     }).catch(function (err) {
       res.json({'error': err.message, 'origin': 'job.put'})
     })
   } else {
-    reject(new Error('RequiredParamNotFound')).catch(function (err) {
+    throw new Error('RequiredParamNotFound').catch(function (err) {
       res.json({'error': err.message, 'origin': 'job.put'})
     })
   }
@@ -107,8 +107,8 @@ _.put = function (input, res) {
 _.delete = function (input, res) {
   if (input.id) {
     schema.Job.findOne({_id: input.id}).exec().then(function (result) {
-      if (result) return schema.Job.findOneAndRemove({_id: input.id}).exec()
-      else reject(new Error('JobNotFound'))
+      if (result !== null) return schema.Job.findOneAndRemove({_id: input.id}).exec()
+      else throw new Error('JobNotFound')
     }).then(function (result) {
       res.json(result)
     }).catch(function (err) {
