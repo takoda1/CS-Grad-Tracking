@@ -5,7 +5,7 @@
 var mongoose = require('mongoose')
 mongoose.Promise = require('bluebird')
 
-var app = require('../api/app')
+var app = require('../app.js')
 global.server = {}
 
 var connectionString = null

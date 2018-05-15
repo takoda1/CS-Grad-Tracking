@@ -11,8 +11,10 @@
     "client-sessions": "^0.8.0",
     "compression": "^1.6.2",
     "connect-multiparty": "^2.0.0",
+    "ejs": "^2.5.8",
     "express": "^4.15.0",
     "gridfs-stream": "^1.1.1",
+    "jquery": "^3.3.1",
     "mongoose": "^4.8.5",
     "mustache": "^2.3.0",
     "xtend": "^4.0.1"
@@ -33,7 +35,7 @@
     ]
   },
   "scripts": {
-    "start": "bin/www",
+    "start": "node bin/www",
     "test": "standard --verbose | snazzy && mocha"
   },
   "repository": {

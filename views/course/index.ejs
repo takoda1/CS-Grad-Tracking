@@ -1,0 +1,70 @@
+<!-- views/course/index.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Search Courses</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-3 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<p>Search Courses</p>
+					<div class="search-bar">
+						<form action="?">
+							<p>PID:</p>
+							<input type="number" name="pid">
+							<p>Last Name:</p>
+							<input type="text" name="last-name">
+							<p>
+								<button type="submit">Search</button>
+							</p>
+						</form>
+					</div>
+
+				</div>
+				
+				<div class='col-lg-9 panelbg text-center'>
+					<h1>Courses</h1>
+					<!-- <% if(courses.length>0) { %>
+						<table>
+							<thead>
+								<tr>
+									<th>Department</th>
+									<th>Number</th>
+									<th>Name</th>
+									<th>Category</th>
+									<th>Hours</th>
+									<th>Faculty</th>
+									<th>Semester</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<% for(var i=0; i<courses.length; i++) { %>
+									<tr>
+										<td><% courses[i].department%></td>
+										<td><% courses[i].number%></td>
+										<td><% courses[i].name%></td>
+										<td><% courses[i].category%></td>
+										<td><% courses[i].hours%></td>
+										<td><% courses[i].faculty.firstname%></td>
+										<td><% courses[i].semeste.year%></td>
+									</tr>
+								<% } %>
+							</tbody>
+						</table>
+					<% } else { %>
+						<div>No courses found.</div>
+					<% } %> -->
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

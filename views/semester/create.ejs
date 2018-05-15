@@ -1,0 +1,50 @@
+<!-- views/semester/create.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Create semester</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-3 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<%- include('./search-semester.ejs') %>
+
+				</div>
+				
+				<div class='col-lg-9 panelbg text-center'>
+					<h1>Create semester</h1>
+					<form action="/semester/post" method="post">
+						<table align="center">
+							<tbody>
+								<tr>
+									<td>Year</td>
+									<td><input type="number" name="year" required/></td>
+								</tr>
+								<tr>
+									<td>Season</td>
+									<td>
+										<select name="season">
+											<option value="FALL">Fall</option>
+											<option value="SPRING">Spring</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="submit" required/></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

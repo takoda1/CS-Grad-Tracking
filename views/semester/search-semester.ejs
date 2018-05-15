@@ -1,0 +1,29 @@
+<!-- views/semester/search-semester.ejs -->
+<p>Search Semesters</p>
+<div class="search-bar">
+	<form action="/semester" method="get">
+		<div class="row">
+			<div class="col-md-6">
+				<p>Year:</p>
+				<p>Season:</p>
+			</div>
+			<div class="col-md-6">
+				<p><input type="number" name="year"></p>
+				<p>
+					<select name="season">
+						<option value=""></option>
+						<option value="FALL">Fall</option>
+						<option value="SPRING">Spring</option>
+					</select>
+				</p>
+			</div>
+		</div>
+		<button type="submit">Search</button>
+		<p></p>
+	</form>
+</div>
+<div>
+	<p>
+		<a href="/semester/create" class="btn btn-primary btn-block">Create Semester</a>
+	</p>
+</div>

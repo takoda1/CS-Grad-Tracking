@@ -1,0 +1,61 @@
+.sidebar {
+	background-color: lightblue;
+}
+
+.panelbg {
+	background-color: lightgrey;
+}
+
+html, body {
+	height: 100%;
+}
+
+.white-bg {
+	background-color: white;
+}
+
+.column-padding td {
+	padding:0 30px 0 30px;
+}
+
+table {
+	table-layout: fixed;
+}
+
+/* faculty table column widths*/
+.col-username {
+	width: 20%;
+}
+
+.col-firstname {
+	width: 25%;
+}
+
+.col-lastname {
+	width: 25%;
+}
+
+.col-pid {
+	width: 20%;
+}
+
+.col-delete {
+	width: 10%;
+}
+/* semester table column widths */
+.col-SemesterYear {
+	width: 40%;
+}
+
+.col-SemesterSeason {
+	width: 40%;
+}
+
+.col-SemesterDelete {
+	width: 20%;
+}
+
+.display-table {
+	width: 100%;
+}
+
