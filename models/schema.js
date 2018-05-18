@@ -99,82 +99,8 @@ var jobSchema = mongoose.Schema({
   students: [{type: mongoose.Schema.Types.ObjectId, ref: 'Student'}]
 })
 
-// Schema pre-hooks
-
-facultySchema.pre('save', function (next) {
-  if (this.username && this.firstName && this.lastName && this.pid) next()
-  else next(new Error('RequiredParamNotFound'))
-})
-
-//not needed.
-/*
-facultySchema.pre('findOneAndUpdate', function (next) {
-  console.log(this+" "+this.username)
-  if (this.username) next()
-  else next(new Error('RequiredParamNotFound'))
-})*/
-
-/*
-facultySchema.pre('findOneAndRemove', function (next) {
-  if (this.username) next()
-  else next(new Error('RequiredParamNotFound'))
-})*/
-
-studentSchema.pre('save', function (next) {
-  if (this.username && this.firstName && this.lastName && this.pid) next()
-  else next(new Error('RequiredParamNotFound'))
-})
-
-studentSchema.pre('find', function (next) {
-  if (this.student) {
-    studentSchema.find({})
-  }
-})
-
-studentSchema.pre('findOneAndUpdate', function (next) {
-  if (this.username) next()
-  else next(new Error('RequiredParamNotFound'))
-})
-
-documentSchema.pre('save', function (next) {
-  if (this.title && this.student) {
-    schema.Student.findOne({username: this.student}).exec().then(function (result) {
-      if (result) next()
-      else reject(new Error('InvalidStudent'))
-    })
-    next()
-  } else next(new Error('RequiredParamNotFound'))
-})
-
-semesterSchema.pre('save', function (next) {
-  if (this.year && this.season) next()
-  else next(new Error('RequiredParamNotFound'))
-})
-
-courseSchema.pre('save', function (next) {
-  if (this.department && this.number && this.name && this.category && this.hours && this.faculty && this.semester) {
-    if (this.department.length === 4) next()
-    else next(new Error('InvalidDepartment'))
-  } else next(new Error('RequiredParamNotFound'))
-})
-
-courseSchema.pre('find', function (next) {
-  if (this.faculty) {
-    facultySchema.findOne({'username': this.faculty}).exec().then(function (result) {
-      if (result) this.faculty = result._id
-      else reject(new Error('UnknownFaculty'))
-    })
-  }
-  if (this.semester) {
-    semesterSchema.findOne(this.semester).exec().then(function (result) {
-      if (result) this.semester = result._id
-      else reject(new Error('UnknownSemester'))
-    })
-  }
-})
-
 schema.Admin = mongoose.model('Admin', adminSchema)
-schema.Faculty = mongoose.model('Faculty', facultySchema, 'Faculty')
+schema.Faculty = mongoose.model('Faculty', facultySchema)
 schema.Student = mongoose.model('Student', studentSchema)
 schema.Document = mongoose.model('Document', documentSchema)
 schema.Semester = mongoose.model('Semester', semesterSchema)

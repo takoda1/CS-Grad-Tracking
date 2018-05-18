@@ -13,6 +13,6 @@ router.get('/create', semester.create);
 
 router.post('/post', semester.post);
 
-router.post('/delete', semester.delete);
+router.post('/delete/:_id', semester.delete);
 
 module.exports = router;

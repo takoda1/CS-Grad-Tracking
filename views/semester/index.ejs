@@ -38,9 +38,7 @@
 										<td><%= semesters[i].season%></td>
 										<td>
 											<!--IDK if I need to use form here for delete, change it if it is wrong-->
-											<form action="/semester/delete/" method="post">
-												<input type="hidden" name="year" value= <%= semesters[i].year%> />
-												<input type="hidden" name="season" value = <%= semesters[i].season%> />
+											<form action="/semester/delete/<%= semesters[i]._id%>" method="post">
 												<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
 											</form>
 										</td>

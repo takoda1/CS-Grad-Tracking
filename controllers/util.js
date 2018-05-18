@@ -3,30 +3,66 @@ var _ = {}
 var regexSlashes = /\/*\//ig;
 
 // Removes variables not defined in models and other undefined/null variables
+/*
+@param input document or object reprenting a document
+@param model schema.{model} (the model reprenting the document)
+
+@returns the document with undefined/null variables removed
+*/
 _.validateModelData = function (input, model) {
-  var result = {}
-  var m = model.schema.paths
+  var result = {};
+  var m = model.schema.paths;
   for (var key in m) {
-    if (input[key] !== undefined && input[key] !== null && input[key] !== NaN && input[key] !== '') {
-      if (m[key].instance === 'Array') {
-        result[key] = input[key]
-      } else if (m[key].instance === 'Boolean') {
-        result[key] = Boolean(input[key])
-      } else if (m[key].instance === 'Number') {
-        result[key] = parseInt(input[key])
-      } else if (m[key].instance === 'ObjectID') {
-        result[key] = input[key] === '' ? null : input[key]
-      } else if (m[key].instance === 'Date') {
-        result[key] = new Date().toISOString()
+    if (input[key] !== undefined && input[key] !== null && input[key] !== NaN && input[key] !== "") {
+      if (m[key].instance === "Array") {
+        result[key] = input[key];
+      } else if (m[key].instance === "Boolean") {
+        result[key] = Boolean(input[key]);
+      } else if (m[key].instance === "Number") {
+        result[key] = parseInt(input[key]);
+      } else if (m[key].instance === "ObjectID") {
+        result[key] = input[key] === "" ? null : input[key];
+      } else if (m[key].instance === "Date") {
+        result[key] = new Date().toISOString();
       } else {
-        result[key] = input[key]
+        result[key] = input[key];
       }
     }
   }
-  return result
+  return result;
 }
 
-// Transforms expressions surrounded by '/'s to proper JS regular expressions
+/*
+@description verifies that all fields for a given
+document exist for the corresponding model
+
+@param input document to be checked
+@param model the model that represents that document
+
+@return true or false
+*/
+_.allFieldsExist = function(input, model) {
+  var m = model.schema.obj;
+  for (var key in m){
+    if(input[key] !== undefined && input[key] !== null && input[key] !== NaN && input[key] !== ""){
+    }
+    else{
+      return false;
+    }
+  }
+  return true; 
+}
+
+/*
+pretty sure we don't need this.
+the browser just sends the input fields, and all we have to
+do is make all fields that are text/string into regular
+expressions and feed that into the mongoose search 
+operations, no need to convert to proper js regular expressions
+because there is no point where the data is every surrounded by
+"/"s and isn't a correct regular expression
+*/
+// Transforms expressions surrounded by "/"s to proper JS regular expressions
 _.regexTransform = function (input) {
   for (var key in input) {
     if (input[key] !== undefined && input[key] !== null) {
@@ -34,22 +70,22 @@ _.regexTransform = function (input) {
         for (var i = 0; i < input[key].length; i++) {
           if(isNaN(input[key])){
           input[key][i] = (input[key][i].match(regexSlashes))
-           ? new RegExp(input[key][i].substring(1, input[key][i].length - 1), 'ig') : input[key][i]
+           ? new RegExp(input[key][i].substring(1, input[key][i].length - 1), "ig") : input[key][i]
           }
           else{
             input[key][i] = (input[key][i].toString().match(regexSlashes))
-           ? new RegExp(input[key][i].substring(1, input[key][i].length - 1), 'ig') : input[key][i]
+           ? new RegExp(input[key][i].substring(1, input[key][i].length - 1), "ig") : input[key][i]
           }
         }
         input[key] = {$in: input[key]}
       } else {
         if(isNaN(input[key])){
           input[key] = (input[key].match(regexSlashes))
-           ? new RegExp(input[key].substring(1, input[key].length - 1), 'ig') : input[key]
+           ? new RegExp(input[key].substring(1, input[key].length - 1), "ig") : input[key]
         }
         else{
           input[key] = (input[key].toString().match(regexSlashes))
-           ? new RegExp(input[key].substring(1, input[key].length -1), 'ig') : input[key]
+           ? new RegExp(input[key].substring(1, input[key].length -1), "ig") : input[key]
         }
       }
     }
@@ -62,24 +98,26 @@ _.regexTransform = function (input) {
   text fields can be searched using regexp rather than exactly (eg, searching abc
   for username returns all entries in the database that contain abc rather than 
   only returning entries that are exactly abc)
+
+  @param input document
+
+  @return the document with text fields as regular expressions
 */
 _.addSlashes = function(input){
   for(var key in input){
     if(input[key].constructor == Array){
       for(var i = 0; i < input[key].length; i++){
-        input[key][i] = new RegExp(input[key][i]);
+        input[key][i] = new RegExp(input[key][i], "i");
       }
     }
     else{
       //only create regexp if the field is text
-      if(typeof input[key] == 'string'){
-        console.log(input[key]);
-        input[key] = new RegExp(input[key]);
-        console.log(input[key]);
+      if(typeof input[key] == "string"){
+        input[key] = new RegExp(input[key], "i");
       }
     }
   }
   return input;
 }
 
-module.exports = _
+module.exports = _;

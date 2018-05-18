@@ -3,7 +3,7 @@
 
 <html>
 	<head>
-		<title>Search Faculty</title>
+		<title>Edit faculty</title>
 		<%- include('../partials/head.ejs') %>
 	</head>
 	
@@ -20,12 +20,13 @@
 				</div>
 				<div class='col-lg-9 panelbg text-center'>
 					<h1>Edit Faculty</h1>
-					<form action="/faculty/put/<%= faculty.username%>" method="post">
+					<form action="/faculty/put" method="post">
 						<table align="center">
 							<tbody>
 								<tr>
 									<td>Username</td>
-									<td><input type="text" name="username" value="<%=faculty.username%>" required /></td>
+									<td><%=faculty.username%></td>
+									<td><input type="hidden" name="username" value="<%=faculty.username%>" required /></td>
 								</tr>
 								<tr>
 									<td>First name</td>
@@ -37,7 +38,8 @@
 								</tr>
 								<tr>
 									<td>PID</td>
-									<td><input type="number" name="pid" value="<%=faculty.pid%>" required/></td>
+									<td><%=faculty.pid%></td>
+									<td><input type="hidden" name="pid" value="<%=faculty.pid%>" required/></td>
 								</tr>
 								<tr>
 									<td colspan="2"><button type="submit" class="btn btn-success">Update</button></td>
@@ -45,7 +47,7 @@
 							</tbody>
 						</table>
 					</form>
-					<form action="/faculty/delete/<%=faculty.username%>" method="post">
+					<form action="/faculty/delete/<%=faculty._id%>" method="post">
 						<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
 					</form>
 				</div>

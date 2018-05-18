@@ -1,142 +1,209 @@
-var schema = require('../models/schema')
-var util = require('./util')
+var schema = require("../models/schema")
+var util = require("./util")
 
-var _ = {}
-
-/**
- * @api {post} /api/faculty
- * @class Faculty
- *
- * @description All params required
- *
- * @param {String} username (Required)
- * @param {String} firstName (Required)
- * @param {String} lastName (Required)
- * @param {Number} pid (Required)
- *
- * @returns {Object} success Newly created faculty data
- *
- * @throws {Object} DuplicateFaculty
- * @throws {Object} RequiredParamNotFound
- */
-_.post = function (req, res) {
-  var input = req.body; //because post request sent from form, get fields from the req's body
-  schema.Faculty.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
-    if (result !== null) throw new Error('DuplicateFaculty')
-    else {
-      if (input.username && input.firstName && input.lastName && input.pid) {
-        var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))
-        inputFaculty.save()
-        res.redirect("/faculty/edit/"+inputFaculty.username);
-      } else{
-        console.log(input.body);
-       throw new Error('RequiredParamNotFound')
-     }
-    }
-  }).catch(function (err) {
-    res.json({'error': err.message, 'origin': 'faculty.post'})
-  })
-}
+var facultyController = {}
 
 /**
- * @api {get} /api/faculty
- * @class Faculty
+ * @url {post} /faculty/post
  *
- * @description All params optional
- *
- * @param {String} username
- * @param {String} firstName
- * @param {String} lastName
- * @param {Number} pid
- *
- * @returns {Object} success Matching faculty
- */
-_.get = function (req, res) {
-  var input = req.query;
-  console.log(input);
-  input = util.validateModelData(input, schema.Faculty);
-  input = util.addSlashes(input);
-  schema.Faculty.find(input).exec().then(function (result) {
-    res.render("../views/faculty/index", {faculty: result});
-  }).catch(function (err) {
-    res.json({'error': err.message, 'origin': 'faculty.get'})
-  })
-}
-
-/**
- * @api {put} /api/faculty
- * @class Faculty
- *
- * @description username is required
- *
- * @param {String} username (Required)
- * @param {String} firstName
- * @param {String} lastName
- * @param {Number} pid
+ * @description Called when a faculty is to be created,
+ * receives fields from an html form, all fields 
+ * are required for a faculty to be created.
  * 
- * @success renders edit page with newly update data
+ * A form is submitted when faculty/post is called, and
+ * the form data is stored in req.body
+ * 
+ * @req.body {String} username (Required)
+ * @req.body {String} firstName (Required)
+ * @req.body {String} lastName (Required)
+ * @req.body {Number} pid (Required)
  *
- * @throws {Object} FacultyNotFound
+ * @success redirects to /faculty/edit/:_id route (which uses facultyController.edit)
+ * @failure renders error page with duplicate faculty message
+ * 
+ * @throws {Object} RequiredParamNotFound (shouldn't occur if frontend done properly)
  */
-_.put = function (req, res) {
-  var input = req.body;
-  if (req.params.username) {
-    schema.Faculty.findOneAndUpdate({username: req.params.username}, util.validateModelData(input, schema.Faculty)).exec().then(function (result) {
-      if (result){
-        res.redirect("/faculty/edit/"+input.username);
-      } 
-      else throw new Error('FacultyNotFound')
+facultyController.post = function (req, res) {
+  var input = req.body; //because post request sent from form, get fields from the req"s body
+  //Verify that all fields exist. Should be though if front end is done correctly.
+  if(util.allFieldsExist(input, schema.Faculty)){
+    /*oth username and pid are unique, so look for faculty using those two fields to check
+    if the faculty attempting to be created already exists*/
+    schema.Faculty.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
+      if (result !== null){
+        res.render("../views/error.ejs", {string: "That faculty already exists"});
+      }
+      else {
+        var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))
+        /*use the then function because save() is asynchronous. If you only have inputFaculty.save(); res.redirect...
+        it is possible that the data does not save in time (or load in time if performing queries that return data
+        that is to be sent to a view) before the view loads which can cause errors. So put view rendering code which is
+        reliant on database operations inside of the then function of those operations*/
+        inputFaculty.save().then(function(result){
+          /*result of save function is the newly created faculty object, so
+          access _id from result*/
+          res.redirect("/faculty/edit/"+result._id);
+        });
+      }
+    }).catch(function (err) {
+      res.json({"error": err.message, "origin": "faculty.post"});
     })
-  } else {
-    throw new Error('RequiredParamNotFound').catch(function (err) {
-      res.json({'error': err.message, 'origin': 'faculty.put'})
-    })
+  }
+  //if all of the fields are not provided throw this error
+  else{
+    throw new Error("RequiredParamNotFound");
   }
 }
 
 /**
- * @api {delete} /api/faculty
- * @class Faculty
+ * @url {get} /faculty
  *
- * @description username is required
+ * @description Called when /faculty/index.ejs is to be rendered,
+ * accepts search fields as an html query
  *
- * @param {String} username (Required)
+ * The fields are in req.query when they are provided (searched for)
  *
- * @returns {Object} success Deleted faculty data
+ * @req.query {String} username
+ * @req.query {String} firstName
+ * @req.query {String} lastName
+ * @req.query {Number} pid
  *
- * @throws {Object} FacultyNotFound
- * @throws {Object} RequiredParamNotFound
+ * @finish renders /faculty/index.ejs
+ * if no faculty are found, then the page
+ * just indicates that none are found
  */
-_.delete = function (req, res) {
-  if (req.params.username) {
-    schema.Faculty.findOneAndRemove({username: req.params.username}).exec().then(function(result){
-      if(result){
-        res.redirect("/faculty");
+facultyController.get = function (req, res) {
+  var input = req.query;
+  input = util.validateModelData(input, schema.Faculty); //remove fields that are empty/not part of Faculty definition
+  input = util.addSlashes(input); //make all text fields regular expressions with ignore case
+  //find the faculty and sort by username, render /faculty/index.ejs on completion
+  schema.Faculty.find(input).sort({username:1}).exec().then(function (result) {
+    res.render("../views/faculty/index.ejs", {faculty: result});
+  }).catch(function (err) {
+    res.json({"error": err.message, "origin": "faculty.get"});
+  })
+}
+
+/**
+ * @url {post} /faculty/put
+ *
+ * @description Called when a faculty is to be updated,
+ * field data is sent as an html form, and all
+ * fields are required.
+ *
+ * @req.body {String} username (Required)
+ * @req.body {String} firstName
+ * @req.body {String} lastName
+ * @req.body {Number} pid
+ * 
+ * @success redirects to /faculty/edit/:_id (facultyController.edit)
+ * which displays the newly updated faculty data
+ *
+ * @throws {Object} FacultyNotFound (shouldn't occur if frontend done properly)
+ */
+facultyController.put = function (req, res) {
+  var input = req.body;
+  var input = util.validateModelData(input, schema.Faculty);
+  if (util.allFieldsExist(input, schema.Faculty)) {
+    schema.Faculty.findOneAndUpdate(input).exec().then(function (result) {
+      if (result){
+        res.redirect("/faculty/edit/"+result._id);
+      } 
+      else throw new Error("FacultyNotFound");
+    })
+  } else {
+    throw new Error("RequiredParamNotFound");
+  }
+}
+
+/**
+ * @url {post} /faculty/delete/:_id
+ *
+ * @description Called when a faculty is to be deleted,
+ * requires _id, to be sent as a html parameter.
+ *
+ * @req.params {String} _id (Required)
+ *
+ * @success redirects to /faculty (facultyController.get)
+ * @failure renders error.ejs with error message
+ *
+ * @throws {Object} FacultyNotFound (should not be thrown if front end is done correctly)
+ * @throws {Object} RequiredParamNotFound (shouldn't occur if frontend done properly)
+ */
+facultyController.delete = function (req, res) {
+  var id = req.params._id;
+  if (id != null) {
+    /*courses, students, and jobs reference faculty, so have to check
+    if they reference this faculty. Doesn"t seem to be any default mongo 
+    behavior for delete/remove that checks if any outside document is 
+    referencing the faculty*/
+    schema.Course.find({faculty: id}).exec().then(function(result){
+      if(result.length > 0){
+        res.render("../views/error.ejs", {string: "Could not delete faculty because a course is referencing it."});
       }
-      else throw new Error('FacultyNotFound');
+      else{
+        schema.Student.find({advisor: id}).exec().then(function(result){
+          if(result.length > 0){
+            res.render("../views/error.ejs", {string: "Could not delete faculty because a student is referencing it."});
+          }
+          else{
+            schema.Job.find({supervisor: id}).exec().then(function(result){
+              if(result.length > 0){
+                res.render("../views/error.ejs", {string: "Could not delete faculty because a job is referencing it."});
+              }
+              else{
+                //nothing references this faculty, so try to delete it
+                schema.Faculty.findOneAndRemove({_id: id}).exec().then(function(result){
+                  if(result){
+                    res.redirect("/faculty");
+                  }
+                  else throw new Error("FacultyNotFound");
+                });
+              }
+            });
+          }
+        });
+      }
     });
   } else {
-    throw new Error('RequiredParamNotFound').catch(function (err) {
-      res.json({'error': err.message, 'origin': 'faculty.delete'})
-    })
+    throw new Error("RequiredParamNotFound");
   }
 }
 
-_.create = function(req, res){
-  res.render("../views/faculty/create");
+/*
+ * @url {get} /faculty/create
+ *
+ * @description renders /faculty/create.ejs
+ *
+ */
+facultyController.create = function(req, res){
+  res.render("../views/faculty/create.ejs");
 }
 
-_.edit = function(req, res){
-  if (req.params.username) { //access username from params because passed with faculty/edit/:username
-    schema.Faculty.findOne({username: req.params.username}).exec().then(function (result) {
-      if (result) res.render("../views/faculty/edit", {faculty: result});
-      else throw new Error('FacultyNotFound');
+/**
+ * @url {get} /faculty/edit/:_id
+ *
+ * @description Called when a faculty is to be
+ * edited by the user. _id is required, and is
+ * sent in a html parameter.
+ *
+ * @param {String} _id (Required)
+ *
+ * @finish renders faculty/edit.ejs with the faculty
+ * to be edited
+ *
+ * @throws {Object} FacultyNotFound (shouldn't occur if frontend done properly)
+ * @throws {Object} RequiredParamNotFound (shouldn't occur if frontend done properly)
+ */
+facultyController.edit = function(req, res){
+  if (req.params._id) { //_id from params because passed with faculty/edit/:_id
+    schema.Faculty.findOne({_id: req.params._id}).exec().then(function (result) {
+      if (result) res.render("../views/faculty/edit.ejs", {faculty: result});
+      else throw new Error("FacultyNotFound");
     })
   } else {
-    throw new Error('RequiredParamNotFound').catch(function (err) {
-      res.json({'error': err.message, 'origin': 'faculty.edit'})
-    })
+    throw new Error("RequiredParamNotFound");
   }
 }
 
-module.exports = _
+module.exports = facultyController;

@@ -1,0 +1,82 @@
+<!-- views/course/edit.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Edit course</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-3 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<%- include('./search-course.ejs') %>
+
+				</div>
+				<div class='col-lg-9 panelbg text-center'>
+					<h1>Edit course</h1>
+					<form action="/course/put" method="post">
+						<input type="hidden" name="_id" value="<%=course._id%>"></input>
+						<table align="center">
+							<tbody>
+								<tr>
+									<td>Department</td>
+									<td><input type="text" name="department" value="<%=course.department%>" required /></td>
+								</tr>
+								<tr>
+									<td>Course number</td>
+									<td><input type="number" name="number" value="<%=course.number%>" required/></td>
+								</tr>
+								<tr>
+									<td>Course name</td>
+									<td><input type="text" name="name" value="<%=course.name%>" required/></td>
+								</tr>
+								<tr>
+									<td>Course category</td>
+									<td><input type="text" name="category" value="<%=course.category%>" required/></td>
+								</tr>
+								<tr>
+									<td>hours</td>
+									<td><input type="number" name="hours" value="<%=course.hours%>" required/></td>
+								</tr>
+								<tr>
+									<td>Faculty</td>
+									<td>
+										<select name="faculty" required>
+											<option value="<%=course.faculty._id%>"><%=course.faculty.lastName%>, <%=course.faculty.firstName%></option>
+											<% for(var i=0; i<faculty.length; i++) { %>
+												<option value="<%= faculty[i]._id%>"><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+											<% } %>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Semester</td>
+									<td>
+										<select name="semester" required>
+											<option value="<%=course.semester._id%>"><%=course.semester.season%>, <%=course.semester.year%></option>
+											<% for(var i=0; i<semesters.length; i++) { %>
+												<option value= "<%= semesters[i]._id%>"><%=semesters[i].season%>, <%=semesters[i].year%></option>
+											<% } %>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2"><button type="submit" class="btn btn-success">Update</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+					<form action="/course/delete/<%=course._id%>" method="post">
+						<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

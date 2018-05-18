@@ -15,54 +15,49 @@
 
 					<%- include('../partials/admin-sidebar.ejs') %>
 
-					<p>Search Courses</p>
-					<div class="search-bar">
-						<form action="?">
-							<p>PID:</p>
-							<input type="number" name="pid">
-							<p>Last Name:</p>
-							<input type="text" name="last-name">
-							<p>
-								<button type="submit">Search</button>
-							</p>
-						</form>
-					</div>
-
+					<%- include('./search-course.ejs') %>
 				</div>
-				
+
 				<div class='col-lg-9 panelbg text-center'>
 					<h1>Courses</h1>
-					<!-- <% if(courses.length>0) { %>
-						<table>
+					 <% if(courses.length>0) { %>
+						<table align="center" border="1" class="display-table">
 							<thead>
 								<tr>
-									<th>Department</th>
-									<th>Number</th>
-									<th>Name</th>
-									<th>Category</th>
-									<th>Hours</th>
-									<th>Faculty</th>
-									<th>Semester</th>
+									<th class="col-course-department">Department</th>
+									<th class="col-course-number">Number</th>
+									<th class="col-course-name">Name</th>
+									<th class="col-course-category">Category</th>
+									<th class="col-course-hours">Hours</th>
+									<th class="col-course-faculty">Faculty</th>
+									<th class="col-course-semester">Semester</th>
+									<th class="col-course-delete"></th>
 								</tr>
 							</thead>
 							<tbody>
 
 								<% for(var i=0; i<courses.length; i++) { %>
 									<tr>
-										<td><% courses[i].department%></td>
-										<td><% courses[i].number%></td>
-										<td><% courses[i].name%></td>
-										<td><% courses[i].category%></td>
-										<td><% courses[i].hours%></td>
-										<td><% courses[i].faculty.firstname%></td>
-										<td><% courses[i].semeste.year%></td>
+										<td><a href="/course/edit/<%=courses[i]._id%>"><%= courses[i].department%></a></td>
+										<td><%= courses[i].number%></td>
+										<td><%= courses[i].name%></td>
+										<td><%= courses[i].category%></td>
+										<td><%= courses[i].hours%></td>
+										<td><%= courses[i].faculty.lastName%>, <%= courses[i].faculty.firstName%></td>
+										<td><%= courses[i].semester.season%> <%= courses[i].semester.year%></td>
+										<td>
+											<!--IDK if I need to use form here for delete, change it if it is wrong-->
+											<form action="/course/delete/<%= courses[i]._id%>" method="post">
+												<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
+											</form>
+										</td>
 									</tr>
 								<% } %>
 							</tbody>
 						</table>
 					<% } else { %>
 						<div>No courses found.</div>
-					<% } %> -->
+					<% } %>
 				</div>
 			</div>
 		</div>

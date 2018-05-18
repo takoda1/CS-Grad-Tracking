@@ -7,12 +7,12 @@ router.get('/', faculty.get);
 
 router.get('/create', faculty.create);
 
-router.get('/edit/:username', faculty.edit);
+router.get('/edit/:_id', faculty.edit);
 
 router.post('/post', faculty.post);
 
-router.post('/put/:username', faculty.put);
+router.post('/put', faculty.put);
 
-router.post('/delete/:username', faculty.delete);
+router.post('/delete/:_id', faculty.delete);
 
 module.exports = router;

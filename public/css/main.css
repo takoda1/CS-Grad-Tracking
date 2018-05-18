@@ -55,6 +55,40 @@ table {
 	width: 20%;
 }
 
+/*course table column widths */
+
+.col-course-department {
+	width:20%;
+}
+
+.col-course-number {
+	width:10%;
+}
+
+.col-course-name {
+	width:20%;
+}
+
+.col-course-category {
+	width:10%;
+}
+
+.col-course-hours {
+	width:5%;
+}
+
+.col-course-faculty {
+	width:15%;
+}
+
+.col-course-semester {
+	width:15%;
+}
+
+.col-course-delete {
+	width:5%;
+}
+
 .display-table {
 	width: 100%;
 }

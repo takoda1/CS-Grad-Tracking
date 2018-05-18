@@ -1,15 +1,15 @@
 
 <p>Search Courses</p>
 <div class="search-bar">
-	<form action="/faculty" method="get">
+	<form action="/course" method="get">
 		<div class="row">
 			<div class="col-md-6">
-				<p>PID:</p>
-				<p>Last Name:</p>
+				<p>Course number:</p>
+				<p>Course name:</p>
 			</div>
 			<div class="col-md-6">
-				<p><input type="number" name="pid"></p>
-				<p><input type="text" name="lastName"></p>
+				<p><input type="number" name="number"></p>
+				<p><input type="text" name="name"></p>
 			</div>
 		</div>
 		<button type="submit">Search</button>
@@ -18,6 +18,6 @@
 </div>
 <div>
 	<p>
-		<a href="/faculty/create" class="btn btn-primary btn-block">Create Faculty</a>
+		<a href="/course/create" class="btn btn-primary btn-block">Create course</a>
 	</p>
 </div>

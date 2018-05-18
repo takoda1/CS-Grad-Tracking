@@ -1,153 +1,245 @@
-var schema = require('../models/schema')
-var util = require('./util')
-var ABC = require('../models/ABC')
+var schema = require("../models/schema")
+var util = require("./util")
 
 var courseController = {}
 
 /**
- * @api {post} /api/course
- * @class Course
+ * @url {post} /course/post
  *
- * @description All params are required
+ * @description Called when a course is to be created,
+ * receives fields from an html form, all fields are
+ * required for a course to be created.
+ * 
+ * A form will be submitted when course/post is called, and
+ * form data is stored in req.body
  *
- * @param {String} department Four letter representation of department
- * @param {String} number
- * @param {String} name
- * @param {String} category
- * @param {Number} hours
- * @param {String} faculty
- * @param {Object} semester
+ * @req.body {String} department (Required)
+ * @req.body {String} number (Required)
+ * @req.body {String} name (Required)
+ * @req.body {String} category (Required)
+ * @req.body {Number} hours (Required)
+ * @req.body {String} faculty (Required) (_id that corresponds to referenced faculty)
+ * @req.body {String} semester (Required) (_id that corresponds to referenced semester)
  *
- * @returns {Object} success The newly created or updated course data
+ * @success redirects to /course/edit/:_id (courseController.edit)
+ * @failure redirects to error page that displays appropriate message
  *
- * @throws {Object} InvalidDepartment
- * @throws {Object} UnknownFaculty
- * @throws {Object} UnknownSemester
- * @throws {Object} RequiredParamNotFound
- * @throws {Object} DuplicateCourse
+ * @throws {Object} RequiredParamNotFound (should not occur if frontend done correctly)
  */
-courseController.post = function (input, res) {
-  schema.Semester.findOne(util.validateModelData(input, schema.Semester)).exec().then(function (result) {
-    if (result !== null) throw new Error('DuplicateCourse')
-    else {
-      var inputCourse = new schema.Semester(util.validateModelData(input, schema.Semester))
-      return inputCourse.save()
-    }
-  }).then(function (course) {
-    res.json(course)
-  }).catch(function (err) {
-    res.json({'error': err.message, 'origin': 'course.post'})
-  })
+courseController.post = function (req, res) {
+  var input = req.body;
+  if(util.allFieldsExist(input, schema.Course)){
+    schema.Course.findOne(input).populate("faculty").populate("semester").exec().then(function (result) {
+      if (result != null) {
+        res.render("../views/error.ejs", {string: "This course already exists."});
+      }
+      else {
+        var inputCourse = new schema.Course(util.validateModelData(input, schema.Course));
+        inputCourse.save().then(function(result){
+          res.redirect("/course/edit/"+result._id);
+        });
+      }
+    /*this is catching the possible error if the faculty or semester
+    provided does not exist, and populate is failing*/
+    }).catch(function(err){
+      res.render("../views/error.ejs", {string: err.message});
+    });
+  }
+  else{
+    throw new error("RequiredParamNotFound");
+  }
 }
 
 /**
- * @api {get} /api/course
- * @class Course
+ * @url {get} /course
  *
- * @description At least one param is required
+ * @description Called when the /course/index.ejs is to be rendered,
+ * accepts search fields as an html query
+ * 
+ * The fields are in req.query when they are provided (searched for)
  *
- * @param {String} department Four letter representation of the department
- * @param {Number} number
- * @param {String} name
- * @param {String} category
- * @param {Number} hours
- * @param {String} faculty
- * @param {Object} semester
+ * @req.query {String} department
+ * @req.query {String} number
+ * @req.query {String} name
+ * @req.query {String} category
+ * @req.query {Number} hours
+ * @req.query {String} faculty (_id that corresponds to referenced faculty)
+ * @req.query {String} semester (_id that corresponds to referenced semester)
  *
- * @returns {Object} success Matching courses
- *
- * @throws {Object}
+ * @finish renders /course/index.ejs
+ * if no courses are found, then the page
+ * just indicates that none are found
  */
-/*courseController.get = function (input, res) {
-    /*var a = new ABC({name: "abc"});
-    a.save(function(err){
-      if(err){
-        res.render("../views/index");
-      }
-      else{
-        res.json(a);
-        //res.render("<% abc.name%>", {abc: a});
-      }
-    });*/
-    /*var a = new schema.Faculty({username: "abc", firstName: "JON", lastName: "Miller", pid: 13});
-    a.save(function(err){
-      if(err){
-        console.log(err);
-      }
-      else{
-        res.json(a);
-        //res.render("<% abc.name%>", {abc: a});
-      }
-    });*/
-    /*ABC.find({}).exec(function(err, courses){
-      if(err){}
-      else{
-      res.render("../views/course/index", {courses: {}});
-      }
-    })
-};*/
-
-courseController.get = function (input, res) {
-schema.Course.find(util.regexTransform(input, schema.Course)).exec().then(function (result) {
-    res.json(result)
-    res.render("../views/course/index", {courses: res});
-  }).catch(function (err) {
-    res.json({'error': err.message, 'origin': 'course.get'})
-  })
+courseController.get = function (req, res) {
+  var input = req.query;
+  input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
+  input = util.addSlashes(input); //make all text fields regular expressions with ignore case
+  //http://mongoosejs.com/docs/populate.html
+  schema.Course.find(input).populate("faculty").populate("semester").exec().then(function(result){
+    res.render("../views/course/index", {courses: result});
+  }).catch(function(result){
+    res.json({"error": err.message, "origin": "course.put"});
+  });
 }
 
 /**
- * @api {put} /api/course
- * @class Course
+ * @url {post} /course/put
  *
- * @description id is required
+ * @description Called when a course is to be updated,
+ * field data is sent as an html form, and all fields
+ * are required.
  *
- * @param {String} id (MongoID)
- * @param {String} department Four letter representation of the department
- * @param {Number} number
- * @param {String} name
- * @param {String} category
- * @param {Number} hours
- * @param {String} faculty
- * @param {Object} semester
+ * @req.body {String} id (MongoID) (Required)
+ * @req.body {String} department (Required)
+ * @req.body {Number} number (Required)
+ * @req.body {String} name (Required)
+ * @req.body {String} category (Required)
+ * @req.body {Number} hours (Required)
+ * @req.body {String} faculty (Required) (_id that corresponds to referenced faculty)
+ * @req.body {Object} semester (Required) (_id that corresponds to referenced semester)
  *
- * @returns {Object} Newly updated course object
+ * @success redirects to /course/edit/:_id (courseController.edit)
+ * which displays the newly updated faculty data
  *
- * @throws {Object} CourseNotFound
+ * @throws {Object} CourseNotFound (should not occur if frontend done properly)
  */
-courseController.put = function (input, res) {
-  schema.Course.findOne({_id: input.id}).exec().then(function (result) {
-    if (result === null) throw new Error('CourseNotFound')
-    else return schema.Course.findOneAndUpdate({_id: input.id}, util.validateModelData(input, schema.Course), {new: true}).exec()
-  }).then(function (result) {
-    res.json(result)
-  }).catch(function (err) {
-    res.json({'error': err.message, 'origin': 'course.put'})
-  })
+courseController.put = function (req, res) {
+  var input = req.body;
+  input = util.validateModelData(input, schema.Course);
+  if(util.allFieldsExist(input, schema.Course)){
+    schema.Course.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
+      if(result){
+        res.redirect("/course/edit/"+input._id);
+      }
+      else{
+        throw new Error("CourseNotFound");
+      }
+    }).catch(function(err){
+      res.json({"error": err.message, "origin": "course.put"});
+    });
+  }
+  else{
+    //throw some error to indicate that some field is empty
+  }
+  
 }
 
 /**
- * @api {delete} /api/course
- * @class Course
+ * @url {post} /course/delete/:_id
  *
- * @description id is required
+ * @description Called when a course is to be deleted,
+ * requires _id, to be sent as a html parameter.
  *
- * @param {String} id (MongoID)
+ * @req.params {String} _id (Required)
  *
- * @returns {Object} Deleted course object
+ * @success redirects to /course (facultyController.get)
+ * @failure renders error.ejs with appropriate error message
  *
- * @throws CourseNotFound
+ * @throws CourseNotFound (should not occur if frontend done properly)
+ * @thjrows RequireParamNotFound (should not occur if frontend done properly)
  */
-courseController.delete = function (input, res) {
-  schema.Course.findOne({_id: input.id}).exec().then(function (result) {
-    if (result === null) throw new Error('CourseNotFound')
-    else return schema.Course.findOneAndRemove({_id: input.id}).exec()
-  }).then(function (result) {
-    res.json(result)
-  }).catch(function (err) {
-    res.json({'error': err.message, 'origin': 'course.delete'})
-  })
+courseController.delete = function (req, res) {
+  var id = req.params._id;
+  if(id != null){
+    //check if any students reference this course
+    schema.Student.find({courseHistory: {$elemMatch: {_id: id}}}).exec().then(function(result){
+      if(result.length > 0){
+        res.render("../views/error.ejs", {string: "Could not delete course because student is referencing it."});
+      }
+      else{
+        //check if any jobs reference this course
+        schema.Job.find({course: id}).exec().then(function(result){
+          if(result.length > 0){
+            res.render("../views/error.ejs", {string: "Could not delete course because job is referencing it."});
+          }
+          else{
+            //nothing references this course, so try to delete it
+            schema.Course.findOneAndRemove({_id: id}).exec().then(function (result) {
+              if (result){
+                res.redirect("/course");
+              }
+              else{
+                throw new Error("CourseNotFound");
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  else{
+    throw new Error("RequiredParamNotFound");
+  }
+  
+}
+
+/*
+ * @url {get} /course/create
+ *
+ * @description renders /course/create.ejs
+ *
+ */
+courseController.create = function (req, res){
+  var faculty, semesters;
+  /*provide all the faculty and semesters to the view
+  so that the user can not input custom faculty or
+  semesters*/
+  schema.Faculty.find(
+    {},
+    {lastName:1, firstName:1} //projection
+  ).sort({username:1}).exec().then(function(result){
+    faculty = result;
+    schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+      semesters = result;
+      res.render("../views/course/create", {faculty: faculty, semesters: semesters});
+    });
+  });
+}
+
+/**
+ * @url {get} /course/edit/:_id
+ *
+ * @description Called when a course is to be
+ * edited by the user. _id is required, and is
+ * sent in a html parameter.
+ *
+ * @param {String} _id (Required)
+ *
+ * @finish renders course/edit.ejs with the course
+ * to be edited
+ * 
+ * @throws {Object} CourseNotFound (shouldn't occur if frontend done properly)
+ * @throws {Object} RequiredParamNotFound (shouldn't occur if frontend done properly)
+ */
+courseController.edit = function (req, res){
+  if(req.params._id){
+    //populate the faculty and semester fields with document data
+    schema.Course.findOne({_id: req.params._id}).populate("faculty").populate("semester").exec().then(function(result){
+      if(result != null){
+        var course, faculty, semesters;
+        course = result;
+        //get list of faculty and semesters so that user can't input custom data for those fields
+        schema.Faculty.find(
+          {},
+          {lastName:1, firstName:1}
+        ).sort({username:1}).exec().then(function(result){
+          faculty = result;
+          schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+            semesters = result;
+            res.render("../views/course/edit", {course: course, faculty: faculty, semesters: semesters});
+          });
+        });
+      }
+      else{
+        throw new Error("Course not found");
+      }
+    //catches error if _id is null
+    });
+  }
+  else{
+    throw new Error("RequiredParamNotFound");
+  }
 }
 
 
-module.exports = courseController
+module.exports = courseController;

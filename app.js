@@ -4,8 +4,6 @@ var path = require('path')
 var bodyParser = require('body-parser')
 var compress = require('compression')
 
-var index = require('./routes/index')
-
 var app = express()
 
 // express api setup
