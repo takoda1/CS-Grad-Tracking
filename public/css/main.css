@@ -23,20 +23,24 @@ table {
 }
 
 /* faculty table column widths*/
-.col-username {
+.col-facultyUsername {
 	width: 20%;
 }
 
-.col-firstname {
-	width: 25%;
-}
-
-.col-lastname {
-	width: 25%;
-}
-
-.col-pid {
+.col-facultyFirstname {
 	width: 20%;
+}
+
+.col-facultyLastname {
+	width: 20%;
+}
+
+.col-facultyPid {
+	width: 20%;
+}
+
+.col-facultyActive {
+	width: 10%;
 }
 
 .col-delete {
@@ -58,7 +62,7 @@ table {
 /*course table column widths */
 
 .col-course-department {
-	width:20%;
+	width:15%;
 }
 
 .col-course-number {
@@ -86,10 +90,9 @@ table {
 }
 
 .col-course-delete {
-	width:5%;
+	width:10%;
 }
 
 .display-table {
 	width: 100%;
 }
-

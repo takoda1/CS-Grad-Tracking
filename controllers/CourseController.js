@@ -23,13 +23,13 @@ var courseController = {}
  *
  * @success redirects to /course/edit/:_id (courseController.edit)
  * @failure redirects to error page that displays appropriate message
- *
+ * 
  * @throws {Object} RequiredParamNotFound (should not occur if frontend done correctly)
  */
 courseController.post = function (req, res) {
   var input = req.body;
   if(util.allFieldsExist(input, schema.Course)){
-    schema.Course.findOne(input).populate("faculty").populate("semester").exec().then(function (result) {
+    schema.Course.findOne(input).exec().then(function (result) {
       if (result != null) {
         res.render("../views/error.ejs", {string: "This course already exists."});
       }
@@ -73,7 +73,7 @@ courseController.post = function (req, res) {
 courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
-  input = util.addSlashes(input); //make all text fields regular expressions with ignore case
+  input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   //http://mongoosejs.com/docs/populate.html
   schema.Course.find(input).populate("faculty").populate("semester").exec().then(function(result){
     res.render("../views/course/index", {courses: result});
@@ -101,6 +101,7 @@ courseController.get = function (req, res) {
  * @success redirects to /course/edit/:_id (courseController.edit)
  * which displays the newly updated faculty data
  *
+ * @throws {Object} RequiredParamNotFound (should not occur if frontend done properly)
  * @throws {Object} CourseNotFound (should not occur if frontend done properly)
  */
 courseController.put = function (req, res) {
@@ -108,7 +109,7 @@ courseController.put = function (req, res) {
   input = util.validateModelData(input, schema.Course);
   if(util.allFieldsExist(input, schema.Course)){
     schema.Course.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
-      if(result){
+      if(result != null){
         res.redirect("/course/edit/"+input._id);
       }
       else{
@@ -119,7 +120,7 @@ courseController.put = function (req, res) {
     });
   }
   else{
-    //throw some error to indicate that some field is empty
+    throw new Error("RequiredParamNotFound");
   }
   
 }

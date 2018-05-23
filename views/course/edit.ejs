@@ -22,55 +22,71 @@
 					<h1>Edit course</h1>
 					<form action="/course/put" method="post">
 						<input type="hidden" name="_id" value="<%=course._id%>"></input>
-						<table align="center">
-							<tbody>
-								<tr>
-									<td>Department</td>
-									<td><input type="text" name="department" value="<%=course.department%>" required /></td>
-								</tr>
-								<tr>
-									<td>Course number</td>
-									<td><input type="number" name="number" value="<%=course.number%>" required/></td>
-								</tr>
-								<tr>
-									<td>Course name</td>
-									<td><input type="text" name="name" value="<%=course.name%>" required/></td>
-								</tr>
-								<tr>
-									<td>Course category</td>
-									<td><input type="text" name="category" value="<%=course.category%>" required/></td>
-								</tr>
-								<tr>
-									<td>hours</td>
-									<td><input type="number" name="hours" value="<%=course.hours%>" required/></td>
-								</tr>
-								<tr>
-									<td>Faculty</td>
-									<td>
-										<select name="faculty" required>
-											<option value="<%=course.faculty._id%>"><%=course.faculty.lastName%>, <%=course.faculty.firstName%></option>
-											<% for(var i=0; i<faculty.length; i++) { %>
-												<option value="<%= faculty[i]._id%>"><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
-											<% } %>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>Semester</td>
-									<td>
-										<select name="semester" required>
-											<option value="<%=course.semester._id%>"><%=course.semester.season%>, <%=course.semester.year%></option>
-											<% for(var i=0; i<semesters.length; i++) { %>
-												<option value= "<%= semesters[i]._id%>"><%=semesters[i].season%>, <%=semesters[i].year%></option>
-											<% } %>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="2"><button type="submit" class="btn btn-success">Update</button></td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="form-group row">
+							<label for="inputDepartment" class="col-md-2 offset-md-3">Department</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputDepartment" name="department" value=<%=course.department%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputNumber" class="col-md-2 offset-md-3">Course number</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputNumber" name="number" value=<%=course.number%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputName" class="col-md-2 offset-md-3">Last name</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputName" name="name" value=<%=course.name%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputCategory" class="col-md-2 offset-md-3">Category</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputCategory" name="category" value=<%=course.category%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputHours" class="col-md-2 offset-md-3">Hours</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputHours" value=<%=course.hours%> name="hours" />
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputFaculty" class="col-md-2 offset-md-3">Faculty</label>
+							<div class="col-md-4">
+								<select name="faculty" class="form-control" id="inputFaculty" required>
+									<option value="<%=course.faculty._id%>"><%=course.faculty.lastName%>, <%=course.faculty.firstName%></option>
+									<% for(var i=0; i<faculty.length; i++) { %>
+										<option value="<%= faculty[i]._id%>"><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
+							<div class="col-md-4">
+								<select name="semester" class="form-control" id="inputSemester" required>
+									<option value="<%=course.semester._id%>"><%=course.semester.season%>, <%=course.semester.year%></option>
+									<% for(var i=0; i<semesters.length; i++) { %>
+										<option value= "<%= semesters[i]._id%>"><%=semesters[i].season%>, <%=semesters[i].year%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-success">Update</button>
+							</div>
+						</div>
+
 					</form>
 					<form action="/course/delete/<%=course._id%>" method="post">
 						<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>

@@ -4,47 +4,62 @@
 <html>
 	<head>
 		<title>Create faculty</title>
-		<%- include('../partials/head.ejs') %>
+		<%- include("../partials/head.ejs") %>
 	</head>
 	
 	<body>
 		<div class="container-fluid h-100">
 			<div class="row h-100">
+				<div class="col-lg-3 sidebar text-center">
 
-				<div class='col-lg-3 sidebar text-center'>
+					<%- include("../partials/admin-sidebar.ejs") %>
 
-					<%- include('../partials/admin-sidebar.ejs') %>
-
-					<%- include('./search-faculty.ejs') %>
+					<%- include("./search-faculty.ejs") %>
 
 				</div>
-				
-				<div class='col-lg-9 panelbg text-center'>
+				<div align ="center" class="col-lg-9 panelbg text-center">
 					<h1>Create Faculty</h1>
 					<form action="/faculty/post" method="post">
-						<table align="center">
-							<tbody>
-								<tr>
-									<td>Username</td>
-									<td><input type="text" name="username" required/></td>
-								</tr>
-								<tr>
-									<td>First name</td>
-									<td><input type="text" name="firstName" required/></td>
-								</tr>
-								<tr>
-									<td>Last name</td>
-									<td><input type="text" name="lastName" required/></td>
-								</tr>
-								<tr>
-									<td>PID</td>
-									<td><input type="number" name="pid" required/></td>
-								</tr>
-								<tr>
-									<td colspan="2"><input type="submit" required/></td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="form-group row">
+							<label for="inputUsername" class="col-md-2 offset-md-3">Username</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputUsername" name="username" placeholder="Username" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputFirstname" class="col-md-2 offset-md-3">First name</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputFirstname" name="firstName" placeholder="First name" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputLastname" class="col-md-2 offset-md-3">Last name</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputLastname" name="lastName" placeholder="Last name" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputPid" class="col-md-2 offset-md-3">PID</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputPid" name="pid" placeholder="PID" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputActive" class="col-md-2 offset-md-3">Active</label>
+							<div class="col-md-4">
+								<input type="checkbox" class="form-check-input" id="inputActive" name="active" value="true" />
+							</div>
+						</div>
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>

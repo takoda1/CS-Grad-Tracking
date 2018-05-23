@@ -22,14 +22,15 @@
 				<div class='col-lg-9 panelbg text-center'>
 					<h1>Faculty</h1>
 					 <% if(faculty.length>0) { %>
-						<table align="center" border="1" class="display-table">
+						<table align="center" border="1" class="table display-table table-dark">
 							<thead>
 								<tr>
-									<th class="col-username">Username</th>
-									<th class="col-firstname">First name</th>
-									<th class="col-lastname">Last Name</th>
-									<th class="col-pid">PID</th>
-									<th class="col-delete"></th>
+									<th scope="col" class="col-facultyUsername">Username</th>
+									<th scope="col" class="col-facultyFirstname">First name</th>
+									<th scope="col" class="col-facultyLastname">Last Name</th>
+									<th scope="col" class="col-facultyPid">PID</th>
+									<th scope="col" class="col-facultyActive">Active</th>
+									<th scope="col" class="col-facultyDelete"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -40,6 +41,7 @@
 										<td><%= faculty[i].firstName%></td>
 										<td><%= faculty[i].lastName%></td>
 										<td><%= faculty[i].pid%></td>
+										<td><%= faculty[i].active%></td>
 										<td>
 											<!--IDK if I need to use form here for delete, change it if it is wrong-->
 											<form action="/faculty/delete/<%=faculty[i]._id%>" method="post">

@@ -20,32 +20,51 @@
 				</div>
 				<div class='col-lg-9 panelbg text-center'>
 					<h1>Edit Faculty</h1>
+					
 					<form action="/faculty/put" method="post">
-						<table align="center">
-							<tbody>
-								<tr>
-									<td>Username</td>
-									<td><%=faculty.username%></td>
-									<td><input type="hidden" name="username" value="<%=faculty.username%>" required /></td>
-								</tr>
-								<tr>
-									<td>First name</td>
-									<td><input type="text" name="firstName" value="<%=faculty.firstName%>" /></td>
-								</tr>
-								<tr>
-									<td>Last name</td>
-									<td><input type="text" name="lastName" value="<%=faculty.lastName%>" required/></td>
-								</tr>
-								<tr>
-									<td>PID</td>
-									<td><%=faculty.pid%></td>
-									<td><input type="hidden" name="pid" value="<%=faculty.pid%>" required/></td>
-								</tr>
-								<tr>
-									<td colspan="2"><button type="submit" class="btn btn-success">Update</button></td>
-								</tr>
-							</tbody>
-						</table>
+						<input type="hidden" name="_id" value="<%=faculty._id%>"></input>
+						<div class="form-group row">
+							<label class="col-md-2 offset-md-3">Username</label>
+							<div class="col-md-4">
+								<div><%=faculty.username%></div>
+								<input type="hidden" name="username" value=<%=faculty.username%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputFirstname" class="col-md-2 offset-md-3">First name</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputFirstname" name="firstName" value=<%=faculty.firstName%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputLastname" class="col-md-2 offset-md-3">Last name</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputLastname" name="lastName" value=<%=faculty.lastName%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-md-2 offset-md-3">PID</label>
+							<div class="col-md-4">
+								<div><%=faculty.pid%></div>
+								<input type="hidden" name="pid" value=<%=faculty.pid%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputActive" class="col-md-2 offset-md-3">Active</label>
+							<div class="col-md-4">
+								<input type="checkbox" class="form-check-input" id="inputActive" name="active" value="true" checked/>
+							</div>
+						</div>
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-success">Update</button>
+							</div>
+						</div>
 					</form>
 					<form action="/faculty/delete/<%=faculty._id%>" method="post">
 						<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>

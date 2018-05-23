@@ -66,7 +66,7 @@ semesterController.get = function (req, res) {
   If all fields are empty, then input just becomes {} which searches
   for all semesters*/
   input = util.validateModelData(input, schema.Semester); 
-  input = util.addSlashes(input); //make all text fields regular expressions with ignore case
+  input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   //Find the semesters and sort by year then season, render /semester/index.ejs on completion
   schema.Semester.find(input).sort({year:1, season:1}).exec().then(function (result) {
     res.render("../views/semester/index.ejs", {semesters: result});

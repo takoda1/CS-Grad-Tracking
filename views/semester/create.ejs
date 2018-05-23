@@ -22,26 +22,29 @@
 				<div class='col-lg-9 panelbg text-center'>
 					<h1>Create semester</h1>
 					<form action="/semester/post" method="post">
-						<table align="center">
-							<tbody>
-								<tr>
-									<td>Year</td>
-									<td><input type="number" name="year" required min="2000" max="3000"/></td>
-								</tr>
-								<tr>
-									<td>Season</td>
-									<td>
-										<select name="season" required>
-											<option value="FALL">Fall</option>
-											<option value="SPRING">Spring</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="2"><input type="submit" required/></td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="form-group row">
+							<label for="inputYear" class="col-md-2 offset-md-3">Year</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputYear" name="year" placeholder="Year" min="2000" max="3000" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputSeason" class="col-md-2 offset-md-3">Season</label>
+							<div class="col-md-4">
+								<select name="season" class="form-control" id="inputSeason" required>
+									<option value="FALL">Fall</option>
+									<option value="SPRING">Spring</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+								
 					</form>
 				</div>
 			</div>
