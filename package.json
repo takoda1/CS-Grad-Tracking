@@ -15,6 +15,7 @@
     "express": "^4.15.0",
     "gridfs-stream": "^1.1.1",
     "jquery": "^3.3.1",
+    "mongodb": "^3.1.0-beta4",
     "mongoose": "^4.8.5",
     "mustache": "^2.3.0",
     "xtend": "^4.0.1"
@@ -35,7 +36,9 @@
     ]
   },
   "scripts": {
+    "prestart":"mongod",
     "start": "node bin/www",
+    "poststop":"mongod --shutdown",
     "test": "standard --verbose | snazzy && mocha"
   },
   "repository": {

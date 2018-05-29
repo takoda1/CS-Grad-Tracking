@@ -1,7 +1,7 @@
-var schema = require("../models/schema.js")
-var util = require("./util.js")
+var schema = require("../models/schema.js");
+var util = require("./util.js");
 
-var facultyController = {}
+var facultyController = {};
 
 /**
  * @url {post} /faculty/post
@@ -39,6 +39,9 @@ facultyController.post = function (req, res) {
     schema.Faculty.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
       if (result !== null){
         res.render("../views/error.ejs", {string: "That faculty already exists"});
+      }
+      else if(input.pid.length != 9){
+        res.render("../views/error.ejs", {string: "PID needs to be of length 9"});
       }
       else {
         var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))

@@ -1,18 +1,19 @@
-var express = require('express');
+// /routes/faculty.js
+var express = require("express");
 var router = express.Router();
 
-var faculty = require('../controllers/FacultyController');
+var faculty = require("../controllers/FacultyController.js");
 
-router.get('/', faculty.get);
+router.get("/", faculty.get);
 
-router.get('/create', faculty.create);
+router.get("/create", faculty.create);
 
-router.get('/edit/:_id', faculty.edit);
+router.get("/edit/:_id", faculty.edit);
 
-router.post('/post', faculty.post);
+router.post("/post", faculty.post);
 
-router.post('/put', faculty.put);
+router.post("/put", faculty.put);
 
-router.post('/delete/:_id', faculty.delete);
+router.post("/delete/:_id", faculty.delete);
 
 module.exports = router;

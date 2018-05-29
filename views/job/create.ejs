@@ -1,0 +1,64 @@
+<!-- views/job/create.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Create job</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-3 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-job.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-9 panelbg text-center">
+					<h1>Create job</h1>
+					<form action="/job/post" method="post">
+						<div class="form-group row">
+							<label for="inputPosition" class="col-md-2 offset-md-3">Position</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputPosition" name="position" placeholder="Position" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputSupervisor" class="col-md-2 offset-md-3">Supervisor</label>
+							<div class="col-md-4">
+								<select name="supervisor" class="form-control" id="inputSupervisor" required>
+									<option value=""></option>
+									<% for(var i=0; i < faculty.length; i++){ %>
+										<option value=<%=faculty[i]._id%>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputCourse" class="col-md-2 offset-md-3">Course</label>
+							<div class="col-md-4">
+								<select name="course" class="form-control" id="inputCourse" required>
+									<option value=""></option>
+									<% for(var i=0; i < courses.length; i++){ %>
+										<option value=<%=courses[i]._id%>><%=courses[i].name%> <%=courses[i].number%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

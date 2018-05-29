@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodejs
 
 // Edit this place to set the port number and ip addess of the server that is running the application.
 // It defaults to localhost:3000
@@ -6,7 +6,12 @@ var mongoose = require('mongoose')
 mongoose.Promise = require('bluebird')
 
 var app = require('../app.js')
+
 global.server = {}
+
+//start local mongo database
+const { spawn } = require('child_process');
+const mongod = spawn('mongod');  //, ['--dbpath=/data']
 
 var connectionString = null
 if (process.env.MONGODB_PASSWORD) {

@@ -29,7 +29,8 @@ var courseController = {}
 courseController.post = function (req, res) {
   var input = req.body;
   if(util.allFieldsExist(input, schema.Course)){
-    schema.Course.findOne(input).exec().then(function (result) {
+    //attempt to populate faculty and course, if they don't exist, error will be caught
+    schema.Course.findOne(input).populate("faculty").populate("semester").exec().then(function (result) {
       if (result != null) {
         res.render("../views/error.ejs", {string: "This course already exists."});
       }
@@ -39,8 +40,9 @@ courseController.post = function (req, res) {
           res.redirect("/course/edit/"+result._id);
         });
       }
-    /*this is catching the possible error if the faculty or semester
-    provided does not exist, and populate is failing*/
+    /*this is catching the error if the faculty or semester
+    provided does not exist (shouldn't occur if frontend
+    done properly), and populate is failing*/
     }).catch(function(err){
       res.render("../views/error.ejs", {string: err.message});
     });
@@ -76,8 +78,8 @@ courseController.get = function (req, res) {
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   //http://mongoosejs.com/docs/populate.html
   schema.Course.find(input).populate("faculty").populate("semester").exec().then(function(result){
-    res.render("../views/course/index", {courses: result});
-  }).catch(function(result){
+    res.render("../views/course/index.ejs", {courses: result});
+  }).catch(function(err){
     res.json({"error": err.message, "origin": "course.put"});
   });
 }
@@ -89,7 +91,7 @@ courseController.get = function (req, res) {
  * field data is sent as an html form, and all fields
  * are required.
  *
- * @req.body {String} id (MongoID) (Required)
+ * @req.body {String} _id (MongoID) (Required)
  * @req.body {String} department (Required)
  * @req.body {Number} number (Required)
  * @req.body {String} name (Required)
@@ -110,7 +112,7 @@ courseController.put = function (req, res) {
   if(util.allFieldsExist(input, schema.Course)){
     schema.Course.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
-        res.redirect("/course/edit/"+input._id);
+        res.redirect("/course/edit/"+result._id);
       }
       else{
         throw new Error("CourseNotFound");
@@ -137,7 +139,7 @@ courseController.put = function (req, res) {
  * @failure renders error.ejs with appropriate error message
  *
  * @throws CourseNotFound (should not occur if frontend done properly)
- * @thjrows RequireParamNotFound (should not occur if frontend done properly)
+ * @throws RequireParamNotFound (should not occur if frontend done properly)
  */
 courseController.delete = function (req, res) {
   var id = req.params._id;
@@ -188,7 +190,7 @@ courseController.create = function (req, res){
   schema.Faculty.find(
     {},
     {lastName:1, firstName:1} //projection
-  ).sort({username:1}).exec().then(function(result){
+  ).sort({lastName:1}).exec().then(function(result){
     faculty = result;
     schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
       semesters = result;

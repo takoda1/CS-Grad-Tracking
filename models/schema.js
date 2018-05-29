@@ -61,6 +61,7 @@ var studentSchema = mongoose.Schema({
   dissertationDefence: Boolean,
   finalDissertation: Boolean,
   active: Boolean,
+  job: {type: mongoose.Schema.Types.ObjectId, ref: "Job"},
   semesterStarted: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: "Faculty" },
   courseHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
@@ -97,9 +98,7 @@ var courseSchema = mongoose.Schema({
 var jobSchema = mongoose.Schema({
   position: String,
   supervisor: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
-  course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"},
-  //students should reference jobs, not the other way around, change this
-  students: [{type: mongoose.Schema.Types.ObjectId, ref: "Student"}]
+  course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
 });
 
 // Grades

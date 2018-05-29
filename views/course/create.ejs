@@ -37,7 +37,7 @@
 						</div>
 
 						<div class="form-group row">
-							<label for="inputName" class="col-md-2 offset-md-3">Last name</label>
+							<label for="inputName" class="col-md-2 offset-md-3">Course name</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="inputName" name="name" placeholder="Course name" required/>
 							</div>
@@ -53,7 +53,7 @@
 						<div class="form-group row">
 							<label for="inputHours" class="col-md-2 offset-md-3">Hours</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputHours" placeholder="Hours" name="hours" />
+								<input type="number" class="form-control" id="inputHours" placeholder="Hours" name="hours" min=1 max=10 />
 							</div>
 						</div>
 
@@ -63,7 +63,7 @@
 								<select name="faculty" class="form-control" id="inputFaculty" required>
 									<option value=""></option>
 									<% for(var i=0; i<faculty.length; i++) { %>
-										<option value="<%= faculty[i]._id%>"><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+										<option value=<%= faculty[i]._id%>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
 									<% } %>
 								</select>
 							</div>
@@ -75,7 +75,7 @@
 								<select name="semester" class="form-control" id="inputSemester" required>
 									<option value=""></option>
 									<% for(var i=0; i<semesters.length; i++) { %>
-										<option value= "<%= semesters[i]._id%>"><%=semesters[i].season%>, <%=semesters[i].year%></option>
+										<option value= <%= semesters[i]._id%>><%=semesters[i].season%>, <%=semesters[i].year%></option>
 									<% } %>
 								</select>
 							</div>
