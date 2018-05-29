@@ -1,0 +1,43 @@
+<p>Search Job</p>
+<div class="search-bar">
+	<form action="/job" method="get">
+		<div class="form-group row">
+			<label for="searchPosition" class="col-md-4">Position:</label>
+			<div class="col-md-8">
+				<input type="text" class="form-control" id="searchPosition" placeholder="Position" name="position"/>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="searchSupervisor" class="col-md-4">Supervisor:</label>
+			<div class="col-md-8">
+				<select name="supervisor" class="form-control" id="searchSupervisor">
+					<option></option>
+					<% for(var i=0; i < faculty.length; i++){ %>
+						<option value=<%=faculty[i]._id%>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+					<% } %>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="searchCourse" class="col-md-4">Course:</label>
+			<div class="col-md-8">
+				<select name="course" class="form-control" id="searchCourse">
+					<option></option>
+					<% for(var i=0; i < courses.length; i++){ %>
+						<option value=<%=courses[i]._id%>><%=courses[i].name%> <%=courses[i].number%></option>
+					<% } %>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-md-4 offset-md-4">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div>
+	<p>
+		<a href="/job/create" class="btn btn-primary btn-block">Create job</a>
+	</p>
+</div>

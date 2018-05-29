@@ -1,0 +1,23 @@
+<!-- /views/student/search-student.ejs -->
+<p>Search Students</p>
+<div class="search-bar">
+	<form action="/student" method="get">
+		<div class="row">
+			<div class="col-md-6">
+				<p>Student last name:</p>
+				<p>Student PID:</p>
+			</div>
+			<div class="col-md-6">
+				<p><input type="text" name="lastName"></p>
+				<p><input type="number" name="pid"></p>
+			</div>
+		</div>
+		<button type="submit">Search</button>
+		<p></p>
+	</form>
+</div>
+<div>
+	<p>
+		<a href="/student/create" class="btn btn-primary btn-block">Create student</a>
+	</p>
+</div>
