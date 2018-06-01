@@ -36,9 +36,7 @@
     ]
   },
   "scripts": {
-    "prestart":"mongod",
     "start": "node bin/www",
-    "poststop":"mongod --shutdown",
     "test": "standard --verbose | snazzy && mocha"
   },
   "repository": {

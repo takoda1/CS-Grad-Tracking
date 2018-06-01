@@ -79,7 +79,7 @@ var semesterSchema = mongoose.Schema({
   year: Number,
   season: {
     type: String,
-    enum: ["FALL", "SPRING"]
+    enum: ["FALL", "SPRING", "SUMMER"]
   }
 });
 
@@ -87,16 +87,25 @@ var semesterSchema = mongoose.Schema({
 var courseSchema = mongoose.Schema({
   department: String,
   number: Number,
+  univNumber: Number,
   name: String,
-  category: String,
+  category: {
+    type: String,
+    enum: ["Theory", "Systems", "Appls"]
+  },
   hours: Number,
+  section: Number,
   faculty: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
   semester: {type: mongoose.Schema.Types.ObjectId, ref: "Semester"}
 });
 
 // Jobs
 var jobSchema = mongoose.Schema({
-  position: String,
+  position: {
+    type: String,
+    enum: ["RA", "TA", "Other"]
+  },
+  description: String,
   supervisor: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
 });

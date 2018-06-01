@@ -47,7 +47,7 @@ app.use("/course", require("./routes/course"));
 
 app.use("/faculty", require("./routes/faculty"));
 
-app.use("/semester", require("./routes/semester"));
+//app.use("/semester", require("./routes/semester")); just manually create all semesters
 
 app.use("/job", require("./routes/job"));
 

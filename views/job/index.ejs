@@ -11,7 +11,7 @@
 		<div class="container-fluid h-100">
 			<div class="row h-100">
 
-				<div class='col-lg-3 sidebar text-center'>
+				<div class='col-lg-2 sidebar text-center'>
 
 					<%- include('../partials/admin-sidebar.ejs') %>
 
@@ -19,7 +19,7 @@
 
 				</div>
 				
-				<div class='col-lg-9 panelbg text-center'>
+				<div class='col-lg-10 panelbg text-center'>
 					<h1>Jobs</h1>
 					 <% if(jobs.length>0) { %>
 						<table align="center" border="1" class="table display-table table-dark">
@@ -28,6 +28,7 @@
 									<th scope="col">Position</th>
 									<th scope="col">Supervisor</th>
 									<th scope="col">Course</th>
+									<th scope="col">Description</th>
 									<th scope="col"></th>
 								</tr>
 							</thead>
@@ -37,7 +38,16 @@
 									<tr>
 										<td><a href="/job/edit/<%=jobs[i]._id%>"><%= jobs[i].position%></a></td>
 										<td><%= jobs[i].supervisor.lastName%>, <%= jobs[i].supervisor.firstName%></td>
-										<td><%= jobs[i].course.name%> <%= jobs[i].course.number%></td>
+										<% if(jobs[i].course != null){ %>
+										<td><%= jobs[i].course.name%> <%= jobs[i].course.number%>, section <%=jobs[i].course.section%>, <%=jobs[i].course.semester.season%> <%=jobs[i].course.semester.year%></td>
+										<% } else {%>
+										<td></td>
+										<% } %>
+										<% if(jobs[i].description != null) { %>
+										<td><%= jobs[i].description%></td>
+										<% } else {%>
+										<td></td>
+										<% } %>
 										<td>
 											<!--IDK if I need to use form here for delete, change it if it is wrong-->
 											<form action="/job/delete/<%=jobs[i]._id%>" method="post">

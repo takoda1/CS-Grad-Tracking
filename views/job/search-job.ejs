@@ -24,7 +24,7 @@
 				<select name="course" class="form-control" id="searchCourse">
 					<option></option>
 					<% for(var i=0; i < courses.length; i++){ %>
-						<option value=<%=courses[i]._id%>><%=courses[i].name%> <%=courses[i].number%></option>
+						<option value=<%=courses[i]._id%>><%=courses[i].name%> <%=courses[i].number%>, section <%=courses[i].section%>, <%=courses[i].semester.season%> <%=courses[i].semester.year%></option>
 					<% } %>
 				</select>
 			</div>

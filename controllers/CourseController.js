@@ -34,6 +34,9 @@ courseController.post = function (req, res) {
       if (result != null) {
         res.render("../views/error.ejs", {string: "This course already exists."});
       }
+      else if(input.department.length != 4){
+        res.render("../views/error.ejs", {string: "Please input four letter department code"});
+      }
       else {
         var inputCourse = new schema.Course(util.validateModelData(input, schema.Course));
         inputCourse.save().then(function(result){
@@ -75,10 +78,16 @@ courseController.post = function (req, res) {
 courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
-  input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
+  //only field that needs to be a regular expression is name
+  if(input.name != null){
+    input.name = new RegExp(input.name, "i");
+  }
   //http://mongoosejs.com/docs/populate.html
   schema.Course.find(input).populate("faculty").populate("semester").exec().then(function(result){
-    res.render("../views/course/index.ejs", {courses: result});
+    var courses = result;
+    schema.Semester.find({}).sort({year: 1, season: 1}).exec().then(function(result){
+      res.render("../views/course/index.ejs", {courses: courses, semesters: result});
+    });
   }).catch(function(err){
     res.json({"error": err.message, "origin": "course.put"});
   });
@@ -110,6 +119,9 @@ courseController.put = function (req, res) {
   var input = req.body;
   input = util.validateModelData(input, schema.Course);
   if(util.allFieldsExist(input, schema.Course)){
+    if(input.department.length != 4){
+      res.render("../views/error.ejs", {string: "Please input four letter department code"});
+    }
     schema.Course.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/course/edit/"+result._id);
@@ -194,7 +206,8 @@ courseController.create = function (req, res){
     faculty = result;
     schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
       semesters = result;
-      res.render("../views/course/create", {faculty: faculty, semesters: semesters});
+      var categories = schema.Course.schema.path("category").enumValues;
+      res.render("../views/course/create", {faculty: faculty, semesters: semesters, categories: categories});
     });
   });
 }
@@ -229,7 +242,8 @@ courseController.edit = function (req, res){
           faculty = result;
           schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
             semesters = result;
-            res.render("../views/course/edit", {course: course, faculty: faculty, semesters: semesters});
+            var categories = schema.Course.schema.path("category").enumValues;
+            res.render("../views/course/edit", {course: course, faculty: faculty, semesters: semesters, categories: categories});
           });
         });
       }

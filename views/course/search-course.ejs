@@ -15,6 +15,17 @@
 			</div>
 		</div>
 		<div class="form-group row">
+			<label for="searchSemester" class="col-md-4">Semester:</label>
+			<div class="col-md-8">
+				<select name="semester" class="form-control" id="searchSemester">
+					<option value=""></option>
+					<% for(var i = 0; i < semesters.length; i++) { %>
+						<option value=<%=semesters[i]._id%>><%=semesters[i].season%>, <%=semesters[i].year%></option>
+					<% } %>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
 			<div class="col-md-4 offset-md-4">
 				<button type="submit" class="btn btn-primary">Search</button>
 			</div>

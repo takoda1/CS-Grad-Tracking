@@ -7,12 +7,13 @@ var jobController = {};
  * @url {post} /job/post
  *
  * @description Called when a job is to be created,
- * receives fields from an html form, all fields
- * are required for a job to be created.
+ * receives fields from an html form, position and
+ * supervisor fields required for a job to be created.
  *
  * @req.body {String} position (Required)
+ * @req.body {String} description (only available if position is "Other")
  * @req.body {String} supervisor (Required)
- * @req.body {String} course (Required)
+ * @req.body {String} course (not required because RA doesn't have a course connected to it)
  *
  * @success redirects to /job/edit/:_id route (which uses jobController.edit)
  * @failure renders error page with duplicate job message
@@ -21,9 +22,10 @@ var jobController = {};
  */
 jobController.post = function (req, res) {
   var input = req.body;
-  if(util.allFieldsExist(input, schema.Job)){
-    //attempt to populate faculty and course, if they don't exist, error will be caught
-    schema.Job.findOne(input).populate("supervisor").populate("course").exec().then(function(result){
+  input = util.validateModelData(input, schema.Job);
+  if(input.position != null && input.supervisor != null){
+    //attempt to populate faculty, if they don't exist, error will be caught
+    schema.Job.findOne(input).populate("supervisor").exec().then(function(result){
       if(result != null){
         res.render("../views/error.ejs", {string: "This job already exists."});
       }
@@ -53,6 +55,7 @@ jobController.post = function (req, res) {
  * accepts search fields as an html query
  *
  * @req.query {String} position
+ * @req.query {String} description
  * @req.query {String} supervisor (_id)
  * @req.query {String} course (_id)
  *
@@ -62,13 +65,14 @@ jobController.post = function (req, res) {
  */
 jobController.get = function (req, res) {
   var input = req.query;
-  console.log(input);
   input = util.validateModelData(input, schema.Job); //remove fields that are empty/not part of job definition
   if(input.position != null){
     input.position = new RegExp(input.position, "i");
   }
-  schema.Job.find(input).populate("supervisor").populate("course").exec().then(function (result) {
+  //https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
+  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).exec().then(function (result) {
     var jobs, faculty;
+    console.log(result);
     jobs = result;
     getFaculty().then(function(result){
       faculty = result;
@@ -85,11 +89,12 @@ jobController.get = function (req, res) {
  * @url {post} /job/put
  *
  * @description Called when a job is to be updated,
- * field data is sent as an html form, and all fields
- * are required.
+ * field data is sent as an html form, and position,
+ * _id, and supervisor are required.
  *
  * @req.body {String} _id (MongoID)
  * @req.body {String} position
+ * @req.body {String} description (only available if position is "Other")
  * @req.body {String} supervisor
  * @req.body {String} course
  *
@@ -102,7 +107,7 @@ jobController.get = function (req, res) {
 jobController.put = function (req, res) {
   var input = req.body;
   input = util.validateModelData(input, schema.Job);
-  if(util.allFieldsExist(input, schema.Job)){
+  if(input.position != null && input.supervisor != null && input._id != null){
     schema.Job.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/job/edit/"+result._id);
@@ -169,7 +174,8 @@ jobController.create = function(req, res){
   getFaculty().then(function(result){
     faculty = result;
     getCourses().then(function(result){
-      res.render("../views/job/create.ejs", {faculty: faculty, courses: result});
+      var jobTitles = schema.Job.schema.path("position").enumValues;
+      res.render("../views/job/create.ejs", {faculty: faculty, courses: result, jobTitles: jobTitles});
     });
   });
  
@@ -220,7 +226,7 @@ function getFaculty(){
 
 function getCourses(){
   return new Promise((resolve, reject)=>{
-    schema.Course.find().sort({name:1}).exec().then(function(result){
+    schema.Course.find().populate("semester").populate("faculty").sort({name:1}).exec().then(function(result){
       resolve(result);
     });
   });

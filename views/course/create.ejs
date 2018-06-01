@@ -11,7 +11,7 @@
 		<div class="container-fluid h-100">
 			<div class="row h-100">
 
-				<div class='col-lg-3 sidebar text-center'>
+				<div class='col-lg-2 sidebar text-center'>
 
 					<%- include('../partials/admin-sidebar.ejs') %>
 
@@ -19,7 +19,7 @@
 
 				</div>
 				
-				<div class='col-lg-9 panelbg text-center'>
+				<div class='col-lg-10 panelbg text-center'>
 					<h1>Create course</h1>
 					<form action="/course/post" method="post">
 						<div class="form-group row">
@@ -37,6 +37,13 @@
 						</div>
 
 						<div class="form-group row">
+							<label for="inputUnivNumber" class="col-md-2 offset-md-3">University course number</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputUnivNumber" placeholder="University course number" name="univNumber" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
 							<label for="inputName" class="col-md-2 offset-md-3">Course name</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="inputName" name="name" placeholder="Course name" required/>
@@ -46,7 +53,12 @@
 						<div class="form-group row">
 							<label for="inputCategory" class="col-md-2 offset-md-3">Category</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="inputCategory" name="category" placeholder="Category" required/>
+								<select name="category" class="form-control" id="inputCategory" required>
+									<option value=""></option>
+									<% for(var i=0; i<categories.length; i++) { %>
+										<option value=<%= categories[i]%>><%=categories[i]%></option>
+									<% } %>
+								</select>
 							</div>
 						</div>
 
@@ -54,6 +66,13 @@
 							<label for="inputHours" class="col-md-2 offset-md-3">Hours</label>
 							<div class="col-md-4">
 								<input type="number" class="form-control" id="inputHours" placeholder="Hours" name="hours" min=1 max=10 />
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputSection" class="col-md-2 offset-md-3">Section</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputSection" placeholder="Section" name="section"/>
 							</div>
 						</div>
 

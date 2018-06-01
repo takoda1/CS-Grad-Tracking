@@ -11,14 +11,14 @@
 		<div class="container-fluid h-100">
 			<div class="row h-100">
 
-				<div class='col-lg-3 sidebar text-center'>
+				<div class='col-lg-2 sidebar text-center'>
 
 					<%- include('../partials/admin-sidebar.ejs') %>
 
 					<%- include('./search-course.ejs') %>
 				</div>
 
-				<div class='col-lg-9 panelbg text-center'>
+				<div class='col-lg-10 panelbg text-center'>
 					<h1>Courses</h1>
 					 <% if(courses.length>0) { %>
 						<table align="center" border="1" class="table display-table table-dark">
@@ -26,9 +26,11 @@
 								<tr>
 									<th scope="col" class="col-course-department">Department</th>
 									<th scope="col" class="col-course-number">Number</th>
+									<th scope="col" class="col-course-univNumber">University course number</th>
 									<th scope="col" class="col-course-name">Name</th>
 									<th scope="col" class="col-course-category">Category</th>
 									<th scope="col" class="col-course-hours">Hours</th>
+									<th scope="col" class="col-course-section">Section</th>
 									<th scope="col" class="col-course-faculty">Faculty</th>
 									<th scope="col" class="col-course-semester">Semester</th>
 									<th scope="col" class="col-course-delete"></th>
@@ -40,9 +42,11 @@
 									<tr>
 										<td><a href="/course/edit/<%=courses[i]._id%>"><%= courses[i].department%></a></td>
 										<td><%= courses[i].number%></td>
+										<td><%= courses[i].univNumber%></td>
 										<td><%= courses[i].name%></td>
 										<td><%= courses[i].category%></td>
 										<td><%= courses[i].hours%></td>
+										<td><%= courses[i].section%></td>
 										<td><%= courses[i].faculty.lastName%>, <%= courses[i].faculty.firstName%></td>
 										<td><%= courses[i].semester.season%> <%= courses[i].semester.year%></td>
 										<td>

@@ -1,3 +1,4 @@
+var schema = require('../models/schema.js');
 var _ = {}
 
 var regexSlashes = /\/*\//ig;
@@ -120,6 +121,18 @@ _.makeRegexp = function(input){
     }
   }
   return input;
+}
+
+//used just once to initialize all possible semesters
+_.initializeAllSemesters = function(){
+  schema.Semester.find({}).remove().exec();
+  var seasons = schema.Semester.schema.path("season").enumValues;
+  for(var i = 2000; i < 2100; i++){
+    for(var j = 0; j < seasons.length; j++){
+      var semester = new schema.Semester({year: i, season: seasons[j]});
+      semester.save().then(function(result){}).catch(function(err){});
+    }
+  }
 }
 
 module.exports = _;

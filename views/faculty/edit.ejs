@@ -11,37 +11,37 @@
 		<div class="container-fluid h-100">
 			<div class="row h-100">
 
-				<div class='col-lg-3 sidebar text-center'>
+				<div class='col-lg-2 sidebar text-center'>
 
 					<%- include('../partials/admin-sidebar.ejs') %>
 
 					<%- include('./search-faculty.ejs') %>
-
+					
 				</div>
-				<div class='col-lg-9 panelbg text-center'>
+				<div class='col-lg-10 panelbg text-center'>
 					<h1>Edit Faculty</h1>
 					
 					<form action="/faculty/put" method="post">
-						<input type="hidden" name="_id" value=<%=faculty._id%>></input>
+						<input type="hidden" name="_id" value="<%=faculty._id%>"></input>
 						<div class="form-group row">
 							<label class="col-md-2 offset-md-3">Username</label>
 							<div class="col-md-4">
 								<div><%=faculty.username%></div>
-								<input type="hidden" name="username" value="<%=faculty.username%>" required/>
+								<input type="hidden" name="username" value=<%=faculty.username%> required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label for="inputFirstname" class="col-md-2 offset-md-3">First name</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="inputFirstname" name="firstName" value="<%=faculty.firstName%>" required/>
+								<input type="text" class="form-control" id="inputFirstname" name="firstName" value=<%=faculty.firstName%> required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label for="inputLastname" class="col-md-2 offset-md-3">Last name</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="inputLastname" name="lastName" value="<%=faculty.lastName%>" required/>
+								<input type="text" class="form-control" id="inputLastname" name="lastName" value=<%=faculty.lastName%> required/>
 							</div>
 						</div>
 

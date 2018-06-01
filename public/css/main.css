@@ -62,10 +62,14 @@ table {
 /*course table column widths */
 
 .col-course-department {
-	width:15%;
+	width:10%;
 }
 
 .col-course-number {
+	width:7.5%;
+}
+
+.col-course-univNumber{
 	width:10%;
 }
 
@@ -81,12 +85,16 @@ table {
 	width:5%;
 }
 
+.col-course-section{
+	width:7.5%;
+}
+
 .col-course-faculty {
-	width:15%;
+	width:10%;
 }
 
 .col-course-semester {
-	width:15%;
+	width:10%;
 }
 
 .col-course-delete {

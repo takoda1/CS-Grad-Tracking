@@ -10,20 +10,25 @@
 	<body>
 		<div class="container-fluid h-100">
 			<div class="row h-100">
-				<div class="col-lg-3 sidebar text-center">
+				<div class="col-lg-2 sidebar text-center">
 
 					<%- include("../partials/admin-sidebar.ejs") %>
 
 					<%- include("./search-job.ejs") %>
 
 				</div>
-				<div align ="center" class="col-lg-9 panelbg text-center">
+				<div align ="center" class="col-lg-10 panelbg text-center">
 					<h1>Create job</h1>
 					<form action="/job/post" method="post">
 						<div class="form-group row">
 							<label for="inputPosition" class="col-md-2 offset-md-3">Position</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="inputPosition" name="position" placeholder="Position" required/>
+								<select name="position" class="form-control" id="inputPosition" required>
+									<option value=""></option>
+									<% for(var i=0; i < jobTitles.length; i++){ %>
+										<option value=<%=jobTitles[i]%>><%=jobTitles[i]%></option>
+									<% } %>
+								</select>
 							</div>
 						</div>
 
@@ -39,15 +44,22 @@
 							</div>
 						</div>
 
-						<div class="form-group row">
+						<div class="form-group row" id="course">
 							<label for="inputCourse" class="col-md-2 offset-md-3">Course</label>
 							<div class="col-md-4">
-								<select name="course" class="form-control" id="inputCourse" required>
+								<select name="course" class="form-control" id="inputCourse">
 									<option value=""></option>
 									<% for(var i=0; i < courses.length; i++){ %>
-										<option value=<%=courses[i]._id%>><%=courses[i].name%> <%=courses[i].number%></option>
+										<option value=<%=courses[i]._id%> id=<%=courses[i].faculty._id%>><%=courses[i].name%> <%=courses[i].number%>, section <%=courses[i].section%>, <%=courses[i].semester.season%> <%=courses[i].semester.year%></option>
 									<% } %>
 								</select>
+							</div>
+						</div>
+
+						<div class="form-group row" id="description" hidden>
+							<label for="inputDescription" class="col-md-2 offset-md-3">Description</label>
+							<div class="col-md-4">
+								<input type="text" name="description" class="form-control" id="inputDescription" placeholder="Description" />
 							</div>
 						</div>
 
@@ -61,4 +73,47 @@
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		document.getElementById("inputPosition").addEventListener("change", function(){
+			var val = document.getElementById("inputPosition").value;
+			if(val === "Other"){
+				document.getElementById("description").hidden = false;
+			}
+			else{
+				document.getElementById("description").hidden = true;
+			}
+
+			if(val === "RA"){
+				document.getElementById("course").hidden = true;
+			}
+			else{
+				document.getElementById("course").hidden = false;
+			}
+
+			if(val != "TA"){
+				var selectCourseElement = document.getElementById("inputCourse");
+				for(var i = 0; i < selectCourseElement.options.length; i++){
+					selectCourseElement.options[i].hidden = false;
+				}
+				document.getElementById("inputSupervisor").options[0].selected = true;
+			}
+
+		}, false);
+
+		document.getElementById("inputSupervisor").addEventListener("change", function(){
+			if(document.getElementById("inputPosition").value === "TA"){
+				var facultyId = document.getElementById("inputSupervisor").value;
+				var selectCourseElement = document.getElementById("inputCourse");
+				for(var i = 0; i < selectCourseElement.options.length; i++){
+					if(selectCourseElement.options[i].id === facultyId){
+						selectCourseElement.options[i].hidden = false;
+					}
+					else{
+						selectCourseElement.options[i].hidden = true;
+					}
+					
+				}
+			}
+		}, false);
+	</script>
 </html>

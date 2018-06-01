@@ -9,10 +9,6 @@ var app = require('../app.js')
 
 global.server = {}
 
-//start local mongo database
-const spawn = require('child_process').spawn;
-const mongod = spawn('mongod');  //, ['--dbpath=/data']
-
 var connectionString = null
 if (process.env.MONGODB_PASSWORD) {
   var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase()
