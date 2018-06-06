@@ -64,6 +64,18 @@
 							</div>
 						</div>
 						<% } %>
+
+						<div class="form-group row">
+							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
+							<div class="col-md-4">
+								<select name="semester" class="form-control" id="inputSemester" required>
+									<option value=<%=job.semester%>><%=job.semester.season%>, <%=job.semester.year%></option>
+									<% for(var i=0; i < semesters.length; i++){ %>
+										<option value=<%=semesters[i]._id%>><%=semesters[i].season%> <%=semesters[i].year%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
 							
 
 						<div class="form-group row align-items-end">

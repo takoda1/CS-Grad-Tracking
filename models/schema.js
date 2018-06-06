@@ -15,7 +15,7 @@ var facultySchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   pid: Number,
-  active: String
+  active: Boolean
 });
 
 // Students
@@ -24,6 +24,7 @@ var studentSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   pid: Number,
+  active: Boolean,
   alternativeName: String,
   gender: {
     type: String,
@@ -35,7 +36,7 @@ var studentSchema = mongoose.Schema({
     enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE", "OTHER"],
     default: "OTHER"
   },
-  status: String,
+  fundingStatus: String,
   citizenship: Boolean,
   residency: {
     type: String,
@@ -54,17 +55,19 @@ var studentSchema = mongoose.Schema({
     default: "MASTERS"
   },
   hoursCompleted: Number,
-  prp: Boolean,
-  oralExam: Boolean,
-  committeeMeeting: Boolean,
-  allButDissertation: Boolean,
-  dissertationDefence: Boolean,
-  finalDissertation: Boolean,
-  active: Boolean,
+  prpPassed: Boolean,
+  backgroundPrepWorksheetApproved: Boolean,
+  programOfStudyApproved: Boolean,
+  researchPlanningMeeting: Boolean,
+  committeeCompApproved: Boolean,
+  phdProposalApproved: Boolean,
+  oralExamPassed: Boolean,
+  dissertationDefencePassed: Boolean,
+  dissertationSubmitted: Boolean,
   job: {type: mongoose.Schema.Types.ObjectId, ref: "Job"},
   semesterStarted: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: "Faculty" },
-  courseHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
+  courseHistory: [{courses: { type: mongoose.Schema.Types.ObjectId, ref: "Course" }}]
 });
 
 // Documents
@@ -107,6 +110,7 @@ var jobSchema = mongoose.Schema({
   },
   description: String,
   supervisor: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
+  semester: {type: mongoose.Schema.Types.ObjectId, ref: "Semester"},
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
 });
 

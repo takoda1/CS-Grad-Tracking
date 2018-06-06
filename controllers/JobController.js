@@ -17,6 +17,7 @@ var jobController = {};
  *
  * @success redirects to /job/edit/:_id route (which uses jobController.edit)
  * @failure renders error page with duplicate job message
+
  * 
  * @throws {Object} RequiredParamNotFound (should not occur if frontend done properly)
  */
@@ -70,14 +71,16 @@ jobController.get = function (req, res) {
     input.position = new RegExp(input.position, "i");
   }
   //https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
-  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).exec().then(function (result) {
-    var jobs, faculty;
-    console.log(result);
+  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate("semester").exec().then(function (result) {
+    var jobs, faculty, courses;
     jobs = result;
     getFaculty().then(function(result){
       faculty = result;
       getCourses().then(function(result){
-        res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: result});
+        courses = result;
+        schema.Semester.find({}).sort({year: 1, season:1}).exec().then(function(result){
+          res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters:result});
+        });
       });
     });
   }).catch(function (err) {
@@ -170,12 +173,15 @@ jobController.delete = function (req, res) {
  *
  */
 jobController.create = function(req, res){
-  var faculty;
+  var faculty, courses, jobTitles;
+  jobTitles = schema.Job.schema.path("position").enumValues;
   getFaculty().then(function(result){
     faculty = result;
     getCourses().then(function(result){
-      var jobTitles = schema.Job.schema.path("position").enumValues;
-      res.render("../views/job/create.ejs", {faculty: faculty, courses: result, jobTitles: jobTitles});
+      courses = result;
+      schema.Semester.find({}).sort({year: 1, season:1}).exec().then(function(result){
+        res.render("../views/job/create.ejs", {faculty: faculty, courses: courses, jobTitles: jobTitles, semesters: result});
+      });
     });
   });
  
@@ -198,14 +204,17 @@ jobController.create = function(req, res){
  */
 jobController.edit = function(req, res){
   if (req.params._id) { //_id from params because passed with job/edit/:_id
-    schema.Job.findOne({_id: req.params._id}).populate("supervisor").populate("course").exec().then(function (result) {
+    schema.Job.findOne({_id: req.params._id}).populate("supervisor").populate("course").populate("semester").exec().then(function (result) {
       if (result != null) {
-        var job, faculty;
+        var job, faculty, courses;
         job = result;
         getFaculty().then(function(result){
           faculty = result;
           getCourses().then(function(result){
-            res.render("../views/job/edit.ejs", {job: job, faculty: faculty, courses: result});
+            courses = result;
+            schema.Semester.find({}).sort({year: 1, season:1}).exec().then(function(result){
+              res.render("../views/job/edit.ejs", {job: job, faculty: faculty, courses: courses, semesters: result});
+            });
           });
         });
       }

@@ -20,7 +20,7 @@ var studentController = {}
  * @req.body {String} alternativeName
  * @req.body {enum: ["MALE", "FEMALE", "OTHER"]} gender
  * @req.body {enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE"]} ethnicity
- * @req.body {String} status
+ * @req.body {String} fundingStatus
  * @req.body {Boolean} citizenship
  * @req.body {enum: ["YES", "NO", "APPLIED"]} residency
  * @req.body {String} enteringStatus
@@ -31,12 +31,16 @@ var studentController = {}
  * @req.body {Boolean} fundingStatus
  * @req.body {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
  * @req.body {Number} hoursCompleted
- * @req.body {Boolean} prp
- * @req.body {Boolean} oralExam
- * @req.body {Boolean} committeeMeeting
- * @req.body {Boolean} allButDissertation
- * @req.body {Boolean} dissertationDefence
- * @req.body {Boolean} finalDissertation
+ * @req.body {Boolean} prpPassed
+ * @req.body {Boolean} backgroundPrepWorksheetApproved
+ * @req.body {Boolean} programOfStudyApproved
+ * @req.body {Boolean} researchPlanningMeeting
+ * @req.body {Boolean} committeeCompApproved
+ * @req.body {Boolean} phdProposalApproved
+ * @req.body {Boolean} oralExamPassed
+ * @req.body {Boolean} dissertationDefencePassed
+ * @req.body {Boolean} dissertationSubmitted
+ * @req.body {Boolean} active
  * @req.body {Object} semesterStarted
  * @req.body {String} advisor
  * @req.body {Object} courseHistory (MongoID array)
@@ -48,6 +52,7 @@ var studentController = {}
  */
 studentController.post = function (req, res) {
   var input = req.body;
+  input = verifyBoolean(input);
   //verify that the required fields are not null
   if(input.username != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN){
     //try to find a student by unique identifiers: username or PID, display error page if one found
@@ -55,11 +60,11 @@ studentController.post = function (req, res) {
       if (result != null){
         res.render("../views/error.ejs", {string: "That student already exists."});
       }
+      else if(input.pid.length != 9){
+        res.render("../views/error.ejs", {string: "PID needs to be of length 9"});
+      }
       else {
-        if(input.citizenship == null){
-          input.citizenship = false;
-        }
-        var inputStudent = new schema.Student(util.validateModelData(input, schema.Student))
+        var inputStudent = new schema.Student(util.validateModelData(input, schema.Student));
         /*use the then function because save() is asynchronous. If you only have inputStudent.save(); res.redirect...
         it is possible that the data does not save in time (or load in time if performing queries that return data
         that is to be sent to a view) before the view loads which can cause errors. So put view rendering code which is
@@ -120,6 +125,7 @@ studentController.get = function (req, res) {
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   schema.Student.find(input).sort({username:1}).exec().then(function (result) {
+
     res.render("../views/student/index.ejs", {students: result});
   }).catch(function (err) {
     res.json({"error": err.message, "origin": "student.get"})
@@ -169,9 +175,10 @@ studentController.get = function (req, res) {
  */
 studentController.put = function (req, res) {
   var input = req.body;
+  input = verifyBoolean(input);
   var input = util.validateModelData(input, schema.Student);
   if (input.username != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
-    schema.Student.findOneAndUpdate({_id: input._id}).exec().then(function(result){
+    schema.Student.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/student/edit/"+result._id);
       }
@@ -197,22 +204,79 @@ studentController.put = function (req, res) {
  * @throws {Object} StudentNotFound (should not be thrown if front end is done correctly)
  * @throws {Object} RequiredParamNotFound (should not be thrown if front end is done correctly)
  */
-studentController.delete = function (input, res) {
+studentController.delete = function (req, res) {
   var id = req.params._id
   if (id != null) {
-    /*Jobs and documents reference students; since documents are
-    personal student documents, just delete the documents. For job,
-    however, you want to keep the job but delete the student from
-    the list of students holding the job.
+    /*Documents reference students; since documents are
+    personal student documents, just delete the documents. 
     */
     schema.Student.findOneAndRemove({_id: id}).exec().then(function(result){
-      schema.Job.find({students: {$elemMatch: {_id: id}}}).exec().then(function(result){
-
-      });
-      schema.Document.find({student: id}).remove().exec();
-
+      if(result){
+        schema.Document.find({student: id}).remove().exec();
+        res.redirect("/student");
+      }
+      else throw new Error("StudentNotFound");
     });
   }
+}
+
+studentController.create = function(req, res){
+  var genders, ethnicities, residencies, degrees, jobs, semesters;
+  genders = schema.Student.schema.path("gender").enumValues;
+  ethnicities = schema.Student.schema.path("ethnicity").enumValues;
+  residencies = schema.Student.schema.path("residency").enumValues;
+  degrees = schema.Student.schema.path("intendedDegree").enumValues;
+  schema.Job.find({}).populate("supervisor").populate("semester").populate("course").exec().then(function(result){
+    jobs = result;
+    schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+      semesters = result;
+      schema.Faculty.find({}).sort({lastName:1}).exec().then(function(result){
+        res.render("../views/student/create", {faculty: result, semesters: semesters, jobs: jobs, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
+      });
+    });
+  });
+}
+
+studentController.edit = function(req, res){
+  if(req.params._id){
+    schema.Student.findOne({_id: req.params._id}).populate("job").populate("semesterStarted").populate("advisor").populate("courseHistory.courses").exec().then(function(result){
+      if(result != null){
+        var genders, ethnicities, residencies, degrees, jobs, semesters, student;
+        student = result;
+        genders = schema.Student.schema.path("gender").enumValues;
+        ethnicities = schema.Student.schema.path("ethnicity").enumValues;
+        residencies = schema.Student.schema.path("residency").enumValues;
+        degrees = schema.Student.schema.path("intendedDegree").enumValues;
+        schema.Job.find({}).populate("supervisor").populate("semester").populate("course").exec().then(function(result){
+          jobs = result;
+          schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+            semesters = result;
+            schema.Faculty.find({}).sort({lastName:1}).exec().then(function(result){
+              res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, jobs: jobs, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
+            });
+          });
+        });
+      }
+      else{
+        throw new Error("Student not found");
+      }
+    });
+  }
+  else{
+    throw new Error("RequiredParamNotFound");
+  }
+}
+
+function verifyBoolean(input){
+  var m = schema.Student.schema.paths
+  for(var key in m){
+    if(m[key].instance === "Boolean"){
+      if(input[key] == null){
+        input[key] = false;
+      }
+    }
+  }
+  return input;
 }
 
 module.exports = studentController;

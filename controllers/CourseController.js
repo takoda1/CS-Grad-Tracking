@@ -243,19 +243,32 @@ courseController.edit = function (req, res){
           schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
             semesters = result;
             var categories = schema.Course.schema.path("category").enumValues;
-            res.render("../views/course/edit", {course: course, faculty: faculty, semesters: semesters, categories: categories});
+            res.render("../views/course/edit.ejs", {course: course, faculty: faculty, semesters: semesters, categories: categories});
           });
         });
       }
       else{
         throw new Error("Course not found");
       }
-    //catches error if _id is null
     });
   }
+  //catches error if _id is null
   else{
     throw new Error("RequiredParamNotFound");
   }
+}
+
+/*
+ * @url {get} /course/upload
+ *
+ * @description renders /course/upload.ejs
+ *
+ */
+courseController.uploadPage = function(req, res){
+  //always have to provide semesters because search requires it
+  schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+    res.render("../views/course/upload.ejs", {semesters: result});
+  });
 }
 
 

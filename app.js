@@ -51,6 +51,8 @@ app.use("/faculty", require("./routes/faculty"));
 
 app.use("/job", require("./routes/job"));
 
+app.use("/student", require("./routes/student"));
+
 // catch 404 and forward to error handler
 app.use(function (req, res) {
   var err = new Error("Not Found")

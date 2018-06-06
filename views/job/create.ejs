@@ -56,6 +56,18 @@
 							</div>
 						</div>
 
+						<div class="form-group row" id="semester">
+							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
+							<div class="col-md-4">
+								<select name="semester" class="form-control" id="inputSemester" required>
+									<option value=""></option>
+									<% for(var i=0; i < semesters.length; i++){ %>
+										<option value=<%=semesters[i]._id%>><%=semesters[i].season%> <%=semesters[i].year%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
 						<div class="form-group row" id="description" hidden>
 							<label for="inputDescription" class="col-md-2 offset-md-3">Description</label>
 							<div class="col-md-4">

@@ -29,6 +29,7 @@
 									<th scope="col">Supervisor</th>
 									<th scope="col">Course</th>
 									<th scope="col">Description</th>
+									<th scope="col">Semester</th>
 									<th scope="col"></th>
 								</tr>
 							</thead>
@@ -36,7 +37,7 @@
 
 								<% for(var i=0; i<jobs.length; i++) { %>
 									<tr>
-										<td><a href="/job/edit/<%=jobs[i]._id%>"><%= jobs[i].position%></a></td>
+										<td><%= jobs[i].position%></td>
 										<td><%= jobs[i].supervisor.lastName%>, <%= jobs[i].supervisor.firstName%></td>
 										<% if(jobs[i].course != null){ %>
 										<td><%= jobs[i].course.name%> <%= jobs[i].course.number%>, section <%=jobs[i].course.section%>, <%=jobs[i].course.semester.season%> <%=jobs[i].course.semester.year%></td>
@@ -48,11 +49,14 @@
 										<% } else {%>
 										<td></td>
 										<% } %>
+										<td><%= jobs[i].semester.season%>, <%= jobs[i].semester.year%></td>
 										<td>
-											<!--IDK if I need to use form here for delete, change it if it is wrong-->
-											<form action="/job/delete/<%=jobs[i]._id%>" method="post">
-												<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
-											</form>
+											<div class="col-md-10 offset-md-1">
+												<a href="/job/edit/<%=jobs[i]._id%>" class="editTag"><button class="btn btn-light btn-block">Edit</button></a>
+												<form action="/job/delete/<%=jobs[i]._id%>" method="post">
+													<button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Do you really want to delete this?');">Delete</button>
+												</form>
+											</div>
 										</td>
 									</tr>
 								<% } %>

@@ -40,7 +40,7 @@
 
 								<% for(var i=0; i<courses.length; i++) { %>
 									<tr>
-										<td><a href="/course/edit/<%=courses[i]._id%>"><%= courses[i].department%></a></td>
+										<td><%= courses[i].department%></td>
 										<td><%= courses[i].number%></td>
 										<td><%= courses[i].univNumber%></td>
 										<td><%= courses[i].name%></td>
@@ -50,10 +50,12 @@
 										<td><%= courses[i].faculty.lastName%>, <%= courses[i].faculty.firstName%></td>
 										<td><%= courses[i].semester.season%> <%= courses[i].semester.year%></td>
 										<td>
-											<!--IDK if I need to use form here for delete, change it if it is wrong-->
-											<form action="/course/delete/<%= courses[i]._id%>" method="post">
-												<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
-											</form>
+											<div class="col-md-10 offset-md-1">
+												<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><button class="btn btn-light btn-block">Edit</button></a>
+												<form action="/course/delete/<%= courses[i]._id%>" method="post">
+													<button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Do you really want to delete this?');">Delete</button>
+												</form>
+											</div>
 										</td>
 									</tr>
 								<% } %>

@@ -1,0 +1,64 @@
+<!-- views/student/index.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Search students</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-2 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<%- include('./search-student.ejs') %>
+
+				</div>
+				
+				<div class='col-lg-10 panelbg text-center'>
+					<h1>Student</h1>
+					 <% if(students.length>0) { %>
+						<table align="center" border="1" class="table display-table table-dark">
+							<thead>
+								<tr>
+									<th scope="col" class="col-studentUsername">Username</th>
+									<th scope="col" class="col-studentFirstname">First name</th>
+									<th scope="col" class="col-studentLastname">Last Name</th>
+									<th scope="col" class="col-studentPid">PID</th>
+									<th scope="col" class="col-studentActive">Active</th>
+									<th scope="col" class="col-studentDelete"></th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<% for(var i=0; i<students.length; i++) { %>
+									<tr>
+										<td><%= students[i].username%></td>
+										<td><%= students[i].firstName%></td>
+										<td><%= students[i].lastName%></td>
+										<td><%= students[i].pid%></td>
+										<td><%= students[i].active%></td>
+										<td>
+											<div class="col-md-10 offset-md-1">
+												<a href="/student/edit/<%=students[i]._id%>" class="editTag"><button class="btn btn-light btn-block">Edit</button></a>
+												<form action="/student/delete/<%=students[i]._id%>" method="post">
+													<button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Do you really want to delete this?');">Delete</button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								<% } %>
+							</tbody>
+						</table>
+					<% } else { %>
+						<div>No student found.</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

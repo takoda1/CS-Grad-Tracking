@@ -1,19 +1,30 @@
 <!-- /views/student/search-student.ejs -->
-<p>Search Students</p>
+<p>Search students</p>
 <div class="search-bar">
 	<form action="/student" method="get">
-		<div class="row">
-			<div class="col-md-6">
-				<p>Student last name:</p>
-				<p>Student PID:</p>
-			</div>
-			<div class="col-md-6">
-				<p><input type="text" name="lastName"></p>
-				<p><input type="number" name="pid"></p>
+		<div class="form-group row">
+			<label for="searchLastName" class="col-md-4">Last Name:</label>
+			<div class="col-md-8">
+				<input type="text" class="form-control" id="searchLastName" placeholder="Last name" name="lastName"/>
 			</div>
 		</div>
-		<button type="submit">Search</button>
-		<p></p>
+		<div class="form-group row">
+			<label for="searchPid" class="col-md-4">PID:</label>
+			<div class="col-md-8">
+				<input type="number" pattern=".{9,9}" class="form-control" id="searchPid" placeholder="PID" name="pid"/>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="searchActive" class="col-md-4">Active:</label>
+			<div class="col-md-8">
+				<input type="checkbox" class="form-control" id="searchActive" name="active" checked value=true />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-md-4 offset-md-4">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+		</div>
 	</form>
 </div>
 <div>

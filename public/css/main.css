@@ -104,3 +104,7 @@ table {
 .display-table {
 	width: 100%;
 }
+
+.editTag:hover {
+	text-decoration: none;
+}

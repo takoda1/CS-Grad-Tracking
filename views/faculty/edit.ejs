@@ -56,7 +56,7 @@
 						<div class="form-group row">
 							<label for="inputActive" class="col-md-2 offset-md-3">Active</label>
 							<div class="col-md-4">
-								<input type="checkbox" class="form-check-input" id="inputActive" name="active" value="true" checked/>
+								<input type="checkbox" class="form-check-input" id="inputActive" name="active" <% if(faculty.active === true) { %> checked <% } %> value="true"/>
 							</div>
 						</div>
 
