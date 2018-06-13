@@ -1,0 +1,109 @@
+<!-- views/job/assign.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Assign students to this job</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-2 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<%- include('./search-job.ejs') %>
+
+				</div>
+				
+				<div class='col-lg-10 panelbg text-center'>
+					<h1>Job description</h1>
+					<table align="center" border="1" class="table display-table table-dark">
+						<thead>
+							<tr>
+								<th scope="col">Position</th>
+								<th scope="col">Supervisor</th>
+								<th scope="col">Course</th>
+								<th scope="col">Description</th>
+								<th scope="col">Semester</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><%= job.position%></td>
+								<td><%= job.supervisor.lastName%>, <%= job.supervisor.firstName%></td>
+								<% if(job.course != null){ %>
+								<td><%= job.course.name%> <%= job.course.number%>, section <%=job.course.section%>, <%=job.course.semester.season%> <%=job.course.semester.year%></td>
+								<% } else {%>
+								<td></td>
+								<% } %>
+								<% if(job.description != null) { %>
+								<td><%= job.description%></td>
+								<% } else {%>
+								<td></td>
+								<% } %>
+								<td><%= job.semester.season%>, <%= job.semester.year%></td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 class="space">Students holding this job</h3>
+					<% if(studentsWithJob.length > 0) { %>
+					<table align="center" border="1" class="table display-table table-dark">
+						<thead>
+							<tr>
+								<th scope="col">Last name</th>
+								<th scope="col">First name</th>
+								<th scope="col">Remove student from job</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% for(var i = 0; i < studentsWithJob.length; i++){ %>
+							<tr>
+								<td><%= studentsWithJob[i].lastName%></td>
+								<td><%= studentsWithJob[i].firstName%></td>
+								<td>
+									<form action="/job/unassign" method="post">
+										<input type="hidden" name="studentId" value=<%=studentsWithJob[i]._id%> />
+										<input type="hidden" name="jobId" value=<%=job._id%> />
+										<button type="submit" class="btn btn-danger">Delete</button>
+									</form>
+								</td>
+							</tr>
+							<% } %>
+						</tbody>
+					</table>
+					<% } else {%>
+					<b>No students hold this job.</b>
+					<% } %>
+
+					<h3 class="space">Add students to this job</h3>
+
+					<form action="/job/assignPost/<%=job._id%>" method="post">
+						<div class="form-group row">
+							<label for="inputStudents" class="col-md-2 offset-md-3">Students</label>
+							<div class="col-md-4">
+								<select name="students" class="form-control" id="inputStudents" multiple required>
+									<option value=""></option>
+									<% for(var i=0; i < students.length; i++){ %>
+										<option value=<%=students[i]._id%>><%=students[i].lastName%>, <%=students[i].firstName%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

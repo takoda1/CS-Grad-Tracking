@@ -7,13 +7,13 @@ var studentController = {}
  * @url {post} /student/post
  *
  * @description Called when a student is to be created,
- * receives fields from an html form, username, first name,
+ * receives fields from an html form, onyen, first name,
  * last name, and pid required.
  *
  * A form is submitted when student/post is called, and
  * the form data is stored in req.body
  *
- * @req.body {String} username (Required)
+ * @req.body {String} onyen (Required)
  * @req.body {String} firstName (Required)
  * @req.body {String} lastName (Required)
  * @req.body {Number} pid (Required)
@@ -54,9 +54,9 @@ studentController.post = function (req, res) {
   var input = req.body;
   input = verifyBoolean(input);
   //verify that the required fields are not null
-  if(input.username != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN){
-    //try to find a student by unique identifiers: username or PID, display error page if one found
-    schema.Student.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
+  if(input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN){
+    //try to find a student by unique identifiers: onyen or PID, display error page if one found
+    schema.Student.findOne({$or: [{onyen: input.onyen}, {pid: input.pid}]}).exec().then(function (result) {
       if (result != null){
         res.render("../views/error.ejs", {string: "That student already exists."});
       }
@@ -88,7 +88,7 @@ studentController.post = function (req, res) {
  * @description Called when /student/index.ejs is to be rendered,
  * accepts search fields as an html query, all fields optional
  *
- * @req.query {String} username
+ * @req.query {String} onyen
  * @req.query {String} firstName
  * @req.query {String} lastName
  * @req.query {Number} pid
@@ -124,8 +124,7 @@ studentController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
-  schema.Student.find(input).sort({username:1}).exec().then(function (result) {
-
+  schema.Student.find(input).sort({onyen:1}).exec().then(function (result) {
     res.render("../views/student/index.ejs", {students: result});
   }).catch(function (err) {
     res.json({"error": err.message, "origin": "student.get"})
@@ -136,10 +135,10 @@ studentController.get = function (req, res) {
  * @url {post} /student/put
  *
  * @description Called when a student is to be updated,
- * field datat is sent as an html form, and username,
+ * field datat is sent as an html form, and onyen,
  * first name, last name, and pid are required.
  *
- * @req.body {String} username
+ * @req.body {String} onyen
  * @req.body {String} firstName
  * @req.body {String} lastName 
  * @req.body {Number} pid
@@ -177,7 +176,7 @@ studentController.put = function (req, res) {
   var input = req.body;
   input = verifyBoolean(input);
   var input = util.validateModelData(input, schema.Student);
-  if (input.username != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
+  if (input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
     schema.Student.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/student/edit/"+result._id);
@@ -239,7 +238,7 @@ studentController.create = function(req, res){
 
 studentController.edit = function(req, res){
   if(req.params._id){
-    schema.Student.findOne({_id: req.params._id}).populate("job").populate("semesterStarted").populate("advisor").populate("courseHistory.courses").exec().then(function(result){
+    schema.Student.findOne({_id: req.params._id}).populate("semesterStarted").populate("advisor").exec().then(function(result){
       if(result != null){
         var genders, ethnicities, residencies, degrees, jobs, semesters, student;
         student = result;
@@ -265,6 +264,49 @@ studentController.edit = function(req, res){
   else{
     throw new Error("RequiredParamNotFound");
   }
+}
+
+studentController.jobs = function(req, res){
+  if(req.params._id){
+    schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
+    .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
+      res.render("../views/student/jobs", {student: result});
+    });
+  }
+  else{
+    //this shouldn't happen if frontend done correctly
+    throw new Error("RequiredParamNotFound");
+  }
+}
+
+studentController.deleteJob = function(req, res){
+  var input = req.body;
+  if(input.studentId != null && input.jobId != null){
+    schema.Student.update({_id:input.studentId}, {$pull:{jobHistory: input.jobId}}).exec().then(function(result){
+      res.redirect("/student/jobs/"+input.studentId);
+    }).catch(function(err){
+      res.render("../views/error.ejs", {string:"Student was not found."});
+    });
+  } 
+  else{
+    res.render("../views/error.ejs", {string: "Either studentId or jobId is missing."});
+  }
+}
+
+studentController.formPage = function(req, res){
+  if(req.params._id != null){
+    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+      var formTitles = schema.Form.schema.path("title").enumValues;
+      res.render("../views/student/forms", {student: result, formTitles: formTitles});
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string: "StudentId incorrect"});
+  }
+}
+
+studentController.uploadForm = function(req, res){
+  
 }
 
 function verifyBoolean(input){

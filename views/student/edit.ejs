@@ -18,15 +18,27 @@
 
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
+					<ul class="nav nav-tabs whiteBg space">
+					  <li class="nav-item">
+					    <a class="nav-link active" href="#">Student</a>
+					  </li>
+					  <li class="nav-item">
+					    <a class="nav-link" href="/student/jobs/<%=student._id%>">Jobs</a>
+					  </li>
+					  <li class="nav-item">
+					    <a class="nav-link" href="/student/forms/<%=student._id%>">Forms</a>
+					  </li>
+					</ul>
 					<h1>Edit student</h1>
 					<form action="/student/put" method="post">
 						<input type="hidden" name="_id" value=<%=student._id%>></input>
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group row">
-									<label for="inputUsername" class="col-md-4">Username</label>
+									<label class="col-md-4">Onyen</label>
 									<div class="col-md-8">
-										<input type="text" class="form-control" id="inputUsername" name="username" value=<%=student.username%> required/>
+										<div><%=student.onyen%></div>
+										<input type="hidden" class="form-control" name="onyen" value=<%=student.onyen%> required/>
 									</div>
 								</div>
 
@@ -45,9 +57,10 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputPid" class="col-md-4">PID</label>
+									<label class="col-md-4">PID</label>
 									<div class="col-md-8">
-										<input type="number" class="form-control" id="inputPid" name="pid" value=<%=student.pid%> required/>
+										<div><%=student.pid%></div>
+										<input type="hidden" class="form-control" name="pid" value=<%=student.pid%> required/>
 									</div>
 								</div>
 
@@ -69,13 +82,8 @@
 									<label for="inputGender" class="col-md-4">Gender</label>
 									<div class="col-md-8">
 										<select name="gender" class="form-control" id="inputGender">
-											<% if(student.gender != null) { %>
-											<option value=<%=student.gender%>><%=student.gender%></option>
-											<% } else {%>
-											<option value=""></option>
-											<% } %>
 											<% for(var i=0; i<genders.length; i++) { %>
-												<option value=<%= genders[i]%>><%=genders[i]%></option>
+												<option value=<%= genders[i]%> <% if(student.gender === genders[i]) { %> selected <% } %>><%=genders[i]%></option>
 											<% } %>
 										</select>
 									</div>
@@ -85,29 +93,10 @@
 									<label for="inputEthnicity" class="col-md-4">Ethnicity</label>
 									<div class="col-md-8">
 										<select name="ethnicity" class="form-control" id="inputEthnicity">
-											<% if(student.ethnicity != null) { %>
-											<option value=<%=student.ethnicity%>><%=student.ethnicity%></option>
-											<% } else {%>
-											<option value=""></option>
-											<% } %>
 											<% for(var i=0; i<ethnicities.length; i++) { %>
-												<option value=<%= ethnicities[i]%>><%=ethnicities[i]%></option>
+												<option value=<%= ethnicities[i]%> <% if(student.ethnicity === ethnicities[i]) { %> selected <% } %>><%=ethnicities[i]%></option>
 											<% } %>
 										</select>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputFundingStatus" class="col-md-4">Funding status</label>
-									<div class="col-md-8">
-										<input type="text" class="form-control" id="inputFundingStatus" name="fundingStatus" <% if(student.fundingStatus != null) { %> value="<%=student.fundingStatus%>" <% } %>/>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputCitizenship" class="col-md-4">Citizenship</label>
-									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputCitizenship" name="citizenship" value="true" <% if(student.citizenship === true) { %> checked <% } %>/>
 									</div>
 								</div>
 
@@ -115,13 +104,8 @@
 									<label for="inputResidency" class="col-md-4">Residency</label>
 									<div class="col-md-8">
 										<select name="residency" class="form-control" id="inputResidency">
-											<% if(student.residency != null) { %>
-											<option value=<%=student.residency%>><%=student.residency%></option>
-											<% } else {%>
-											<option value=""></option>
-											<% } %>
 											<% for(var i=0; i<residencies.length; i++) { %>
-												<option value=<%= residencies[i]%>><%=residencies[i]%></option>
+												<option value=<%= residencies[i]%> <% if(student.residency === residencies[i]) { %> selected <% } %>><%=residencies[i]%></option>
 											<% } %>
 										</select>
 									</div>
@@ -134,9 +118,6 @@
 									</div>
 								</div>
 
-							</div>
-							<div class="col-md-4">
-
 								<div class="form-group row">
 									<label for="inputResearchArea" class="col-md-4">Research area</label>
 									<div class="col-md-8">
@@ -144,17 +125,38 @@
 									</div>
 								</div>
 
-								<div class="form-group row">
-									<label for="inputBackgroundApproved" class="col-md-4">Background approved</label>
-									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputBackgroundApproved" name="backgroundApproved" value="true" <% if(student.backgroundApproved === true) { %> checked <% } %>/>
-									</div>
-								</div>
+							</div>
+							<div class="col-md-4">
 
 								<div class="form-group row">
 									<label for="inputLeaveExtension" class="col-md-4">Leave extension</label>
 									<div class="col-md-8">
 										<input type="text" class="form-control" id="inputLeaveExtension" name="leaveExtension" <% if(student.leaveExtension != null) { %> value="<%=student.leaveExtension%>" <% } %>/>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputIntendedDegree" class="col-md-4">Intended degree</label>
+									<div class="col-md-8">
+										<select name="intendedDegree" class="form-control" id="inputIntendedDegree">
+											<% for(var i=0; i<degrees.length; i++) { %>
+												<option value=<%= degrees[i]%> <% if(student.intenededDegree === degrees[i]) { %> selected <% } %>><%=degrees[i]%></option>
+											<% } %>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputHoursCompleted" class="col-md-4">Hours completed</label>
+									<div class="col-md-8">
+										<input type="number" class="form-control" id="inputHoursCompleted" name="hoursCompleted" <% if(student.hoursCompleted != null) { %> value=<%=student.hoursCompleted%> <% } %>/>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputCitizenship" class="col-md-4">Citizenship</label>
+									<div class="col-md-8">
+										<input type="checkbox" class="form-check-input" id="inputCitizenship" name="citizenship" value="true" <% if(student.citizenship === true) { %> checked <% } %>/>
 									</div>
 								</div>
 
@@ -173,53 +175,30 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputIntendedDegree" class="col-md-4">Intended degree</label>
+									<label for="inputBackgroundApproved" class="col-md-4">Background approved</label>
 									<div class="col-md-8">
-										<select name="intendedDegree" class="form-control" id="inputIntendedDegree">
-											<% if(student.intendedDegree != null) { %>
-											<option value=<%=student.intendedDegree%>><%=student.intendedDegree%></option>
-											<% } else {%>
-											<option value=""></option>
-											<% } %>
-											<% for(var i=0; i<degrees.length; i++) { %>
-												<option value=<%= degrees[i]%>><%=degrees[i]%></option>
-											<% } %>
-										</select>
+										<input type="date" class="form-control" id="inputBackgroundApproved" name="backgroundApproved" <% if(student.backgroundApproved != null) { %> value=<%=student.backgroundApproved.toISOString().substring(0,10)%> <% } %> />
 									</div>
 								</div>
 
 								<div class="form-group row">
-									<label for="inputHoursCompleted" class="col-md-4">Hours completed</label>
+									<label for="inputMastersAwarded" class="col-md-4">Masters awarded</label>
 									<div class="col-md-8">
-										<input type="number" class="form-control" id="inputHoursCompleted" name="hoursCompleted" <% if(student.hoursCompleted != null) { %> value=<%=student.hoursCompleted%> <% } %>/>
+										<input type="date" class="form-control" id="inputMastersAwarded" name="mastersAwarded" <% if(student.mastersAwarded != null) { %> value=<%=student.mastersAwarded.toISOString().substring(0,10)%> <% } %> />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputPrpPassed" class="col-md-4">prp passed</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputPrpPassed" name="prpPassed" value="true" <% if(student.prpPassed === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputPrpPassed" name="prpPassed" <% if(student.prpPassed != null) { %> value=<%=student.prpPassed.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputBackgroundPrepWorksheetApproved" class="col-md-4">Background prep worksheet approved</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputBackgroundPrepWorksheetApproved" name="backgroundPrepWorksheetApproved" value="true" <% if(student.backgroundPrepWorksheetApproved === true) { %> checked <% } %>/>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputProgramOfStudyApproved" class="col-md-4">Program of study approved</label>
-									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputProgramOfStudyApproved" name="programOfStudyApproved" value="true" <% if(student.programOfStudyApproved === true) { %> checked <% } %>/>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputResearchPlanningMeeting" class="col-md-4">Research planning meeting</label>
-									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputResearchPlanningMeeting" name="researchPlanningMeeting" value="true" <% if(student.researchPlanningMeeting === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputBackgroundPrepWorksheetApproved" name="backgroundPrepWorksheetApproved" <% if(student.backgroundPrepWorksheetApproved != null) { %> value=<%=student.backgroundPrepWorksheetApproved.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
@@ -227,51 +206,61 @@
 							<div class="col-md-4">
 
 								<div class="form-group row">
+									<label for="inputProgramOfStudyApproved" class="col-md-4">Program of study approved</label>
+									<div class="col-md-8">
+										<input type="date" class="form-control" id="inputProgramOfStudyApproved" name="programOfStudyApproved" <% if(student.programOfStudyApproved != null) { %> value=<%=student.programOfStudyApproved.toISOString().substring(0,10)%> <% } %>/>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputResearchPlanningMeeting" class="col-md-4">Research planning meeting</label>
+									<div class="col-md-8">
+										<input type="date" class="form-control" id="inputResearchPlanningMeeting" name="researchPlanningMeeting" <% if(student.researchPlanningMeeting != null) { %> value=<%=student.researchPlanningMeeting.toISOString().substring(0,10)%> <% } %>/>
+									</div>
+								</div>
+
+								<div class="form-group row">
 									<label for="inputCommitteeCompApproved" class="col-md-4">Committee comp approved</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputCommitteeCompApproved" name="committeeCompApproved" value="true" <% if(student.committeeCompApproved === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputCommitteeCompApproved" name="committeeCompApproved" <% if(student.committeeCompApproved != null) { %> value=<%=student.committeeCompApproved.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputPhdProposalApproved" class="col-md-4">phD proposal approved</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputPhdProposalApproved" name="phdProposalApproved" value="true" <% if(student.phdProposalApproved === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputPhdProposalApproved" name="phdProposalApproved" <% if(student.phdProposalApproved != null) { %> value=<%=student.phdProposalApproved.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputOralExamPassed" class="col-md-4">Oral exam passed</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputPrpPassed" name="oralExamPassed" value="true" <% if(student.oralExamPassed === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputOralExamPassed" name="oralExamPassed" <% if(student.oralExamPassed != null) { %> value=<%=student.oralExamPassed.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputDissertationDefencePassed" class="col-md-4">Dissertation defence passed</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputDissertationDefencePassed" name="dissertationDefencePassed" value="true" <% if(student.dissertationDefencePassed === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputDissertationDefencePassed" name="dissertationDefencePassed" <% if(student.dissertationDefencePassed != null) { %> value=<%=student.dissertationDefencePassed.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputDissertationSubmitted" class="col-md-4">Dissertation submitted</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputDissertationSubmitted" name="dissertationSubmitted" value="true" <% if(student.dissertationSubmitted === true) { %> checked <% } %>/>
+										<input type="date" class="form-control" id="inputDissertationSubmitted" name="dissertationSubmitted" <% if(student.dissertationSubmitted != null) { %> value=<%=student.dissertationSubmitted.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
 
-								<div class="form-group row">
+								<!-- <div class="form-group row">
 									<label for="inputJob" class="col-md-4">Job</label>
 									<div class="col-md-8">
 										<select name="job" class="form-control" id="inputJob">
-											<% if(student.job != null) { %>
-											<option value=<%=student.job._id%>><%=student.job.position%>, <%=student.job.semester.season%>, <%=student.job.semester.year%></option>
-											<% } else {%>
 											<option value=""></option>
-											<% } %>
 											<% for(var i=0; i<jobs.length; i++) { %>
-												<option value=<%= jobs[i]._id%>>
+												<option value=<%= jobs[i]._id%> <% if(student.job != null && student.job._id.equals(jobs[i]._id)) { %> selected <% } %>>
 												<%=jobs[i].position%>, 
 												<%=jobs[i].supervisor.lastName%>, <%=jobs[i].supervisor.firstName%>,  
 												<%=jobs[i].semester.season%>, <%=jobs[i].semester.year%> 
@@ -282,19 +271,15 @@
 											<% } %>
 										</select>
 									</div>
-								</div>
+								</div> -->
 
 								<div class="form-group row">
 									<label for="inputSemesterStarted" class="col-md-4">Semester started</label>
 									<div class="col-md-8">
 										<select name="semesterStarted" class="form-control" id="inputSemesterStarted">
-											<% if(student.semesterStarted != null) { %>
-											<option value=<%=student.semesterStarted._id%>><%=student.semesterStarted.season%>, <%=student.semesterStarted.year%></option>
-											<% } else {%>
 											<option value=""></option>
-											<% } %>
 											<% for(var i=0; i<semesters.length; i++) { %>
-												<option value=<%= semesters[i]._id%>><%=semesters[i].season%>, <%=semesters[i].year%></option>
+												<option value=<%= semesters[i]._id%> <% if(student.semesterStarted != null && student.semesterStarted._id.equals(semesters[i]._id)) { %> selected <% } %>><%=semesters[i].season%>, <%=semesters[i].year%></option>
 											<% } %>
 										</select>
 									</div>
@@ -304,13 +289,9 @@
 									<label for="inputAdvisor" class="col-md-4">Advisor</label>
 									<div class="col-md-8">
 										<select name="advisor" class="form-control" id="inputAdvisor">
-											<% if(student.faculty != null) { %>
-											<option value=<%=student.faculty._id%>><%=student.faculty.lastName%>, <%=student.faculty.firstName%></option>
-											<% } else {%>
 											<option value=""></option>
-											<% } %>
 											<% for(var i=0; i<faculty.length; i++) { %>
-												<option value=<%= faculty[i]._id%>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+												<option value=<%= faculty[i]._id%> <% if(student.advisor != null && student.advisor._id.equals(faculty[i]._id)) { %> selected <% } %>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
 											<% } %>
 										</select>
 									</div>
@@ -318,15 +299,14 @@
 
 								<!-- no courseHistory field, have a dedicated page for adding courseHistory to students -->
 
-								<div class="form-group row align-items-end">
-									<div class="col-md-8 offset-md-2">
-										<button type="submit" class="btn btn-success">Update</button>
-									</div>
-								</div>
-
 							</div>
 						</div>
+
+					<div class="col-md-8 offset-md-2">
+						<button type="submit" class="btn btn-success">Update</button>
+					</div>
 					</form>
+					<div class="space"></div>
 					<form action="/student/delete/<%=student._id%>" method="post">
 						<button type="submit" class="btn btn-danger" onclick="return confirm('Do you really want to delete this?');">Delete</button>
 					</form>

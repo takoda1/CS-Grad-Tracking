@@ -1,0 +1,61 @@
+<!-- views/student/forms.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Student forms</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<ul class="nav nav-tabs whiteBg space">
+					  <li class="nav-item">
+					    <a class="nav-link" href="/student/edit/<%=student._id%>">Student</a>
+					  </li>
+					  <li class="nav-item">
+					    <a class="nav-link" href="/student/jobs/<%=student._id%>">Jobs</a>
+					  </li>
+					  <li class="nav-item">
+					    <a class="nav-link active" href="#">Forms</a>
+					  </li>
+					</ul>
+
+					<form action="/student/formUpload" enctype="multipart/form-data" method="post">
+						<div class="form-group row">
+							<label for="inputTitle" class="col-md-2 offset-md-4">Title</label>
+							<div class="col-md-2">
+								<select name="title" class="form-control" id="inputTitle" required>
+									<option value=""></option>
+									<% for(var i = 0; i < formTitles.length; i++){ %>
+									<option value="<%=formTitles[i]%>"><%=formTitles[i]%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="inputForm" class="col-md-2 offset-md-4">Form</label>
+							<div class="col-md-2">
+								<input type="file" name="upload" class="form-control-file" id="inputSheet" accept="application/pdf" required/>
+							</div>
+						</div>
+						<div class="col-md-4 offset-md-4">
+							<button type="submit" value="Upload" class="btn btn-primary">Submit</button>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
