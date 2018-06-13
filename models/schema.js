@@ -4,14 +4,14 @@ var schema = {};
 
 // Administrators
 var adminSchema = mongoose.Schema({
-  username: String,
+  onyen: String,
   firstName: String,
   lastName: String
 });
 
 // Faculty
 var facultySchema = mongoose.Schema({
-  username: String,
+  onyen: String,
   firstName: String,
   lastName: String,
   pid: Number,
@@ -20,7 +20,7 @@ var facultySchema = mongoose.Schema({
 
 // Students
 var studentSchema = mongoose.Schema({
-  username: String,
+  onyen: String,
   firstName: String,
   lastName: String,
   pid: Number,
@@ -36,8 +36,6 @@ var studentSchema = mongoose.Schema({
     enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE", "OTHER"],
     default: "OTHER"
   },
-  fundingStatus: String,
-  citizenship: Boolean,
   residency: {
     type: String,
     enum: ["YES", "NO", "APPLIED"],
@@ -45,36 +43,45 @@ var studentSchema = mongoose.Schema({
   },
   enteringStatus: String,
   researchArea: String,
-  backgroundApproved: Boolean,
   leaveExtension: String,
-  fundingEligibility: Boolean,
-  fundingStatus: Boolean,
   intendedDegree: {
     type: String,
     enum: ["MASTERS", "PHD", "BOTH"],
     default: "MASTERS"
   },
   hoursCompleted: Number,
-  prpPassed: Boolean,
-  backgroundPrepWorksheetApproved: Boolean,
-  programOfStudyApproved: Boolean,
-  researchPlanningMeeting: Boolean,
-  committeeCompApproved: Boolean,
-  phdProposalApproved: Boolean,
-  oralExamPassed: Boolean,
-  dissertationDefencePassed: Boolean,
-  dissertationSubmitted: Boolean,
-  job: {type: mongoose.Schema.Types.ObjectId, ref: "Job"},
+  citizenship: Boolean,
+  fundingEligibility: Boolean,
+  fundingStatus: Boolean,
+  backgroundApproved: Date,
+  mastersAwarded: Date,
+  prpPassed: Date,
+  backgroundPrepWorksheetApproved: Date,
+  programOfStudyApproved: Date,
+  researchPlanningMeeting: Date,
+  committeeCompApproved: Date,
+  phdProposalApproved: Date,
+  oralExamPassed: Date,
+  dissertationDefencePassed: Date,
+  dissertationSubmitted: Date,
+  jobHistory: [{type: mongoose.Schema.Types.ObjectId, ref: "Job"}],
   semesterStarted: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: "Faculty" },
-  courseHistory: [{courses: { type: mongoose.Schema.Types.ObjectId, ref: "Course" }}]
+  courseHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
+  forms: [{type:mongoose.Schema.Types.ObjectId, ref: "Form"}]
 });
 
-// Documents
-var documentSchema = mongoose.Schema({
-  title: String,
-  backgroundSheet: Boolean,
-  student: {type: mongoose.Schema.Types.ObjectId, ref: "Student"}
+// Forms
+var formSchema = mongoose.Schema({
+  title: {
+    type: String,
+    enum: ["Background Preparation Worksheet", "Course Waiver", "M.S. Program of Study",
+      "Outside Review Option", "Request for Appointment of M.S. Committee", "Ph.D. Program of Study",
+      "Report of Disapproval of Dissertation Proposal", "Technical Writing Requirement",
+      "Report of Preliminary Research Presentation", "Teaching Requirement",
+      "Report of Research Discussion", "Program Product Requirement"]
+  },
+  data: Buffer
 });
 
 // Semesters
@@ -106,12 +113,13 @@ var courseSchema = mongoose.Schema({
 var jobSchema = mongoose.Schema({
   position: {
     type: String,
-    enum: ["RA", "TA", "Other"]
+    enum: ["RA", "TA", "OTHER"]
   },
-  description: String,
   supervisor: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
   semester: {type: mongoose.Schema.Types.ObjectId, ref: "Semester"},
-  course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
+  course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"},
+  description: String
+  
 });
 
 // Grades
@@ -127,7 +135,7 @@ var gradeSchema = mongoose.Schema({
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
 schema.Student = mongoose.model("Student", studentSchema);
-schema.Document = mongoose.model("Document", documentSchema);
+schema.Form = mongoose.model("Form", formSchema);
 schema.Semester = mongoose.model("Semester", semesterSchema);
 schema.Course = mongoose.model("Course", courseSchema);
 schema.Job = mongoose.model("Job", jobSchema);

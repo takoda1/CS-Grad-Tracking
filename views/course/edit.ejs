@@ -25,7 +25,7 @@
 						<div class="form-group row">
 							<label for="inputDepartment" class="col-md-2 offset-md-3">Department</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="inputDepartment" name="department" value="<%=course.department%>" required/>
+								<input type="text" class="form-control" id="inputDepartment" name="department" value="<%=course.department%>" minlength="4" maxlength="4" required/>
 							</div>
 						</div>
 
@@ -54,9 +54,8 @@
 							<label for="inputCategory" class="col-md-2 offset-md-3">Category</label>
 							<div class="col-md-4">
 								<select name="category" class="form-control" id="inputCategory" required>
-									<option value="<%=course.category%>"><%=course.category%></option>
 									<% for(var i=0; i<categories.length; i++) { %>
-										<option value=<%= categories[i]%>><%=categories[i]%></option>
+										<option value=<%= categories[i]%> <% if(course.category === categories[i]) { %> selected <% } %>><%=categories[i]%></option>
 									<% } %>
 								</select>
 							</div>
@@ -72,7 +71,7 @@
 						<div class="form-group row">
 							<label for="inputSection" class="col-md-2 offset-md-3">Section</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputSection" name="section" value=<%=course.section%>/>
+								<input type="number" class="form-control" id="inputSection" name="section" value=<%=course.section%> />
 							</div>
 						</div>
 
@@ -80,9 +79,8 @@
 							<label for="inputFaculty" class="col-md-2 offset-md-3">Faculty</label>
 							<div class="col-md-4">
 								<select name="faculty" class="form-control" id="inputFaculty" required>
-									<option value=<%=course.faculty._id%>><%=course.faculty.lastName%>, <%=course.faculty.firstName%></option>
 									<% for(var i=0; i<faculty.length; i++) { %>
-										<option value=<%= faculty[i]._id%>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+										<option value=<%= faculty[i]._id%> <% if(course.faculty._id.equals(faculty[i]._id)) { %> selected <% } %> ><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
 									<% } %>
 								</select>
 							</div>
@@ -92,9 +90,8 @@
 							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
 							<div class="col-md-4">
 								<select name="semester" class="form-control" id="inputSemester" required>
-									<option value=<%=course.semester._id%>><%=course.semester.season%>, <%=course.semester.year%></option>
 									<% for(var i=0; i<semesters.length; i++) { %>
-										<option value=<%= semesters[i]._id%>><%=semesters[i].season%>, <%=semesters[i].year%></option>
+										<option value=<%= semesters[i]._id%> <% if(course.semester._id.equals(semesters[i]._id)) { %> selected <% } %>><%=semesters[i].season%>, <%=semesters[i].year%></option>
 									<% } %>
 								</select>
 							</div>

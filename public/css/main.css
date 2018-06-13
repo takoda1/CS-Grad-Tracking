@@ -23,7 +23,7 @@ table {
 }
 
 /* faculty table column widths*/
-.col-facultyUsername {
+.col-facultyOnyen {
 	width: 20%;
 }
 
@@ -107,4 +107,27 @@ table {
 
 .editTag:hover {
 	text-decoration: none;
+	color: green;
+}
+
+.editTag {
+	color: green;
+}
+
+.space {
+	margin:10px;
+}
+
+.fabutton {
+	background: none;
+	padding:0px:
+	border:none;
+}
+
+.colJobModify {
+	width:10%;
+}
+
+.whiteBg {
+	background: white;
 }

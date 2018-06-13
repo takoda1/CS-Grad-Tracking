@@ -19,7 +19,30 @@
 				</div>
 
 				<div class='col-lg-10 panelbg text-center'>
-					
+					<h1>Upload courses</h1>
+					<form action="/course/upload" enctype="multipart/form-data" method="post">
+						<div class="form-group row">
+							<label for="inputSheet" class="col-md-3 offset-md-3">Spreadsheet</label>
+							<div class="col-md-4">
+								<input type="file" name="upload" class="form-control-file" id="inputSheet" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
+							</div>
+						</div>
+						<div class="col-md-4 offset-md-4">
+							<button type="submit" value="Upload" class="btn btn-primary">Submit</button>
+						</div>
+						<h3>Upload format</h3>
+						<img src="/images/courseUploadFormat.png">
+
+						<div class="col-md-4 offset-md-4">
+							<h3>Requirements</h2>
+							<ul class="list-group">
+								<li class="list-group-item">Category must be the single letter abbreviation (s,t,a), lower or upper case.</li>
+								<li class="list-group-item">Faculty must be LASTNAME, FIRSTNAME (case does not matter).</li>
+								<li class="list-group-item">Semester must be SEASON, YYYY (case for season does not matter).</li>
+								<li class="list-group-item">Columns must be in displayed order, headers don't need to be what is displayed above.</li>
+							</ul>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>

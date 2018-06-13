@@ -13,7 +13,7 @@ var facultyController = {};
  * A form is submitted when faculty/post is called, and
  * the form data is stored in req.body
  * 
- * @req.body {String} username (Required)
+ * @req.body {String} onyen (Required)
  * @req.body {String} firstName (Required)
  * @req.body {String} lastName (Required)
  * @req.body {Number} pid (Required)
@@ -34,9 +34,9 @@ facultyController.post = function (req, res) {
   }
   //Verify that all fields exist. Should be though if front end is done correctly.
   if(util.allFieldsExist(input, schema.Faculty)){
-    /*username and pid are unique, so look for faculty using those two fields to check
+    /*onyen and pid are unique, so look for faculty using those two fields to check
     if the faculty attempting to be created already exists*/
-    schema.Faculty.findOne({$or: [{username: input.username}, {pid: input.pid}]}).exec().then(function (result) {
+    schema.Faculty.findOne({$or: [{onyen: input.onyen}, {pid: input.pid}]}).exec().then(function (result) {
       if (result !== null){
         res.render("../views/error.ejs", {string: "That faculty already exists"});
       }
@@ -74,7 +74,7 @@ facultyController.post = function (req, res) {
  *
  * The fields are in req.query when they are provided (searched for)
  *
- * @req.query {String} username
+ * @req.query {String} onyen
  * @req.query {String} firstName
  * @req.query {String} lastName
  * @req.query {Number} pid
@@ -88,8 +88,8 @@ facultyController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Faculty); //remove fields that are empty/not part of Faculty definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
-  //find the faculty and sort by username, render /faculty/index.ejs on completion
-  schema.Faculty.find(input).sort({username:1}).exec().then(function (result) {
+  //find the faculty and sort by onyen, render /faculty/index.ejs on completion
+  schema.Faculty.find(input).sort({lastName:1}).exec().then(function (result) {
     res.render("../views/faculty/index.ejs", {faculty: result});
   }).catch(function (err) {
     res.json({"error": err.message, "origin": "faculty.get"});
@@ -103,7 +103,7 @@ facultyController.get = function (req, res) {
  * field data is sent as an html form, and all
  * fields are required.
  *
- * @req.body {String} username (Required)
+ * @req.body {String} onyen (Required)
  * @req.body {String} firstName (Required)
  * @req.body {String} lastName (Required)
  * @req.body {Number} pid (Required)

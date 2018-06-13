@@ -17,4 +17,6 @@ router.post("/put", course.put);
 
 router.post("/delete/:_id", course.delete);
 
+router.post("/upload", course.upload);
+
 module.exports = router;

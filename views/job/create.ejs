@@ -44,7 +44,7 @@
 							</div>
 						</div>
 
-						<div class="form-group row" id="course">
+						<div class="form-group row" id="course" hidden>
 							<label for="inputCourse" class="col-md-2 offset-md-3">Course</label>
 							<div class="col-md-4">
 								<select name="course" class="form-control" id="inputCourse">
@@ -68,7 +68,7 @@
 							</div>
 						</div>
 
-						<div class="form-group row" id="description" hidden>
+						<div class="form-group row" id="description">
 							<label for="inputDescription" class="col-md-2 offset-md-3">Description</label>
 							<div class="col-md-4">
 								<input type="text" name="description" class="form-control" id="inputDescription" placeholder="Description" />
@@ -88,32 +88,26 @@
 	<script type="text/javascript">
 		document.getElementById("inputPosition").addEventListener("change", function(){
 			var val = document.getElementById("inputPosition").value;
-			if(val === "Other"){
-				document.getElementById("description").hidden = false;
-			}
-			else{
-				document.getElementById("description").hidden = true;
-			}
 
-			if(val === "RA"){
-				document.getElementById("course").hidden = true;
-			}
-			else{
+			if(val === "TA"){
 				document.getElementById("course").hidden = false;
+				document.getElementById("inputCourse").required = true;
+			}
+			else{
+				document.getElementById("course").hidden = true;
+				document.getElementById("inputCourse").required = false;
 			}
 
-			if(val != "TA"){
-				var selectCourseElement = document.getElementById("inputCourse");
-				for(var i = 0; i < selectCourseElement.options.length; i++){
-					selectCourseElement.options[i].hidden = false;
-				}
-				document.getElementById("inputSupervisor").options[0].selected = true;
-			}
+			document.getElementById("inputSupervisor").options[0].selected = true;
+			document.getElementById("inputCourse").options[0].selected = true;
+			document.getElementById("inputSemester").options[0].selected = true;
+			document.getElementById("inputDescription").value = "";
 
 		}, false);
 
 		document.getElementById("inputSupervisor").addEventListener("change", function(){
 			if(document.getElementById("inputPosition").value === "TA"){
+				document.getElementById("inputCourse").options[0].selected = true;
 				var facultyId = document.getElementById("inputSupervisor").value;
 				var selectCourseElement = document.getElementById("inputCourse");
 				for(var i = 0; i < selectCourseElement.options.length; i++){

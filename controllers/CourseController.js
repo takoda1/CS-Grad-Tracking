@@ -1,6 +1,7 @@
 var schema = require("../models/schema")
 var util = require("./util")
-
+var XLSX = require("xlsx");
+var formidable = require("formidable");
 var courseController = {}
 
 /**
@@ -83,7 +84,7 @@ courseController.get = function (req, res) {
     input.name = new RegExp(input.name, "i");
   }
   //http://mongoosejs.com/docs/populate.html
-  schema.Course.find(input).populate("faculty").populate("semester").exec().then(function(result){
+  schema.Course.find(input).sort({number:1}).populate("faculty").populate("semester").exec().then(function(result){
     var courses = result;
     schema.Semester.find({}).sort({year: 1, season: 1}).exec().then(function(result){
       res.render("../views/course/index.ejs", {courses: courses, semesters: result});
@@ -238,7 +239,7 @@ courseController.edit = function (req, res){
         schema.Faculty.find(
           {},
           {lastName:1, firstName:1}
-        ).sort({username:1}).exec().then(function(result){
+        ).sort({onyen:1}).exec().then(function(result){
           faculty = result;
           schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
             semesters = result;
@@ -271,5 +272,94 @@ courseController.uploadPage = function(req, res){
   });
 }
 
+courseController.upload = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    var f = files[Object.keys(files)[0]];
+    var workbook = XLSX.readFile(f.path);
+    var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    var headers = {};
+    var data = [];
+    var i = 0;
+    for(var field in schema.Course.schema.obj){
+      headers[String.fromCharCode(i+65)] = field;
+      i++;
+    }
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var col = z.substring(0,1);
+        var row = parseInt(z.substring(1));
+        var value = worksheet[z].v;
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    //try to create models
+    //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    data.forEach(function(element){
+      //verify that all fields exist
+      if(util.allFieldsExist(element, schema.Course)){
+        //get faculty lastname/firstname
+        var reg = /\s*,\s*/;
+        var facultyName = element.faculty.split(reg);
+        facultyName[0] = new RegExp(facultyName[0], "i");
+        facultyName[1] = new RegExp(facultyName[1], "i");
+        var semester = element.semester.split(reg);
+        schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
+          if(result != null){
+            element.faculty = result._id;
+            schema.Semester.findOne({season: semester[0].toUpperCase(), year: parseInt(semester[1])}).exec().then(function(result){
+              if(result != null){
+                element.semester = result._id;
+                switch(element.category){
+                  case "t":
+                  case "T":
+                    element.category = "Theory";
+                    break;
+                  case "s":
+                  case "S":
+                    element.category = "Systems";
+                    break;
+                  case "a":
+                  case "A":
+                  case "applications":
+                  case "Applications":
+                    element.category = "Appls";
+                    break;
+                  default:
+                    break;
+                }
+                schema.Course.findOne(element).exec().then(function (result) {
+                  //if the course doesn't already exist, try to make it
+                  if(result == null){
+                    var inputCourse = new schema.Course(element);
+                    inputCourse.save().then(function(result){
+                    }).catch(function(err){
+                      res.render("../views/error.ejs", {string: element.name+" did not save because something is wrong with it."});
+                    });
+                  }
+                });
+              }
+              else{
+                res.render("../views/error.ejs", {string: element.name+" did not save because the semester is incorrect."});
+              }
+            });
+          }
+          else{
+            res.render("../views/error.ejs", {string: element.name+" did not save because the faculty is incorrect."});
+          }
+        });
+      }
+      else{
+        res.render("../views/error.ejs", {string: element.name+" did not save because it is missing a field."});
+      }
+    });
+    res.redirect("/course/upload"); //quickly redirects, database in background may still be saving courses but don't want to wait for that
+  });
+}
 
 module.exports = courseController;

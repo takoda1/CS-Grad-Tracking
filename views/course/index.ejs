@@ -51,9 +51,9 @@
 										<td><%= courses[i].semester.season%> <%= courses[i].semester.year%></td>
 										<td>
 											<div class="col-md-10 offset-md-1">
-												<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><button class="btn btn-light btn-block">Edit</button></a>
+												<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><i class="fas fa-edit"></i></a>
 												<form action="/course/delete/<%= courses[i]._id%>" method="post">
-													<button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Do you really want to delete this?');">Delete</button>
+													<button type="submit" class="btn btn-default" onclick="return confirm('Do you really want to delete this?');"><i class="fas fa-trash-alt"></i></button>
 												</form>
 											</div>
 										</td>

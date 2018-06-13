@@ -34,9 +34,8 @@
 							<label for="inputSupervisor" class="col-md-2 offset-md-3">Supervisor</label>
 							<div class="col-md-4">
 								<select name="supervisor" class="form-control" id="inputSupervisor" required>
-									<option value=<%=job.supervisor._id%>><%=job.supervisor.lastName%>, <%=job.supervisor.firstName%></option>
 									<% for(var i=0; i < faculty.length; i++){ %>
-										<option value=<%=faculty[i]._id%>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
+										<option value=<%=faculty[i]._id%> <% if(job.supervisor._id.equals(faculty[i]._id)) { %> selected <% } %> ><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
 									<% } %>
 								</select>
 							</div>
@@ -47,9 +46,8 @@
 							<label for="inputCourse" class="col-md-2 offset-md-3">Course</label>
 							<div class="col-md-4">
 								<select name="course" class="form-control" id="inputCourse" required>
-									<option value=<%=job.course._id%>><%=job.course.name%> <%=job.course.number%>, section <%=job.course.section%></option>
 									<% for(var i=0; i < courses.length; i++){ %>
-										<option value=<%=courses[i]._id%>><%=courses[i].name%> <%=courses[i].number%>, section <%=courses[i].section%></option>
+										<option value=<%=courses[i]._id%> <% if(job.course._id.equals(courses[i]._id)) { %> selected <% } %> ><%=courses[i].name%> <%=courses[i].number%>, section <%=courses[i].section%>, <%=courses[i].semester.season%> <%=courses[i].semester.year%></option>
 									<% } %>
 								</select>
 							</div>
@@ -69,9 +67,8 @@
 							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
 							<div class="col-md-4">
 								<select name="semester" class="form-control" id="inputSemester" required>
-									<option value=<%=job.semester%>><%=job.semester.season%>, <%=job.semester.year%></option>
 									<% for(var i=0; i < semesters.length; i++){ %>
-										<option value=<%=semesters[i]._id%>><%=semesters[i].season%> <%=semesters[i].year%></option>
+										<option value=<%=semesters[i]._id%> <% if(job.semester._id.equals(semesters[i]._id)) { %> selected <% } %> ><%=semesters[i].season%> <%=semesters[i].year%></option>
 									<% } %>
 								</select>
 							</div>

@@ -23,9 +23,9 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group row">
-									<label for="inputUsername" class="col-md-6">Username</label>
+									<label for="inputOnyen" class="col-md-6">Onyen</label>
 									<div class="col-md-6">
-										<input type="text" class="form-control" id="inputUsername" name="username" placeholder="Username" required/>
+										<input type="text" class="form-control" id="inputOnyen" name="onyen" placeholder="Onyen" required/>
 									</div>
 								</div>
 
@@ -89,20 +89,6 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputFundingStatus" class="col-md-6">Funding status</label>
-									<div class="col-md-6">
-										<input type="text" class="form-control" id="inputFundingStatus" name="fundingStatus" placeholder="Funding status"/>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputCitizenship" class="col-md-6">Citizenship</label>
-									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputCitizenship" name="citizenship" value="true" />
-									</div>
-								</div>
-
-								<div class="form-group row">
 									<label for="inputResidency" class="col-md-6">Residency</label>
 									<div class="col-md-6">
 										<select name="residency" class="form-control" id="inputResidency">
@@ -114,15 +100,15 @@
 									</div>
 								</div>
 
-							</div>
-							<div class="col-md-4">
-
 								<div class="form-group row">
 									<label for="inputEnteringStatus" class="col-md-6">Entering status</label>
 									<div class="col-md-6">
 										<input type="text" class="form-control" id="inputEnteringStatus" name="enteringStatus" placeholder="Entering status"/>
 									</div>
 								</div>
+
+							</div>
+							<div class="col-md-4">
 
 								<div class="form-group row">
 									<label for="inputResearchArea" class="col-md-6">Research area</label>
@@ -132,30 +118,9 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputBackgroundApproved" class="col-md-6">Background approved</label>
-									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputBackgroundApproved" name="backgroundApproved" value="true" />
-									</div>
-								</div>
-
-								<div class="form-group row">
 									<label for="inputLeaveExtension" class="col-md-6">Leave extension</label>
 									<div class="col-md-6">
 										<input type="text" class="form-control" id="inputLeaveExtension" name="leaveExtension" placeholder="Leave extension"/>
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputFundingEligibility" class="col-md-6">Funding eligibility</label>
-									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputFundingEligibility" name="fundingEligibility" value="true" />
-									</div>
-								</div>
-
-								<div class="form-group row">
-									<label for="inputFundingStatus" class="col-md-6">Funding status</label>
-									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputFundingStatus" name="fundingStatus" value="true" />
 									</div>
 								</div>
 
@@ -179,16 +144,44 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputPrpPassed" class="col-md-6">prp passed</label>
+									<label for="inputCitizenship" class="col-md-6">Citizenship</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputPrpPassed" name="prpPassed" value="true" />
+										<input type="checkbox" class="form-check-input" id="inputCitizenship" name="citizenship" value="true" />
 									</div>
 								</div>
 
 								<div class="form-group row">
-									<label for="inputBackgroundPrepWorksheetApproved" class="col-md-6">Background prep worksheet approved</label>
+									<label for="inputFundingEligibility" class="col-md-6">Funding eligibility</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputBackgroundPrepWorksheetApproved" name="backgroundPrepWorksheetApproved" value="true" />
+										<input type="checkbox" class="form-check-input" id="inputFundingEligibility" name="fundingEligibility" value="true" />
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputFundingStatus" class="col-md-6">Funding status</label>
+									<div class="col-md-6">
+										<input type="checkbox" class="form-check-input" id="inputFundingStatus" name="fundingStatus" value="true" />
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputBackgroundApproved" class="col-md-6">Background approved</label>
+									<div class="col-md-6">
+										<input type="date" class="form-control" id="inputBackgroundApproved" name="backgroundApproved"  />
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputMastersAwarded" class="col-md-6">Masters awarded</label>
+									<div class="col-md-6">
+										<input type="date" class="form-control" id="inputMastersAwarded" name="mastersAwarded"  />
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPrpPassed" class="col-md-6">prp passed</label>
+									<div class="col-md-6">
+										<input type="date" class="form-control" id="inputPrpPassed" name="prpPassed" />
 									</div>
 								</div>
 
@@ -196,55 +189,62 @@
 							<div class="col-md-4">
 
 								<div class="form-group row">
+									<label for="inputBackgroundPrepWorksheetApproved" class="col-md-6">Background prep worksheet approved</label>
+									<div class="col-md-6">
+										<input type="date" class="form-control" id="inputBackgroundPrepWorksheetApproved" name="backgroundPrepWorksheetApproved"  />
+									</div>
+								</div>
+
+								<div class="form-group row">
 									<label for="inputProgramOfStudyApproved" class="col-md-6">Program of study approved</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputProgramOfStudyApproved" name="programOfStudyApproved" value="true" />
+										<input type="date" class="form-control" id="inputProgramOfStudyApproved" name="programOfStudyApproved"  />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputResearchPlanningMeeting" class="col-md-6">Research planning meeting</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputResearchPlanningMeeting" name="researchPlanningMeeting" value="true" />
+										<input type="date" class="form-control" id="inputResearchPlanningMeeting" name="researchPlanningMeeting"  />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputCommitteeCompApproved" class="col-md-6">Committee comp approved</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputCommitteeCompApproved" name="committeeCompApproved" value="true" />
+										<input type="date" class="form-control" id="inputCommitteeCompApproved" name="committeeCompApproved"  />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputPhdProposalApproved" class="col-md-6">phD proposal approved</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputPhdProposalApproved" name="phdProposalApproved" value="true" />
+										<input type="date" class="form-control" id="inputPhdProposalApproved" name="phdProposalApproved"  />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputOralExamPassed" class="col-md-6">Oral exam passed</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputPrpPassed" name="prpPassed" value="true" />
+										<input type="date" class="form-control" id="inputOralExamPassed" name="oralExamPassed"  />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputDissertationDefencePassed" class="col-md-6">Dissertation defence passed</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputDissertationDefencePassed" name="dissertationDefencePassed" value="true" />
+										<input type="date" class="form-control" id="inputDissertationDefencePassed" name="dissertationDefencePassed"  />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<label for="inputDissertationSubmitted" class="col-md-6">Dissertation submitted</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputDissertationSubmitted" name="dissertationSubmitted" value="true" />
+										<input type="date" class="form-control" id="inputDissertationSubmitted" name="dissertationSubmitted"  />
 									</div>
 								</div>
 
-								<div class="form-group row">
+								<!-- <div class="form-group row">
 									<label for="inputJob" class="col-md-6">Job</label>
 									<div class="col-md-6">
 										<select name="job" class="form-control" id="inputJob">
@@ -261,7 +261,7 @@
 											<% } %>
 										</select>
 									</div>
-								</div>
+								</div> -->
 
 								<div class="form-group row">
 									<label for="inputSemesterStarted" class="col-md-6">Semester started</label>

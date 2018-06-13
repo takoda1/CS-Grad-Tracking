@@ -31,17 +31,17 @@ app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
 
 //bootstrap static resource
-app.use(express.static(path.join(__dirname, "bower_components/bootstrap/dist")))
+app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist")))
 
-//css static resource
+//public static resource
 app.use(express.static(path.join(__dirname, "public")))
 
 // routes to use for api
 //app.use("/api", index);
 
 /*app.get("/", (req, res) => {
-  res.render("admin-home")
-})*/
+  res.render("faculty/index.ejs", {faculty: {}});
+});*/
 
 app.use("/course", require("./routes/course"));
 

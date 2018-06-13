@@ -1,5 +1,7 @@
 var schema = require('../models/schema.js');
 var util = require('./util.js');
+var formidable = require("formidable");
+var XLSX = require("xlsx");
 
 var jobController = {};
 
@@ -45,7 +47,7 @@ jobController.post = function (req, res) {
     
   }
   else{
-    throw new error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "Required parameter not found"});
   }
 }
 
@@ -71,14 +73,14 @@ jobController.get = function (req, res) {
     input.position = new RegExp(input.position, "i");
   }
   //https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
-  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate("semester").exec().then(function (result) {
+  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate({path: "semester", options:{sort:{year:1, season:1}}}).exec().then(function (result) {
     var jobs, faculty, courses;
     jobs = result;
     getFaculty().then(function(result){
       faculty = result;
       getCourses().then(function(result){
         courses = result;
-        schema.Semester.find({}).sort({year: 1, season:1}).exec().then(function(result){
+        getSemesters().then(function(result){
           res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters:result});
         });
       });
@@ -146,7 +148,7 @@ jobController.delete = function (req, res) {
   var id = req.params._id;
   if (id != null) {
     //students reference jobs, so check if any students are referencing before deleting
-    schema.Student.find({job: id}).exec().then(function(result){
+    schema.Student.find({jobHistory: id}).exec().then(function(result){
       if(result.length > 0){
         res.render("../views/error.ejs", {string: "Could not delete job because a student is referencing it."})
       }
@@ -179,7 +181,7 @@ jobController.create = function(req, res){
     faculty = result;
     getCourses().then(function(result){
       courses = result;
-      schema.Semester.find({}).sort({year: 1, season:1}).exec().then(function(result){
+      getSemesters().then(function(result){
         res.render("../views/job/create.ejs", {faculty: faculty, courses: courses, jobTitles: jobTitles, semesters: result});
       });
     });
@@ -212,7 +214,7 @@ jobController.edit = function(req, res){
           faculty = result;
           getCourses().then(function(result){
             courses = result;
-            schema.Semester.find({}).sort({year: 1, season:1}).exec().then(function(result){
+            getSemesters().then(function(result){
               res.render("../views/job/edit.ejs", {job: job, faculty: faculty, courses: courses, semesters: result});
             });
           });
@@ -225,9 +227,238 @@ jobController.edit = function(req, res){
   }
 }
 
+jobController.uploadPage = function(req, res){
+  var faculty, courses;
+  getFaculty().then(function(result){
+    faculty = result;
+    getCourses().then(function(result){
+      courses = result;
+      getSemesters().then(function(result){
+        res.render("../views/job/upload.ejs", {faculty: faculty, courses: courses, semesters:result});
+      });
+    });
+  });
+}
+
+jobController.upload = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    var f = files[Object.keys(files)[0]];
+    var workbook = XLSX.readFile(f.path);
+    var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    var headers = {};
+    var data = [];
+    headers[String.fromCharCode(65)] = "onyen";
+    var i = 1;
+    for(var field in schema.Job.schema.obj){
+      headers[String.fromCharCode(i+65)] = field;
+      i++;
+    }
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var col = z.substring(0,1);
+        var row = parseInt(z.substring(1));
+        var value = worksheet[z].v;
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    //try to create models
+    //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    data.forEach(function(element){
+      //verify that required fields exist
+      if(element.position != null && element.supervisor != null && element.semester != null){
+        //get faculty lastname/firstname
+        var reg = /\s*,\s*/;
+        var facultyName = element.supervisor.split(reg);
+        facultyName[0] = new RegExp(facultyName[0], "i");
+        facultyName[1] = new RegExp(facultyName[1], "i");
+        var semester = element.semester.split(reg);
+        schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
+          if(result != null){
+            element.supervisor = result._id;
+            schema.Semester.findOne({season: semester[0].toUpperCase(), year: parseInt(semester[1])}).exec().then(function(result){
+              if(result != null){
+                element.semester = result._id;
+                element.position = element.position.toUpperCase();
+                if(element.course != null){
+                  var courseInfo = element.course.split(reg); //should be Department, number, section
+                  schema.Course.findOne({department: new RegExp(courseInfo[0], "i"), number: courseInfo[1], section: courseInfo[2], faculty: element.supervisor, semester: element.semester}).exec().then(function(result){
+                    if(result != null){
+                      element.course = result._id;
+                      schema.Job.findOne(util.validateModelData(element, schema.Job)).exec().then(function(result){
+                        //if the job doesn't exist, try to make it
+                        if(result == null){
+                          var inputJob = new schema.Job(element);
+                          inputJob.save().then(function(result){
+                            //save to student's job history
+                            pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
+                              res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                            });
+                          }).catch(function(err){
+                            res.render("../views/error.ejs", {string:element.position+" "+element.supervisor+" did not save because "+err});
+                          });
+                        }
+                        else{
+                          pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
+                            res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                          });
+                        }
+                      });
+                    }
+                    else{
+                      res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because the course/faculty/semester is incorrect."});
+                    }
+                  });
+                }
+                else{
+                  schema.Job.findOne(util.validateModelData(element, schema.Job)).exec().then(function(result){
+                    //if the job doesn't exist, try to make it
+                    if(result == null){
+                      var inputJob = new schema.Job(element);
+                      inputJob.save().then(function(result){
+                        //save to student's job history
+                        pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
+                          res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                        });
+                      }).catch(function(err){
+                        res.render("../views/error.ejs", {string:element.position+" "+element.supervisor+" did not save because something is wrong with it"});
+                      });
+                    }
+                    else{
+                      pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
+                        res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                      });
+                    }
+                  });
+                }
+              }
+              else{
+                res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because the semester is incorrect."});
+              }
+            });
+          }
+          else{
+            res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because the faculty is incorrect."});
+          }
+        });
+      }
+      else{
+        res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because it is missing a field."});
+      }
+    });
+    res.redirect("/job/upload"); //quickly redirects, database in background may still be saving courses but don't want to wait for that
+  });
+}
+
+function pushStudentJob(onyen, jobId){
+  return new Promise((resolve, reject)=>{
+    schema.Student.findOne({onyen: onyen}).exec().then(function(result){
+      if(result != null){
+
+        schema.Student.update({onyen:onyen},{$addToSet: {jobHistory: jobId}}).exec();
+        resolve(result);
+      }
+      else{
+        reject(result);
+      }
+    });
+  });
+}
+
+
+jobController.assignPage = function(req, res){
+  var jobId = req.params._id;
+  if(jobId != null){
+    var job, faculty, courses, semesters, students;
+    schema.Job.findOne({_id: jobId}).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate("semester").exec().then(function(result){
+      if(result != null){
+        job = result;
+        getFaculty().then(function(result){
+          faculty = result;
+          getCourses().then(function(result){
+            courses = result;
+            getSemesters().then(function(result){
+              semesters = result;
+              schema.Student.find().sort({lastName:1, firstName:1}).exec().then(function(result){
+                students = result;
+                schema.Student.find({jobHistory: jobId}).exec().then(function(result){
+                  res.render("../views/job/assign.ejs", {job: job, faculty: faculty, semesters: semesters, courses: courses, students: students, studentsWithJob: result});
+                });
+              });
+            });
+          });
+        });
+      }
+      //should not occur during regular website use
+      else{
+        throw new Error("Job not found");
+      }
+    });
+  }
+  else{
+    throw new Error("RequiredParamNotFound");
+  }
+}
+
+jobController.assign = function(req, res){
+  var jobId = req.params._id;
+  var input = req.body;
+  if(jobId != null && input.students != null){
+    //make sure the job is in the database
+    schema.Job.findOne({_id: jobId}).exec().then(function(result){
+      if(result != null){
+        console.log(typeof(input.students));
+        if(typeof(input.students) == "string"){
+          input.students = [input.students];
+        }
+        console.log(typeof(input.students));
+        input.students.forEach(function(student){
+          schema.Student.findOne({_id: student}).exec().then(function(result){
+            if(result != null){
+              pushStudentJob(result.onyen, jobId).then(function(result){}).catch(function(err){
+                res.render("../views/error.ejs", {string: "Student not found"});
+              });
+            }
+            else{
+              res.render("../views/error.ejs", {string: "Student not found"});
+            }
+          });
+        });
+        console.log("ABC");
+        res.redirect("/job/assign/"+jobId);
+      }
+      else{
+        res.render("../views/error.ejs", {string: "Job not found"});
+      }
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string: "Required parameter not found"});
+  }
+}
+
+jobController.unAssign = function(req, res){
+  var input = req.body;
+  if(input.studentId != null && input.jobId != null){
+    schema.Student.update({_id:input.studentId}, {$pull:{jobHistory: input.jobId}}).exec().then(function(result){
+      res.redirect("/job/assign/"+input.jobId);
+    }).catch(function(err){
+      res.render("../views/error.ejs", {string:"Student was not found."});
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string:"Either student Id or job id is missing."});
+  }
+}
+
 function getFaculty(){
   return new Promise((resolve, reject)=>{
-    schema.Faculty.find().sort({username:1}).exec().then(function(result){
+    schema.Faculty.find().sort({onyen:1}).exec().then(function(result){
       resolve(result);
     });
   });
@@ -236,6 +467,14 @@ function getFaculty(){
 function getCourses(){
   return new Promise((resolve, reject)=>{
     schema.Course.find().populate("semester").populate("faculty").sort({name:1}).exec().then(function(result){
+      resolve(result);
+    });
+  });
+}
+
+function getSemesters(){
+  return new Promise((resolve, reject)=>{
+    schema.Semester.find().sort({year:1, season:1}).exec().then(function(result){
       resolve(result);
     });
   });
