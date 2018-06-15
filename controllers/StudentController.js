@@ -1,5 +1,8 @@
-var schema = require("../models/schema.js")
-var util = require("./util.js")
+var schema = require("../models/schema.js");
+var util = require("./util.js");
+var formidable = require("formidable");
+var fs = require("fs");
+var path = require("path");
 
 var studentController = {}
 
@@ -306,7 +309,48 @@ studentController.formPage = function(req, res){
 }
 
 studentController.uploadForm = function(req, res){
-  
+  var studId = req.params._id;
+  if(studId != null){
+    schema.Student.findOne({_id: studId}).exec().then(function(result){
+      if(result != null){
+        var student = result;
+        var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files){
+          if(fields.title != null){
+            var f = files[Object.keys(files)[0]];
+            var newpath = path.join(__dirname, "../data/forms/"+student.onyen+fields.title+".pdf");
+            fs.rename(f.path, newpath, function(err){
+              console.log("ABC");
+            });
+            // var f = files[Object.keys(files)[0]];
+            // var rstream = fs.createReadStream(f.path);
+            // var chunks = [];
+            // var buffer = Buffer.alloc(16000000);
+            // rstream.on("data", chunk=>{
+            //  chunks.push(chunk);
+            // });
+            // rstream.on("close", () =>{
+            //  buffer = Buffer.concat(chunks);
+            //  console.log(buffer);
+            // });
+            // fs.writeFile(path.join(__dirname, "../data/forms/"+student.onyen+fields.title+".pdf"), buffer, "binary");
+
+          }
+          // var title = fields.title;
+          //   // var inputForm = new schema.Form({title, buffer});
+          //   // inputForm.save().then(function(result){
+          //   //   console.log(result);
+          //   // });
+        });
+      }
+      else{
+        throw new Error("Student not found");
+      }
+    });
+  }
+  else{
+    throw new Error("Required param not found");
+  }
 }
 
 function verifyBoolean(input){

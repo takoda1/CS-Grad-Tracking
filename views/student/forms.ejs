@@ -31,7 +31,7 @@
 					  </li>
 					</ul>
 
-					<form action="/student/formUpload" enctype="multipart/form-data" method="post">
+					<form action="/student/uploadForm/<%=student._id%>" enctype="multipart/form-data" method="post">
 						<div class="form-group row">
 							<label for="inputTitle" class="col-md-2 offset-md-4">Title</label>
 							<div class="col-md-2">
@@ -46,11 +46,11 @@
 						<div class="form-group row">
 							<label for="inputForm" class="col-md-2 offset-md-4">Form</label>
 							<div class="col-md-2">
-								<input type="file" name="upload" class="form-control-file" id="inputSheet" accept="application/pdf" required/>
+								<input type="file" name="form" class="form-control-file" id="inputSheet" accept="application/pdf" required/>
 							</div>
 						</div>
 						<div class="col-md-4 offset-md-4">
-							<button type="submit" value="Upload" class="btn btn-primary">Submit</button>
+							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
 					</form>
 
