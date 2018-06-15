@@ -23,4 +23,6 @@ router.post('/delete/:_id', student.delete);
 
 router.post("/deleteJob", student.deleteJob);
 
+router.post("/uploadForm/:_id", student.uploadForm);
+
 module.exports = router;
