@@ -318,29 +318,11 @@ studentController.uploadForm = function(req, res){
         form.parse(req, function(err, fields, files){
           if(fields.title != null){
             var f = files[Object.keys(files)[0]];
-            var newpath = path.join(__dirname, "../data/forms/"+student.onyen+fields.title+".pdf");
+            var newpath = path.join(__dirname, "../data/forms/"+student._id+fields.title+".pdf");
             fs.rename(f.path, newpath, function(err){
-              console.log("ABC");
+              res.redirect("/student/forms/"+studId);
             });
-            // var f = files[Object.keys(files)[0]];
-            // var rstream = fs.createReadStream(f.path);
-            // var chunks = [];
-            // var buffer = Buffer.alloc(16000000);
-            // rstream.on("data", chunk=>{
-            //  chunks.push(chunk);
-            // });
-            // rstream.on("close", () =>{
-            //  buffer = Buffer.concat(chunks);
-            //  console.log(buffer);
-            // });
-            // fs.writeFile(path.join(__dirname, "../data/forms/"+student.onyen+fields.title+".pdf"), buffer, "binary");
-
           }
-          // var title = fields.title;
-          //   // var inputForm = new schema.Form({title, buffer});
-          //   // inputForm.save().then(function(result){
-          //   //   console.log(result);
-          //   // });
         });
       }
       else{
@@ -350,6 +332,27 @@ studentController.uploadForm = function(req, res){
   }
   else{
     throw new Error("Required param not found");
+  }
+}
+
+studentController.viewForm = function(req, res){
+  if(req.params.title != null && req.params._id != null){
+    //make sure student exists
+    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+      if(result != null){
+        var filePath = path.join(__dirname, "../data/forms/"+req.params._id+req.params.title+".pdf");
+        fs.access(filePath, function(err){
+          if(err){
+            res.render("../views/error.ejs", {string: "File does not exist."});
+          } 
+          else{
+            var file = fs.createReadStream(filePath);
+            res.setHeader("Content-type", "application/pdf");
+            file.pipe(res);
+          }
+        });
+      }
+    });
   }
 }
 

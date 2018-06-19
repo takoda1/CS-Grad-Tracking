@@ -30,7 +30,17 @@
 					    <a class="nav-link active" href="#">Forms</a>
 					  </li>
 					</ul>
+					<h3 class="space">View a form</h3>
+					<% for(var i = 0; i < formTitles.length; i++) { %>
+					<div class="col-md-4 offset-md-4">
+						<a href="/student/viewForm/<%=student._id%>/<%=formTitles[i]%>" target="_blank"><%=formTitles[i]%></a>
+					</div>
+					<% } %>
 
+					<h3 class="space">Fillable forms; fill then download and then upload on this page.</h3>
+					<a href="https://cs.unc.edu/academics/graduate/ms-requirements/progress-forms/" target="_blank" >Forms</a>
+
+					<h3 class="space">Upload a form</h3>
 					<form action="/student/uploadForm/<%=student._id%>" enctype="multipart/form-data" method="post">
 						<div class="form-group row">
 							<label for="inputTitle" class="col-md-2 offset-md-4">Title</label>
