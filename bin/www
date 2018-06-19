@@ -1,4 +1,4 @@
-#!/usr/bin/env nodejs
+#!/usr/bin/env node
 
 // Edit this place to set the port number and ip addess of the server that is running the application.
 // It defaults to localhost:3000
