@@ -304,11 +304,12 @@ courseController.upload = function(req, res){
       //verify that all fields exist
       if(util.allFieldsExist(element, schema.Course)){
         //get faculty lastname/firstname
-        var reg = /\s*,\s*/;
-        var facultyName = element.faculty.split(reg);
+        var commaReg = /\s*,\s*/;
+        var facultyName = element.faculty.split(commaReg);
         facultyName[0] = new RegExp(facultyName[0], "i");
         facultyName[1] = new RegExp(facultyName[1], "i");
-        var semester = element.semester.split(reg);
+        var spaceReg = /\s* \s*/;
+        var semester = element.semester.split(spaceReg);
         schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
           if(result != null){
             element.faculty = result._id;

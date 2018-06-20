@@ -91,7 +91,7 @@
 							<div class="col-md-4">
 								<select name="semester" class="form-control" id="inputSemester" required>
 									<% for(var i=0; i<semesters.length; i++) { %>
-										<option value=<%= semesters[i]._id%> <% if(course.semester._id.equals(semesters[i]._id)) { %> selected <% } %>><%=semesters[i].season%>, <%=semesters[i].year%></option>
+										<option value=<%= semesters[i]._id%> <% if(course.semester._id.equals(semesters[i]._id)) { %> selected <% } %>><%=semesters[i].season%> <%=semesters[i].year%></option>
 									<% } %>
 								</select>
 							</div>

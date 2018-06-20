@@ -67,8 +67,7 @@ var studentSchema = mongoose.Schema({
   jobHistory: [{type: mongoose.Schema.Types.ObjectId, ref: "Job"}],
   semesterStarted: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: "Faculty" },
-  courseHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
-  forms: [{type:mongoose.Schema.Types.ObjectId, ref: "Form"}]
+  courseHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
 });
 
 // Forms

@@ -17,7 +17,7 @@ router.get("/forms/:_id", student.formPage);
 
 router.get("/viewForm/:_id/:title", student.viewForm);
 
-//router.get("/abc/:_id/:asdf", student.abc);
+router.get("/upload", student.uploadPage);
 
 router.post('/post', student.post);
 
@@ -28,6 +28,10 @@ router.post('/delete/:_id', student.delete);
 router.post("/deleteJob", student.deleteJob);
 
 router.post("/uploadForm/:_id", student.uploadForm);
+
+router.post("/upload", student.upload);
+
+router.post("/addJobs", student.addJobs);
 
 
 

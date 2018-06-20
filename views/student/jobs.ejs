@@ -44,26 +44,26 @@
 								</tr>
 							</thead>
 							<tbody>
-								<% jobs = student.jobHistory %>
-								<% for(var i=0; i<jobs.length; i++) { %>
+								<% job = student.jobHistory %>
+								<% for(var i=0; i<job.length; i++) { %>
 									<tr>
-										<td><%= jobs[i].position%></td>
-										<td><%= jobs[i].supervisor.lastName%>,  <%=jobs[i].supervisor.firstName%></td>
-										<td><%= jobs[i].semester.season%>, <%=jobs[i].semester.year%></td>
-										<% if(jobs[i].course != null) { %>
-										<td><%= jobs[i].course.department%> <%= jobs[i].course.number%>, <%=jobs[i].course.section%></td>
+										<td><%= job[i].position%></td>
+										<td><%= job[i].supervisor.lastName%>,  <%=job[i].supervisor.firstName%></td>
+										<td><%= job[i].semester.season%> <%=jobs[i].semester.year%></td>
+										<% if(job[i].course != null) { %>
+										<td><%= job[i].course.department%> <%= job[i].course.number%>, <%=job[i].course.section%></td>
 										<% } else { %>
 										<td></td>
 										<% } %>
-										<% if(jobs[i].description != null) { %>
-										<td><%= jobs[i].description%></td>
+										<% if(job[i].description != null) { %>
+										<td><%= job[i].description%></td>
 										<% } else { %>
 										<td></td>
 										<% } %>
 										<td>
 											<form action="/student/deleteJob" method="post">
 												<input type="hidden" name="studentId" value=<%=student._id%> />
-												<input type="hidden" name="jobId" value=<%=jobs[i]._id%> />
+												<input type="hidden" name="jobId" value=<%=job[i]._id%> />
 												<button type="submit" class="btn btn-danger">Delete</button>
 											</form>
 										</td>
@@ -72,8 +72,31 @@
 							</tbody>
 						</table>
 					<% } else { %>
-						<div>No student found.</div>
+						<div>No jobs found.</div>
 					<% } %>
+
+					<h2 class="space">Add jobs</h2>
+					<form action="/student/addJobs" method="post">
+						<div class="form-group row">
+							<label for="inputJobs" class="col-md-2 offset-md-3">Jobs</label>
+							<div class="col-md-4">
+								<select name="jobs" class="form-control" id="inputJobs" multiple required>
+									<option value=""></option>
+									<% for(var i=0; i < jobs.length; i++){ %>
+										<option value=<%=jobs[i]._id%>><%=jobs[i].position%>, <%=jobs[i].supervisor.lastName%>, <%=jobs[i].supervisor.firstName%>, <%=jobs[i].semester.season%> <%=jobs[i].semester.year%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<input type="hidden" name="studentId" value=<%=student._id%> />
+
+						<div class="form-group row align-items-end">
+							<div class="col-md-4 offset-md-4">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+					</form>
 
 				</div>
 			</div>
