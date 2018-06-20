@@ -273,11 +273,12 @@ jobController.upload = function(req, res){
       //verify that required fields exist
       if(element.position != null && element.supervisor != null && element.semester != null){
         //get faculty lastname/firstname
-        var reg = /\s*,\s*/;
-        var facultyName = element.supervisor.split(reg);
+        var commaReg = /\s*,\s*/;
+        var facultyName = element.supervisor.split(commaReg);
         facultyName[0] = new RegExp(facultyName[0], "i");
         facultyName[1] = new RegExp(facultyName[1], "i");
-        var semester = element.semester.split(reg);
+        var spaceReg = /\s* \s*/;
+        var semester = element.semester.split(spaceReg);
         schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
           if(result != null){
             element.supervisor = result._id;

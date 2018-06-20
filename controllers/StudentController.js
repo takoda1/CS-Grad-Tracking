@@ -3,6 +3,8 @@ var util = require("./util.js");
 var formidable = require("formidable");
 var fs = require("fs");
 var path = require("path");
+var XLSX = require("xlsx");
+var formidable = require("formidable");
 
 var studentController = {}
 
@@ -214,7 +216,7 @@ studentController.delete = function (req, res) {
     */
     schema.Student.findOneAndRemove({_id: id}).exec().then(function(result){
       if(result){
-        schema.Document.find({student: id}).remove().exec();
+        schema.Form.find({student: id}).remove().exec();
         res.redirect("/student");
       }
       else throw new Error("StudentNotFound");
@@ -271,10 +273,15 @@ studentController.edit = function(req, res){
 
 studentController.jobs = function(req, res){
   if(req.params._id){
-    schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
-    .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
-      res.render("../views/student/jobs", {student: result});
+    var jobs;
+    schema.Job.find().populate("supervisor").populate("course").populate("semester").exec().then(function(result){
+      jobs = result;
+      schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
+      .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
+        res.render("../views/student/jobs", {student: result, jobs: jobs});
+      });
     });
+    
   }
   else{
     //this shouldn't happen if frontend done correctly
@@ -293,6 +300,28 @@ studentController.deleteJob = function(req, res){
   } 
   else{
     res.render("../views/error.ejs", {string: "Either studentId or jobId is missing."});
+  }
+}
+
+studentController.addJobs = function(req, res){
+  var input = req.body;
+  if(input.studentId != null){
+    schema.Student.findOne({_id: input.studentId}).exec().then(function(result){
+      if(result != null){
+        if(typeof(input.jobs) == "string"){
+          input.jobs = [input.jobs];
+        }
+        schema.Student.update({_id: input.studentId},{$addToSet: {jobHistory: {$each: input.jobs}}}).exec().then(function(result){
+          res.redirect("/student/jobs/"+input.studentId);
+        });
+      }
+      else{
+        res.render("../views/error.ejs", {string: "Student not found"});
+      }
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string: "Student id missing"});
   }
 }
 
@@ -354,6 +383,114 @@ studentController.viewForm = function(req, res){
       }
     });
   }
+}
+
+studentController.uploadPage = function(req, res){
+  res.render("../views/student/upload.ejs");
+}
+
+studentController.upload = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    var f = files[Object.keys(files)[0]];
+    var workbook = XLSX.readFile(f.path, {cellDates:true});
+    var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    var headers = {};
+    var data = [];
+    var i = 0;
+    var j = 0;
+    for(var field in schema.Student.schema.obj){
+      if(field != "jobHistory" && field != "courseHistory"){
+        if(i > 25){
+          i = 0;
+          j = 1;
+        }
+        if(j == 1){
+          headers[String.fromCharCode(65)+String.fromCharCode(i+65)] = field;
+        }
+        else{
+          headers[String.fromCharCode(i+65)] = field;
+        }
+        i++;
+      }
+    }
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var tt = 0;
+        for(var i = 0; i < z.length; i++){
+          if(!isNaN(z[i])){
+            tt = i;
+            break;
+          }
+        }
+        var col = z.substring(0,tt);
+        var row = parseInt(z.substring(tt));
+        var value = worksheet[z].v;
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    //try to create models
+    //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    data.forEach(function(element){
+      //verify that all fields exist
+      if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null){
+        var commaReg = /\s*,\s*/;
+        var facultyName = [null, null];
+        if(element.advisor != null){
+          facultyName = element.advisor.split(commaReg);
+          facultyName[0] = new RegExp(facultyName[0], "i");
+          facultyName[1] = new RegExp(facultyName[1], "i");
+        }
+        var spaceReg = /\s* \s*/;
+        var semester = [null, 0];
+        if(element.semesterStarted != null){
+          semester = element.semesterStarted.split(spaceReg);
+          semester[0] = semester[0].toUpperCase();
+          semester[1] = parseInt(semester[1]);
+        }
+        schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
+          if(result != null){
+            element.advisor = result._id;
+          }
+          else{
+            element.advisor = null;
+          }
+          schema.Semester.findOne({season: semester[0].toUpperCase(), year: parseInt(semester[1])}).exec().then(function(result){
+            if(result != null){
+              element.semesterStarted = result._id;
+            }
+            else{
+              element.semesterStarted = null;
+            }
+            schema.Student.findOne({$or: [{onyen: element.onyen}, {pid: element.pid}]}).exec().then(function(result){
+              if(result == null){
+                var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
+                inputStudent.save().then(function(result){
+                }).catch(function(err){
+                  throw new Error(element.lastName+" did not save because something was wrong with it.");
+                });
+              }
+              else{
+                schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().catch(
+                  function(err){
+                    throw new Error(element.lastName+" did not update because something was wrong with it.");
+                  });
+              }
+            });
+            
+          });
+
+        });
+        
+      }
+    });
+  });
+  res.redirect("/student/upload");
 }
 
 function verifyBoolean(input){

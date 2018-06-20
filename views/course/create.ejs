@@ -94,7 +94,7 @@
 								<select name="semester" class="form-control" id="inputSemester" required>
 									<option value=""></option>
 									<% for(var i=0; i<semesters.length; i++) { %>
-										<option value= <%= semesters[i]._id%>><%=semesters[i].season%>, <%=semesters[i].year%></option>
+										<option value= <%= semesters[i]._id%>><%=semesters[i].season%> <%=semesters[i].year%></option>
 									<% } %>
 								</select>
 							</div>

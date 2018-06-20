@@ -24,6 +24,7 @@ _.validateModelData = function (input, model) {
       } else if (m[key].instance === "ObjectID") {
         result[key] = input[key] === "" ? null : input[key];
       } else if (m[key].instance === "Date") {
+        console.log(input[key]);
         result[key] = new Date(input[key]);
       } else {
         result[key] = input[key];
