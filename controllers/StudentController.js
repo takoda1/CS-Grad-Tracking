@@ -83,7 +83,7 @@ studentController.post = function (req, res) {
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -129,7 +129,7 @@ studentController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
-  schema.Student.find(input).sort({onyen:1}).exec().then(function (result) {
+  schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
     res.render("../views/student/index.ejs", {students: result});
   }).catch(function (err) {
     res.json({"error": err.message, "origin": "student.get"})
@@ -186,11 +186,11 @@ studentController.put = function (req, res) {
       if(result != null){
         res.redirect("/student/edit/"+result._id);
       }
-      else throw new Error("StudentNotFound");
+      else res.render("../views/error.ejs", {string: "StudentNotFound"});
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -219,24 +219,22 @@ studentController.delete = function (req, res) {
         schema.Form.find({student: id}).remove().exec();
         res.redirect("/student");
       }
-      else throw new Error("StudentNotFound");
+      else res.render("../views/error.ejs", {string: "StudentNotFound"});
     });
   }
 }
 
 studentController.create = function(req, res){
-  var genders, ethnicities, residencies, degrees, jobs, semesters;
+  var genders, ethnicities, residencies, degrees, semesters;
   genders = schema.Student.schema.path("gender").enumValues;
   ethnicities = schema.Student.schema.path("ethnicity").enumValues;
   residencies = schema.Student.schema.path("residency").enumValues;
   degrees = schema.Student.schema.path("intendedDegree").enumValues;
-  schema.Job.find({}).populate("supervisor").populate("semester").populate("course").exec().then(function(result){
-    jobs = result;
-    schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
-      semesters = result;
-      schema.Faculty.find({}).sort({lastName:1}).exec().then(function(result){
-        res.render("../views/student/create", {faculty: result, semesters: semesters, jobs: jobs, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
-      });
+  
+  schema.Semester.find().sort({year:1, season:1}).exec().then(function(result){
+    semesters = result;
+    schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
+      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
     });
   });
 }
@@ -245,36 +243,34 @@ studentController.edit = function(req, res){
   if(req.params._id){
     schema.Student.findOne({_id: req.params._id}).populate("semesterStarted").populate("advisor").exec().then(function(result){
       if(result != null){
-        var genders, ethnicities, residencies, degrees, jobs, semesters, student;
+        var genders, ethnicities, residencies, degrees, semesters, student;
         student = result;
         genders = schema.Student.schema.path("gender").enumValues;
         ethnicities = schema.Student.schema.path("ethnicity").enumValues;
         residencies = schema.Student.schema.path("residency").enumValues;
         degrees = schema.Student.schema.path("intendedDegree").enumValues;
-        schema.Job.find({}).populate("supervisor").populate("semester").populate("course").exec().then(function(result){
-          jobs = result;
-          schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
-            semesters = result;
-            schema.Faculty.find({}).sort({lastName:1}).exec().then(function(result){
-              res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, jobs: jobs, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
-            });
+        schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+          semesters = result;
+          schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
+            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
           });
         });
       }
       else{
-        throw new Error("Student not found");
+        res.render("../views/error.ejs", {string: "Student not found"});
       }
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
 studentController.jobs = function(req, res){
   if(req.params._id){
     var jobs;
-    schema.Job.find().populate("supervisor").populate("course").populate("semester").exec().then(function(result){
+    schema.Job.find().populate({path:"supervisor", options: {sort: {lastName:1, firstName:1}}}).populate({path: "course", options: {sort: {number:1}}})
+    .populate({path: "semester", options: {sort: {year:1, season:1}}}).sort({position:1}).exec().then(function(result){
       jobs = result;
       schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
       .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
@@ -285,7 +281,7 @@ studentController.jobs = function(req, res){
   }
   else{
     //this shouldn't happen if frontend done correctly
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -329,7 +325,11 @@ studentController.formPage = function(req, res){
   if(req.params._id != null){
     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
       var formTitles = schema.Form.schema.path("title").enumValues;
-      res.render("../views/student/forms", {student: result, formTitles: formTitles});
+      var uploadSuccess = false;
+      if(req.params.uploadSuccess == "true"){
+        uploadSuccess = true;
+      }
+      res.render("../views/student/forms", {student: result, formTitles: formTitles, uploadSuccess: uploadSuccess});
     });
   }
   else{
@@ -349,18 +349,18 @@ studentController.uploadForm = function(req, res){
             var f = files[Object.keys(files)[0]];
             var newpath = path.join(__dirname, "../data/forms/"+student._id+fields.title+".pdf");
             fs.rename(f.path, newpath, function(err){
-              res.redirect("/student/forms/"+studId);
+              res.redirect("/student/forms/"+studId+"/true");
             });
           }
         });
       }
       else{
-        throw new Error("Student not found");
+        res.render("../views/error.ejs", {string: "Student not found"});
       }
     });
   }
   else{
-    throw new Error("Required param not found");
+    res.render("../views/error.ejs", {string: "Required param not found"});
   }
 }
 
@@ -386,7 +386,12 @@ studentController.viewForm = function(req, res){
 }
 
 studentController.uploadPage = function(req, res){
-  res.render("../views/student/upload.ejs");
+  var uploadSuccess = false;
+  console.log(req.params);
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
+  res.render("../views/student/upload.ejs", {uploadSuccess: uploadSuccess});
 }
 
 studentController.upload = function(req, res){
@@ -436,6 +441,8 @@ studentController.upload = function(req, res){
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    console.log(data);
+    var count = 0;
     data.forEach(function(element){
       //verify that all fields exist
       if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null){
@@ -448,6 +455,7 @@ studentController.upload = function(req, res){
         }
         var spaceReg = /\s* \s*/;
         var semester = [null, 0];
+        console.log(typeof(element.semesterStarted));
         if(element.semesterStarted != null){
           semester = element.semesterStarted.split(spaceReg);
           semester[0] = semester[0].toUpperCase();
@@ -460,7 +468,7 @@ studentController.upload = function(req, res){
           else{
             element.advisor = null;
           }
-          schema.Semester.findOne({season: semester[0].toUpperCase(), year: parseInt(semester[1])}).exec().then(function(result){
+          schema.Semester.findOne({season: semester[0], year: parseInt(semester[1])}).exec().then(function(result){
             if(result != null){
               element.semesterStarted = result._id;
             }
@@ -471,14 +479,23 @@ studentController.upload = function(req, res){
               if(result == null){
                 var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
                 inputStudent.save().then(function(result){
+                  count++;
+                  if(count == data.length){
+                    res.redirect("/student/upload/true");
+                  }
                 }).catch(function(err){
-                  throw new Error(element.lastName+" did not save because something was wrong with it.");
+                  res.render("../views/error.ejs", {string: element.lastName+" did not save because something was wrong with it."});
                 });
               }
               else{
-                schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().catch(
+                schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().then(function(result){
+                  count++;
+                  if(count == data.length){
+                    res.redirect("/student/upload/true");
+                  }
+                }).catch(
                   function(err){
-                    throw new Error(element.lastName+" did not update because something was wrong with it.");
+                    res.render("../views/error.ejs", {string: element.lastName+" did not update because something was wrong with it."});
                   });
               }
             });
@@ -490,7 +507,6 @@ studentController.upload = function(req, res){
       }
     });
   });
-  res.redirect("/student/upload");
 }
 
 function verifyBoolean(input){

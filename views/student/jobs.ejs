@@ -18,17 +18,9 @@
 
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
-					<ul class="nav nav-tabs whiteBg space">
-					  <li class="nav-item">
-					    <a class="nav-link" href="/student/edit/<%=student._id%>">Student</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link active" href="#">Jobs</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" href="/student/forms/<%=student._id%>">Forms</a>
-					  </li>
-					</ul>
+				
+					<%- include("./studentBarPartial.ejs") %>
+
 					<h1>Job history</h1>
 
 					<% if(student.jobHistory.length>0) { %>

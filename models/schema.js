@@ -78,7 +78,7 @@ var formSchema = mongoose.Schema({
       "Outside Review Option", "Request for Appointment of M.S. Committee", "Ph.D. Program of Study",
       "Report of Disapproval of Dissertation Proposal", "Technical Writing Requirement",
       "Report of Preliminary Research Presentation", "Teaching Requirement",
-      "Report of Research Discussion", "Program Product Requirement"]
+      "Report of Research Discussion", "Program Product Requirement", "Transfer Credit Request", "Student Progress Report"]
   },
   data: Buffer
 });
@@ -131,6 +131,11 @@ var gradeSchema = mongoose.Schema({
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
 });
 
+ var semesterReferenceSchema = mongoose.Schema({
+   name: String,
+   semester: {type: mongoose.Schema.Types.ObjectId, ref:"Semester"}
+ });
+
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
 schema.Student = mongoose.model("Student", studentSchema);
@@ -139,5 +144,6 @@ schema.Semester = mongoose.model("Semester", semesterSchema);
 schema.Course = mongoose.model("Course", courseSchema);
 schema.Job = mongoose.model("Job", jobSchema);
 schema.Grade = mongoose.model("Grade", gradeSchema);
+schema.SemesterReference = mongoose.model("SemesterReference", semesterReferenceSchema);
 
 module.exports = schema;
