@@ -55,11 +55,15 @@
 											<a href="/job/assign/<%=jobs[i]._id%>"><button class="btn btn-primary">Assign jobs</button></a>
 										</td>
 										<td>
-											<div class="col-md-10 offset-md-1">
-												<a href="/job/edit/<%=jobs[i]._id%>" class="editTag"><i class="fas fa-edit"></i></a>
-												<form action="/job/delete/<%=jobs[i]._id%>" method="post">
-													<button type="submit" class="btn btn-default" onclick="return confirm('Do you really want to delete this?');"><i class="fas fa-trash-alt"></i></button>
-												</form>
+											<div class="row">
+												<div class="col-md-6">
+													<a href="/job/edit/<%=jobs[i]._id%>" class="editTag"><i class="fas fa-edit"></i></a>
+												</div>
+												<div class="col-md-6">
+													<form action="/job/delete/<%=jobs[i]._id%>" method="post">
+														<button type="submit" class="btn btn-default" onclick="return confirm('Do you really want to delete this?');"><i class="fas fa-trash-alt"></i></button>
+													</form>
+												</div>
 											</div>
 										</td>
 									</tr>

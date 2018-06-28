@@ -30,7 +30,7 @@ var config = {
 //   host: '0.0.0.0'
 }
 
-mongoose.connect(config[app.settings.env], {useMongoClient: true})
+mongoose.connect(config[app.settings.env])
 mongoose.connection
   .on('error', console.error.bind(console, 'connection error:'))
   .once('open', function () {

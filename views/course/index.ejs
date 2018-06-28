@@ -50,11 +50,15 @@
 										<td><%= courses[i].faculty.lastName%>, <%= courses[i].faculty.firstName%></td>
 										<td><%= courses[i].semester.season%> <%= courses[i].semester.year%></td>
 										<td>
-											<div class="col-md-10 offset-md-1">
-												<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><i class="fas fa-edit"></i></a>
-												<form action="/course/delete/<%= courses[i]._id%>" method="post">
-													<button type="submit" class="btn btn-default" onclick="return confirm('Do you really want to delete this?');"><i class="fas fa-trash-alt"></i></button>
-												</form>
+											<div class="row">
+												<div class="col-md-6">
+													<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><i class="fas fa-edit"></i></a>
+												</div>
+												<div class="col-md-6">
+													<form action="/course/delete/<%= courses[i]._id%>" method="post">
+														<button type="submit" class="btn btn-default" onclick="return confirm('Do you really want to delete this?');"><i class="fas fa-trash-alt"></i></button>
+													</form>
+												</div>
 											</div>
 										</td>
 									</tr>

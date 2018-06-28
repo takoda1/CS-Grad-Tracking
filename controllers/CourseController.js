@@ -52,7 +52,7 @@ courseController.post = function (req, res) {
     });
   }
   else{
-    throw new error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -83,10 +83,69 @@ courseController.get = function (req, res) {
   if(input.name != null){
     input.name = new RegExp(input.name, "i");
   }
+
+   //schema.SemesterReference.find({}).remove().exec();
+   // schema.Semester.findOne({season:"SPRING", year:2010}).exec().then(function(result){
+   //  console.log(result);
+   //   var semesterReferenceObject = {name: "AAA", semester: result._id};
+   //   var semesterReferenceModel = new schema.SemesterReference(semesterReferenceObject);
+   //   semesterReferenceModel.save().then(function(result){
+   //     console.log(result);
+   //   })
+   // })
+   // schema.SemesterReference.find().populate({path: "semester", options: {sort: {"year": -1}}}).exec().then(function(result){
+   //  console.log(result);
+   // })
+   // schema.Semester.find().sort({year:-1}).exec().then(function(result){
+   //  console.log(result);
+   // })
+  schema.SemesterReference.aggregate([
+  {
+    "$lookup":{
+      "from":schema.Semester.collection.name,
+      "let": {"semester":"$semester"},
+      "pipeline":[
+        {"$match": {"$expr":{"$eq":["$_id", "$$semester"]}}},
+        {"$sort":{"year":1}}
+      ],
+      "as": "semester"
+    }
+  },
+  {"$unwind":"$semester"}]).exec().then(function(result){
+    console.log(result);
+  })
   //http://mongoosejs.com/docs/populate.html
-  schema.Course.find(input).sort({number:1}).populate("faculty").populate("semester").exec().then(function(result){
+  schema.Course.aggregate([
+  {
+    $lookup: {
+      from: schema.Faculty.collection.name,
+      localField: "faculty",
+      foreignField: "_id",
+      as: "faculty"
+    }
+  },
+  {
+    $unwind:"$faculty"
+  },
+  {
+    $lookup : {
+      from: schema.Semester.collection.name,
+      let: {"semester" : "$semester"},
+      pipeline:[
+      {$match:{$expr:{$eq:["$_id", "$$semester"]}}},
+      {"$sort": {"abc": 1}}
+      ],
+      "as":"semester"
+    }
+  },
+  {$unwind: "$semester"}
+  ]).exec().then(function(result){
+    console.log(result);
+  });
+  
+  schema.Course.find(input).populate("faculty").populate({path: "semester", options:{sort:{"year":"descending"}}}).exec().then(function(result){
     var courses = result;
-    schema.Semester.find({}).sort({year: 1, season: 1}).exec().then(function(result){
+    schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
       res.render("../views/course/index.ejs", {courses: courses, semesters: result});
     });
   }).catch(function(err){
@@ -128,14 +187,14 @@ courseController.put = function (req, res) {
         res.redirect("/course/edit/"+result._id);
       }
       else{
-        throw new Error("CourseNotFound");
+        res.render("../views/error.ejs", {string: "CourseNotFound"});
       }
     }).catch(function(err){
       res.json({"error": err.message, "origin": "course.put"});
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
   
 }
@@ -175,7 +234,7 @@ courseController.delete = function (req, res) {
                 res.redirect("/course");
               }
               else{
-                throw new Error("CourseNotFound");
+                res.render("../views/error.ejs", {string: "CourseNotFound"});
               }
             });
           }
@@ -184,7 +243,7 @@ courseController.delete = function (req, res) {
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
   
 }
@@ -249,13 +308,13 @@ courseController.edit = function (req, res){
         });
       }
       else{
-        throw new Error("Course not found");
+        res.render("../views/error.ejs", {string: "Course not found"});
       }
     });
   }
   //catches error if _id is null
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -266,9 +325,13 @@ courseController.edit = function (req, res){
  *
  */
 courseController.uploadPage = function(req, res){
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
   //always have to provide semesters because search requires it
   schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
-    res.render("../views/course/upload.ejs", {semesters: result});
+    res.render("../views/course/upload.ejs", {semesters: result, uploadSuccess: uploadSuccess});
   });
 }
 
@@ -299,6 +362,7 @@ courseController.upload = function(req, res){
     data.shift();
     data.shift();
     //try to create models
+    var count = 0;
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
     data.forEach(function(element){
       //verify that all fields exist
@@ -339,9 +403,19 @@ courseController.upload = function(req, res){
                   if(result == null){
                     var inputCourse = new schema.Course(element);
                     inputCourse.save().then(function(result){
+                      count++;
+                      if(count == data.length){
+                        res.redirect("/course/upload/true");
+                      }
                     }).catch(function(err){
                       res.render("../views/error.ejs", {string: element.name+" did not save because something is wrong with it."});
                     });
+                  }
+                  else{
+                    count++;
+                    if(count == data.length){
+                      res.redirect("/course/upload/true");
+                    }
                   }
                 });
               }
@@ -359,7 +433,6 @@ courseController.upload = function(req, res){
         res.render("../views/error.ejs", {string: element.name+" did not save because it is missing a field."});
       }
     });
-    res.redirect("/course/upload"); //quickly redirects, database in background may still be saving courses but don't want to wait for that
   });
 }
 

@@ -24,14 +24,14 @@
 					<form action="/job/put" method="post">
 						<input type="hidden" name="_id" value=<%=job._id%>></input>
 						<div class="form-group row">
-							<label for="inputPosition" class="col-md-2 offset-md-3">Position</label>
+							<label for="inputPosition" class="col-md-2 offset-md-3">Position *</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="inputPosition" name="position" value="<%=job.position%>" required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
-							<label for="inputSupervisor" class="col-md-2 offset-md-3">Supervisor</label>
+							<label for="inputSupervisor" class="col-md-2 offset-md-3">Supervisor *</label>
 							<div class="col-md-4">
 								<select name="supervisor" class="form-control" id="inputSupervisor" required>
 									<% for(var i=0; i < faculty.length; i++){ %>
@@ -64,7 +64,7 @@
 						<% } %>
 
 						<div class="form-group row">
-							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
+							<label for="inputSemester" class="col-md-2 offset-md-3">Semester *</label>
 							<div class="col-md-4">
 								<select name="semester" class="form-control" id="inputSemester" required>
 									<% for(var i=0; i < semesters.length; i++){ %>

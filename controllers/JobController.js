@@ -234,7 +234,11 @@ jobController.uploadPage = function(req, res){
     getCourses().then(function(result){
       courses = result;
       getSemesters().then(function(result){
-        res.render("../views/job/upload.ejs", {faculty: faculty, courses: courses, semesters:result});
+        var uploadSuccess = false;
+        if(req.params.uploadSuccess == "true"){
+          uploadSuccess = true;
+        }
+        res.render("../views/job/upload.ejs", {faculty: faculty, courses: courses, semesters:result, uploadSuccess: uploadSuccess});
       });
     });
   });
@@ -269,6 +273,7 @@ jobController.upload = function(req, res){
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    var count = 0;
     data.forEach(function(element){
       //verify that required fields exist
       if(element.position != null && element.supervisor != null && element.semester != null){
@@ -287,7 +292,7 @@ jobController.upload = function(req, res){
                 element.semester = result._id;
                 element.position = element.position.toUpperCase();
                 if(element.course != null){
-                  var courseInfo = element.course.split(reg); //should be Department, number, section
+                  var courseInfo = element.course.split(commaReg); //should be Department, number, section
                   schema.Course.findOne({department: new RegExp(courseInfo[0], "i"), number: courseInfo[1], section: courseInfo[2], faculty: element.supervisor, semester: element.semester}).exec().then(function(result){
                     if(result != null){
                       element.course = result._id;
@@ -297,16 +302,35 @@ jobController.upload = function(req, res){
                           var inputJob = new schema.Job(element);
                           inputJob.save().then(function(result){
                             //save to student's job history
-                            pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
-                              res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
-                            });
+                            if(element.onyen != null){
+                              pushStudentJob(element.onyen, result._id).then(function(result){
+                                console.log("ABC");
+                                count++;
+                                if(count == data.length){
+                                  res.redirect("/job/upload/true");
+                                }
+                              }).catch(function(err){
+                                res.render("../views/error.ejs", {string: "Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                              });
+                            }
+                            else{
+                              count++;
+                              if(count == data.length){
+                                res.redirect("/job/upload/true");
+                              }
+                            }
                           }).catch(function(err){
-                            res.render("../views/error.ejs", {string:element.position+" "+element.supervisor+" did not save because "+err});
+                            res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because "+err});
                           });
                         }
                         else{
-                          pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
-                            res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                          pushStudentJob(element.onyen, result._id).then(function(result){
+                            count++;
+                            if(count == data.length){
+                              res.redirect("/job/upload/true");
+                            }
+                          }).catch(function(err){
+                            res.render("../views/error.ejs", {string: "Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
                           });
                         }
                       });
@@ -323,16 +347,34 @@ jobController.upload = function(req, res){
                       var inputJob = new schema.Job(element);
                       inputJob.save().then(function(result){
                         //save to student's job history
-                        pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
-                          res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
-                        });
+                        if(element.onyen != null){
+                          pushStudentJob(element.onyen, result._id).then(function(result){
+                            count++;
+                            if(count == data.length){
+                              res.redirect("/job/upload/true");
+                            }
+                          }).catch(function(err){
+                            res.render("../views/error.ejs", {string: "Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                          });
+                        }
+                        else{
+                          count++;
+                          if(count == data.length){
+                            res.redirect("/job/upload/true");
+                          }
+                        }
                       }).catch(function(err){
-                        res.render("../views/error.ejs", {string:element.position+" "+element.supervisor+" did not save because something is wrong with it"});
+                        res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because something is wrong with it"});
                       });
                     }
                     else{
-                      pushStudentJob(element.onyen, result._id).then(function(result){}).catch(function(err){
-                        res.render("../views/error.ejs", {string:"Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
+                      pushStudentJob(element.onyen, result._id).then(function(result){
+                        count++;
+                        if(count == data.length){
+                          res.redirect("/job/upload/true");
+                        }
+                      }).catch(function(err){
+                        res.render("../views/error.ejs", {string: "Student "+element.onyen+" did not save job "+element.position+" because student was not found."});
                       });
                     }
                   });
@@ -352,7 +394,6 @@ jobController.upload = function(req, res){
         res.render("../views/error.ejs", {string: element.position+" "+element.supervisor+" did not save because it is missing a field."});
       }
     });
-    res.redirect("/job/upload"); //quickly redirects, database in background may still be saving courses but don't want to wait for that
   });
 }
 

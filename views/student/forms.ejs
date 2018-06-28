@@ -19,17 +19,17 @@
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
 
-					<ul class="nav nav-tabs whiteBg space">
-					  <li class="nav-item">
-					    <a class="nav-link" href="/student/edit/<%=student._id%>">Student</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" href="/student/jobs/<%=student._id%>">Jobs</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link active" href="#">Forms</a>
-					  </li>
-					</ul>
+					<%- include("./studentBarPartial.ejs") %>
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Upload success!</strong>
+					</div>
+					<% } %>
+
 					<h3 class="space">View a form</h3>
 					<% for(var i = 0; i < formTitles.length; i++) { %>
 					<div class="col-md-4 offset-md-4">
@@ -67,5 +67,6 @@
 				</div>
 			</div>
 		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
 	</body>
 </html>

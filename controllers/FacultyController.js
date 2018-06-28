@@ -89,7 +89,7 @@ facultyController.get = function (req, res) {
   input = util.validateModelData(input, schema.Faculty); //remove fields that are empty/not part of Faculty definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   //find the faculty and sort by onyen, render /faculty/index.ejs on completion
-  schema.Faculty.find(input).sort({lastName:1}).exec().then(function (result) {
+  schema.Faculty.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
     res.render("../views/faculty/index.ejs", {faculty: result});
   }).catch(function (err) {
     res.json({"error": err.message, "origin": "faculty.get"});

@@ -10,7 +10,7 @@ router.get("/create", job.create);
 
 router.get("/edit/:_id", job.edit);
 
-router.get("/upload", job.uploadPage);
+router.get("/upload/:uploadSuccess", job.uploadPage);
 
 router.get("/assign/:_id", job.assignPage);
 

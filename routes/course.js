@@ -9,7 +9,7 @@ router.get("/edit/:_id", course.edit);
 
 router.get("/create", course.create);
 
-router.get("/upload", course.uploadPage);
+router.get("/upload/:uploadSuccess", course.uploadPage);
 
 router.post("/post", course.post);
 

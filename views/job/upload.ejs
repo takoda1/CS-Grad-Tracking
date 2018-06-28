@@ -19,6 +19,16 @@
 				</div>
 
 				<div class='col-lg-10 panelbg text-center'>
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Upload success!</strong>
+					</div>
+					<% } %>
+					
 					<h1>Upload jobs</h1>
 					<form action="/job/upload" enctype="multipart/form-data" method="post">
 						<div class="form-group row">
@@ -49,5 +59,6 @@
 				</div>
 			</div>
 		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
 	</body>
 </html>
