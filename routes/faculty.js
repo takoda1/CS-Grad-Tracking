@@ -10,6 +10,8 @@ router.get("/create", faculty.create);
 
 router.get("/edit/:_id", faculty.edit);
 
+router.get("/download", faculty.download);
+
 router.post("/post", faculty.post);
 
 router.post("/put", faculty.put);

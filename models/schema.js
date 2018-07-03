@@ -100,7 +100,7 @@ var courseSchema = mongoose.Schema({
   name: String,
   category: {
     type: String,
-    enum: ["Theory", "Systems", "Appls"]
+    enum: ["NA", "Theory", "Systems", "Appls"]
   },
   hours: Number,
   section: Number,
