@@ -2,6 +2,9 @@ var schema = require("../models/schema")
 var util = require("./util")
 var XLSX = require("xlsx");
 var formidable = require("formidable");
+var mongoose = require("mongoose");
+var path = require("path");
+var fs = require("fs");
 var courseController = {}
 
 /**
@@ -79,43 +82,44 @@ courseController.post = function (req, res) {
 courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
-  //only field that needs to be a regular expression is name
-  if(input.name != null){
-    input.name = new RegExp(input.name, "i");
-  }
-
-   //schema.SemesterReference.find({}).remove().exec();
-   // schema.Semester.findOne({season:"SPRING", year:2010}).exec().then(function(result){
-   //  console.log(result);
-   //   var semesterReferenceObject = {name: "AAA", semester: result._id};
-   //   var semesterReferenceModel = new schema.SemesterReference(semesterReferenceObject);
-   //   semesterReferenceModel.save().then(function(result){
-   //     console.log(result);
-   //   })
-   // })
-   // schema.SemesterReference.find().populate({path: "semester", options: {sort: {"year": -1}}}).exec().then(function(result){
-   //  console.log(result);
-   // })
-   // schema.Semester.find().sort({year:-1}).exec().then(function(result){
-   //  console.log(result);
-   // })
-  schema.SemesterReference.aggregate([
-  {
-    "$lookup":{
-      "from":schema.Semester.collection.name,
-      "let": {"semester":"$semester"},
-      "pipeline":[
-        {"$match": {"$expr":{"$eq":["$_id", "$$semester"]}}},
-        {"$sort":{"year":1}}
-      ],
-      "as": "semester"
+  //have to do this because sorting in populate is not working
+  //its really stupid
+  var match;
+  if(input.semester == null && input.number == null){
+    match = {
+      $match: {
+        name:new RegExp(input.name, "i")
+      }
     }
-  },
-  {"$unwind":"$semester"}]).exec().then(function(result){
-    console.log(result);
-  })
-  //http://mongoosejs.com/docs/populate.html
+  }
+  else if(input.semester == null && input.number != null){
+    match = {
+      $match: {
+        name:new RegExp(input.name, "i"),
+        number: input.number
+      }
+    }
+  }
+  else if(input.semester != null && input.number == null){
+     match = {
+        $match: {
+          name:new RegExp(input.name, "i"),
+          semester: new mongoose.Types.ObjectId(input.semester)
+        }
+      }
+  }
+  else{
+     match = {
+        $match: {
+          name:new RegExp(input.name, "i"),
+          semester: new mongoose.Types.ObjectId(input.semester),
+          number: input.number
+        }
+      }
+  }
+  
   schema.Course.aggregate([
+  match,
   {
     $lookup: {
       from: schema.Faculty.collection.name,
@@ -130,20 +134,24 @@ courseController.get = function (req, res) {
   {
     $lookup : {
       from: schema.Semester.collection.name,
-      let: {"semester" : "$semester"},
-      pipeline:[
-      {$match:{$expr:{$eq:["$_id", "$$semester"]}}},
-      {"$sort": {"abc": 1}}
-      ],
-      "as":"semester"
+      localField: "semester",
+      foreignField: "_id",
+      as: "semester"
     }
   },
-  {$unwind: "$semester"}
+  {
+    $unwind:{
+      path: "$semester"
+    }
+  },
+  {
+    $sort:{
+      "semester.year": 1,
+      "semester.season": 1,
+      "number": 1
+    }
+  }
   ]).exec().then(function(result){
-    console.log(result);
-  });
-  
-  schema.Course.find(input).populate("faculty").populate({path: "semester", options:{sort:{"year":"descending"}}}).exec().then(function(result){
     var courses = result;
     schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
       res.render("../views/course/index.ejs", {courses: courses, semesters: result});
@@ -151,6 +159,7 @@ courseController.get = function (req, res) {
   }).catch(function(err){
     res.json({"error": err.message, "origin": "course.put"});
   });
+  
 }
 
 /**
@@ -365,6 +374,9 @@ courseController.upload = function(req, res){
     var count = 0;
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
     data.forEach(function(element){
+      if(element.category == null){
+        element.category = "NA";
+      }
       //verify that all fields exist
       if(util.allFieldsExist(element, schema.Course)){
         //get faculty lastname/firstname
@@ -396,6 +408,7 @@ courseController.upload = function(req, res){
                     element.category = "Appls";
                     break;
                   default:
+                    element.category = "NA";
                     break;
                 }
                 schema.Course.findOne(element).exec().then(function (result) {
@@ -434,6 +447,64 @@ courseController.upload = function(req, res){
       }
     });
   });
+}
+
+courseController.download = function(req, res){
+  schema.Course.aggregate([
+  {
+    $project: {
+      _id: 0,
+      __v: 0
+    }
+  },
+  {
+    $lookup: {
+      from: schema.Faculty.collection.name,
+      localField: "faculty",
+      foreignField: "_id",
+      as: "faculty"
+    }
+  },
+  {
+    $unwind:"$faculty"
+  },
+  {
+    $lookup : {
+      from: schema.Semester.collection.name,
+      localField: "semester",
+      foreignField: "_id",
+      as: "semester"
+    }
+  },
+  {
+    $unwind:{
+      path: "$semester"
+    }
+  },
+  {
+    $sort:{
+      "semester.year": 1,
+      "semester.season": 1,
+      "number": 1
+    }
+  }
+  ]).exec().then(function(result){
+    var wb = XLSX.utils.book_new();
+     for(var i = 0; i < result.length; i++){
+       result[i].faculty = result[i].faculty.lastName + ", " + result[i].faculty.firstName;
+       result[i].semester = result[i].semester.season + " " + result[i].semester.year;
+     }
+    var ws = XLSX.utils.json_to_sheet(result);
+    XLSX.utils.book_append_sheet(wb, ws, "Courses");
+    var filePath = path.join(__dirname, "../data/courseTemp.xlsx");
+    XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    fs.createReadStream(filePath).pipe(res);
+
+  });
+
+  
+
 }
 
 module.exports = courseController;

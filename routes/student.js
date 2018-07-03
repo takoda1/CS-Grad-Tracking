@@ -19,6 +19,8 @@ router.get("/viewForm/:_id/:title", student.viewForm);
 
 router.get("/upload/:uploadSuccess", student.uploadPage);
 
+router.get("/download", student.download);
+
 router.post('/post', student.post);
 
 router.post('/put', student.put);

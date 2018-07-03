@@ -5,6 +5,7 @@ var fs = require("fs");
 var path = require("path");
 var XLSX = require("xlsx");
 var formidable = require("formidable");
+var mongoose = require("mongoose");
 
 var studentController = {}
 
@@ -269,9 +270,93 @@ studentController.edit = function(req, res){
 studentController.jobs = function(req, res){
   if(req.params._id){
     var jobs;
+
     schema.Job.find().populate({path:"supervisor", options: {sort: {lastName:1, firstName:1}}}).populate({path: "course", options: {sort: {number:1}}})
     .populate({path: "semester", options: {sort: {year:1, season:1}}}).sort({position:1}).exec().then(function(result){
       jobs = result;
+
+      // schema.Student.aggregate([
+      // {
+      //   $match: {
+      //     _id: new mongoose.Types.ObjectId(req.params._id)
+      //   }
+      // },
+      // {
+      //   $unwind: "$jobHistory"
+      // },
+      // {
+      //   $lookup: {
+      //     from: schema.Job.collection.name,
+      //     localField: "jobHistory",
+      //     foreignField: "_id",
+      //     as: "jobHistoryObject"
+      //   }
+      // },
+      // {
+      //   $unwind: {
+      //     path: "$jobHistoryObject",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $group:{
+      //     "_id":"$_id",
+      //     "jobHistory": {$push: "$jobHistory"},
+      //     "jobHistoryObject": {"$push": "$jobHistoryObject"}
+      //   }
+      // },
+      // {
+      //   $lookup: {
+      //     from: schema.Faculty.collection.name,
+      //     localField: "jobHistory.supervisor",
+      //     foreignField: "_id",
+      //     as: "supervisor"
+      //   }
+      // },
+      // {
+      //   $unwind: {
+      //     path: "$supervisor",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $lookup: {
+      //     from: schema.Semester.collection.name,
+      //     localField: "jobHistory.semester",
+      //     foreignField: "_id",
+      //     as: "semester"
+      //   }
+      // },
+      // {
+      //   $unwind: {
+      //     path: "$semester",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $lookup: {
+      //     from: schema.Course.collection.name,
+      //     localField: "jobHistory.course",
+      //     foreignField: "_id",
+      //     as: "course"
+      //   }
+      // },
+      // {
+      //   $unwind:{
+      //     path:"$course",
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $sort: {
+      //     "jobHistory.semester.year": 1
+      //   }
+      // }
+      // ]).exec().then(function(result){
+      //   console.log(result);
+      //   res.render("../views/student/jobs", {student: result, jobs: jobs});
+      // });
+
       schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
       .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
         res.render("../views/student/jobs", {student: result, jobs: jobs});
@@ -506,6 +591,39 @@ studentController.upload = function(req, res){
         
       }
     });
+  });
+}
+
+studentController.download = function(req, res){
+  schema.Student.find({}, "-_id -__v").populate("advisor").populate("semesterStarted").sort({lastName:1, firstName:1}).lean().exec().then(function(result){
+    var m = schema.Student.schema.obj;
+    var template = {};
+    for(var key in m){
+      if (result[0][key] == undefined || result[0][key] == null || result[0][key] == NaN || result[0][key] == ""){
+        template[key] = null;
+      }
+      else{
+        template[key] = result[0][key];
+      }
+    }
+    result[0] = template;
+    for(var i = 0; i < result.length; i++){
+      result[i].jobHistory = null;
+      result[i].courseHistory = null;
+      if(result[i].advisor != null){
+        result[i].advisor = result[i].advisor.lastName + " " + result[i].advisor.firstName;
+      }
+      if(result[i].semesterStarted != null){
+        result[i].semesterStarted = result[i].semesterStarted.season + " " + result[i].semesterStarted.year;
+      }
+    }
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(result);
+    XLSX.utils.book_append_sheet(wb, ws, "Student");
+    var filePath = path.join(__dirname, "../data/studentTemp.xlsx");
+    XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    fs.createReadStream(filePath).pipe(res);
   });
 }
 

@@ -14,6 +14,8 @@ router.get("/upload/:uploadSuccess", job.uploadPage);
 
 router.get("/assign/:_id", job.assignPage);
 
+router.get("/download", job.download);
+
 router.post("/post", job.post);
 
 router.post("/put", job.put);

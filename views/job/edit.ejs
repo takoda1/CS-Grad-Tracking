@@ -63,6 +63,7 @@
 						</div>
 						<% } %>
 
+						<% if(job.course == null) { %>
 						<div class="form-group row">
 							<label for="inputSemester" class="col-md-2 offset-md-3">Semester *</label>
 							<div class="col-md-4">
@@ -73,6 +74,11 @@
 								</select>
 							</div>
 						</div>
+						<% } else { %>
+
+						<input type="hidden" name="semester" value=<%=job.course.semester%> required ></input>
+
+						<% } %>
 							
 
 						<div class="form-group row align-items-end">

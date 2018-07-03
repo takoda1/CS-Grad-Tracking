@@ -11,6 +11,8 @@ router.get("/create", course.create);
 
 router.get("/upload/:uploadSuccess", course.uploadPage);
 
+router.get("/download", course.download);
+
 router.post("/post", course.post);
 
 router.post("/put", course.put);

@@ -2,6 +2,8 @@ var schema = require('../models/schema.js');
 var util = require('./util.js');
 var formidable = require("formidable");
 var XLSX = require("xlsx");
+var fs = require("fs");
+var path = require("path");
 
 var jobController = {};
 
@@ -74,14 +76,19 @@ jobController.get = function (req, res) {
   }
   //https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
   schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate({path: "semester", options:{sort:{year:1, season:1}}}).exec().then(function (result) {
-    var jobs, faculty, courses;
+    var jobs, faculty, courses, semesters;
     jobs = result;
     getFaculty().then(function(result){
       faculty = result;
       getCourses().then(function(result){
         courses = result;
         getSemesters().then(function(result){
-          res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters:result});
+          semesters = result;
+          for(var i = 0; i < jobs.length; i++){
+
+          }
+          //schema.Job.find({jobHistory: jobId})
+          res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters});
         });
       });
     });
@@ -118,14 +125,14 @@ jobController.put = function (req, res) {
         res.redirect("/job/edit/"+result._id);
       }
       else{
-        throw new Error("JobNotFound");
+        res.render("../views/error.ejs", {string: "JobNotFound"});
       }
     }).catch(function(err){
       res.json({"error": err.message, "origin": "job.put"});
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -158,13 +165,13 @@ jobController.delete = function (req, res) {
           if(result){
             res.redirect("/job");
           }
-          else throw new Error("JobNotFound");
+          else res.render("../views/error.ejs", {string: "JobNotFound"});
         });
       }
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -220,10 +227,10 @@ jobController.edit = function(req, res){
           });
         });
       }
-      else throw new Error("JobNotFound");
+      else res.render("../views/error.ejs", {string: "JobNotFound"});
     });
   } else {
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -438,12 +445,12 @@ jobController.assignPage = function(req, res){
       }
       //should not occur during regular website use
       else{
-        throw new Error("Job not found");
+        res.render("../views/error.ejs", {string: "Job not found"});
       }
     });
   }
   else{
-    throw new Error("RequiredParamNotFound");
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
 
@@ -498,6 +505,37 @@ jobController.unAssign = function(req, res){
   }
 }
 
+jobController.download = function(req, res){
+
+  schema.Job.find({}, "-_id -__v").populate("course").populate("supervisor").populate("semester").lean().exec().then(function(result){
+    var m = schema.Job.schema.obj;
+    var template = {};
+    for(var key in m){
+      if (result[0][key] == undefined || result[0][key] == null || result[0][key] == NaN || result[0][key] == ""){
+        template[key] = null;
+      }
+      else{
+        template[key] = result[0][key];
+      }
+    }
+    result[0] = template;
+    for(var i = 0; i < result.length; i++){
+      if(result[i].course != null){
+        result[i].course = result[i].course.department + " " + result[i].course.number + " " + result[i].course.section;
+      }
+      result[i].supervisor = result[i].supervisor.lastName + " " + result[i].supervisor.firstName;
+      result[i].semester = result[i].semester.season + " " + result[i].semester.year;
+    }
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(result);
+    XLSX.utils.book_append_sheet(wb, ws, "Jobs");
+    var filePath = path.join(__dirname, "../data/jobTemp.xlsx");
+    XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    fs.createReadStream(filePath).pipe(res);
+  });
+}
+
 function getFaculty(){
   return new Promise((resolve, reject)=>{
     schema.Faculty.find().sort({onyen:1}).exec().then(function(result){
@@ -520,6 +558,10 @@ function getSemesters(){
       resolve(result);
     });
   });
+}
+
+function getConnectedStudents(){
+  
 }
 
 
