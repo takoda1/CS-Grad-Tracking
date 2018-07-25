@@ -82,76 +82,21 @@ courseController.post = function (req, res) {
 courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
-  //have to do this because sorting in populate is not working
-  //its really stupid
-  var match;
-  if(input.semester == null && input.number == null){
-    match = {
-      $match: {
-        name:new RegExp(input.name, "i")
-      }
-    }
-  }
-  else if(input.semester == null && input.number != null){
-    match = {
-      $match: {
-        name:new RegExp(input.name, "i"),
-        number: input.number
-      }
-    }
-  }
-  else if(input.semester != null && input.number == null){
-     match = {
-        $match: {
-          name:new RegExp(input.name, "i"),
-          semester: new mongoose.Types.ObjectId(input.semester)
+  schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
+    result.sort(function(a, b){
+      if(a.semester.year == b.semester.year){
+        if(a.semester.season < b.semester.season){
+          return -1;
         }
-      }
-  }
-  else{
-     match = {
-        $match: {
-          name:new RegExp(input.name, "i"),
-          semester: new mongoose.Types.ObjectId(input.semester),
-          number: input.number
+        if(a.semester.season > b.semester.season){
+          return 1;
         }
+        return 0;
       }
-  }
-  
-  schema.Course.aggregate([
-  match,
-  {
-    $lookup: {
-      from: schema.Faculty.collection.name,
-      localField: "faculty",
-      foreignField: "_id",
-      as: "faculty"
-    }
-  },
-  {
-    $unwind:"$faculty"
-  },
-  {
-    $lookup : {
-      from: schema.Semester.collection.name,
-      localField: "semester",
-      foreignField: "_id",
-      as: "semester"
-    }
-  },
-  {
-    $unwind:{
-      path: "$semester"
-    }
-  },
-  {
-    $sort:{
-      "semester.year": 1,
-      "semester.season": 1,
-      "number": 1
-    }
-  }
-  ]).exec().then(function(result){
+      else{
+        return a.semester.year - b.semester.year;
+      }
+    });
     var courses = result;
     schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
       res.render("../views/course/index.ejs", {courses: courses, semesters: result});
@@ -159,7 +104,74 @@ courseController.get = function (req, res) {
   }).catch(function(err){
     res.json({"error": err.message, "origin": "course.put"});
   });
+  // var match;
+  // if(input.semester == null && input.number == null){
+  //   match = {
+  //     $match: {
+  //       name:new RegExp(input.name, "i")
+  //     }
+  //   }
+  // }
+  // else if(input.semester == null && input.number != null){
+  //   match = {
+  //     $match: {
+  //       name:new RegExp(input.name, "i"),
+  //       number: input.number
+  //     }
+  //   }
+  // }
+  // else if(input.semester != null && input.number == null){
+  //    match = {
+  //       $match: {
+  //         name:new RegExp(input.name, "i"),
+  //         semester: new mongoose.Types.ObjectId(input.semester)
+  //       }
+  //     }
+  // }
+  // else{
+  //    match = {
+  //       $match: {
+  //         name:new RegExp(input.name, "i"),
+  //         semester: new mongoose.Types.ObjectId(input.semester),
+  //         number: input.number
+  //       }
+  //     }
+  // }
   
+  // schema.Course.aggregate([
+  // match,
+  // {
+  //   $lookup: {
+  //     from: schema.Faculty.collection.name,
+  //     localField: "faculty",
+  //     foreignField: "_id",
+  //     as: "faculty"
+  //   }
+  // },
+  // {
+  //   $unwind:"$faculty"
+  // },
+  // {
+  //   $lookup : {
+  //     from: schema.Semester.collection.name,
+  //     localField: "semester",
+  //     foreignField: "_id",
+  //     as: "semester"
+  //   }
+  // },
+  // {
+  //   $unwind:{
+  //     path: "$semester"
+  //   }
+  // },
+  // {
+  //   $sort:{
+  //     "semester.year": 1,
+  //     "semester.season": 1,
+  //     "number": 1
+  //   }
+  // }
+  // ]).exec().then(function(result){
 }
 
 /**
@@ -450,45 +462,62 @@ courseController.upload = function(req, res){
 }
 
 courseController.download = function(req, res){
-  schema.Course.aggregate([
-  {
-    $project: {
-      _id: 0,
-      __v: 0
-    }
-  },
-  {
-    $lookup: {
-      from: schema.Faculty.collection.name,
-      localField: "faculty",
-      foreignField: "_id",
-      as: "faculty"
-    }
-  },
-  {
-    $unwind:"$faculty"
-  },
-  {
-    $lookup : {
-      from: schema.Semester.collection.name,
-      localField: "semester",
-      foreignField: "_id",
-      as: "semester"
-    }
-  },
-  {
-    $unwind:{
-      path: "$semester"
-    }
-  },
-  {
-    $sort:{
-      "semester.year": 1,
-      "semester.season": 1,
-      "number": 1
-    }
-  }
-  ]).exec().then(function(result){
+  schema.Course.find({}, "-_id -__v").populate("faculty").populate("semester").sort({number:1}).lean().exec().then(function(result){
+    result.sort(function(a, b){
+      if(a.semester.year == b.semester.year){
+        if(a.semester.season < b.semester.season){
+          return -1;
+        }
+        if(a.semester.season > b.semester.season){
+          return 1;
+        }
+        return 0;
+      }
+      else{
+        return a.semester.year - b.semester.year;
+      }
+    });
+
+  // });
+  // schema.Course.aggregate([
+  // {
+  //   $project: {
+  //     _id: 0,
+  //     __v: 0
+  //   }
+  // },
+  // {
+  //   $lookup: {
+  //     from: schema.Faculty.collection.name,
+  //     localField: "faculty",
+  //     foreignField: "_id",
+  //     as: "faculty"
+  //   }
+  // },
+  // {
+  //   $unwind:"$faculty"
+  // },
+  // {
+  //   $lookup : {
+  //     from: schema.Semester.collection.name,
+  //     localField: "semester",
+  //     foreignField: "_id",
+  //     as: "semester"
+  //   }
+  // },
+  // {
+  //   $unwind:{
+  //     path: "$semester"
+  //   }
+  // },
+  // {
+  //   $sort:{
+  //     "semester.year": 1,
+  //     "semester.season": 1,
+  //     "number": 1
+  //   }
+  // }
+  // ]).exec().then(function(result){
     var wb = XLSX.utils.book_new();
      for(var i = 0; i < result.length; i++){
        result[i].faculty = result[i].faculty.lastName + ", " + result[i].faculty.firstName;
@@ -498,6 +527,7 @@ courseController.download = function(req, res){
     XLSX.utils.book_append_sheet(wb, ws, "Courses");
     var filePath = path.join(__dirname, "../data/courseTemp.xlsx");
     XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-Disposition", "filename=" + "Courses.xlsx");
     res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     fs.createReadStream(filePath).pipe(res);
 

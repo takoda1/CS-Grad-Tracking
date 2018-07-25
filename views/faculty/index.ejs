@@ -43,11 +43,11 @@
 										<td><%= faculty[i].pid%></td>
 										<td><%= faculty[i].active%></td>
 										<td>
-											<div class="row">
-												<div class="col-md-6">
+											<div class="editRow">
+												<div class="editColumn">
 													<a href="/faculty/edit/<%=faculty[i]._id%>" class="editTag"><i class="fas fa-edit"></i></a>
 												</div>
-												<div class="col-md-6">
+												<div class="editColumn">
 													<form action="/faculty/delete/<%=faculty[i]._id%>" method="post">
 														<button type="submit" class="btn btn-default" onclick="return confirm('Do you really want to delete this?');"><i class="fas fa-trash-alt"></i></button>
 													</form>

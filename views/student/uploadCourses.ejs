@@ -1,24 +1,23 @@
-<!-- views/student/upload.ejs -->
+<!-- views/student/uploadCourses.ejs -->
 <!DOCTYPE html>
 
 <html>
 	<head>
-		<title>Upload students</title>
-		<%- include('../partials/head.ejs') %>
+		<title>Upload courses</title>
+		<%- include("../partials/head.ejs") %>
 	</head>
 	
 	<body>
 		<div class="container-fluid h-100">
 			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
 
-				<div class='col-lg-2 sidebar text-center'>
+					<%- include("../partials/admin-sidebar.ejs") %>
 
-					<%- include('../partials/admin-sidebar.ejs') %>
+					<%- include("./search-student.ejs") %>
 
-					<%- include('./search-student.ejs') %>
 				</div>
-
-				<div class='col-lg-10 panelbg text-center'>
+				<div align ="center" class="col-lg-10 panelbg text-center">
 
 					<% if(uploadSuccess == true) { %>
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -29,8 +28,8 @@
 					</div>
 					<% } %>
 
-					<h1>Upload students</h1>
-					<form action="/student/uploadCourse" enctype="multipart/form-data" method="post">
+					<h1>Upload courses</h1>
+					<form action="/student/uploadCourses" enctype="multipart/form-data" method="post">
 						<div class="form-group row">
 							<label for="inputSheet" class="col-md-3 offset-md-3">Spreadsheet</label>
 							<div class="col-md-4">
@@ -41,24 +40,18 @@
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
 						<h3>Upload format</h3>
-						<img src="/images/studentUploadFormat1.png">
-						<img src="/images/studentUploadFormat2.png">
+						<img src="/images/gradeUploadFormat.png">
 						
 						<div class="col-md-4 offset-md-4">
 							<h3>Requirements</h2>
 							<ul class="list-group">
 								<li class="list-group-item">Columns must be in order displayed above, headers don't have to be what is displayed.</li>
-								<li class="list-group-item">onyen, first name, last name, and pid are required.</li>
-								<li class="list-group-item">Masters awarded through dissertation submitted should be dates.</li>
-								<li class="list-group-item">Active, citizenship, funding eligibility, and funding status
-								 are true/false</li>
-								<li class="list-group-item">Intended degree can be MASTERS, PHD, or BOTH</li>
+								<li class="list-group-item">Only grade is not required</li>
 							</ul>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
-		<%- include("../partials/bootstrapScripts.ejs") %>
 	</body>
 </html>

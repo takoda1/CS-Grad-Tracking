@@ -75,7 +75,21 @@ jobController.get = function (req, res) {
     input.position = new RegExp(input.position, "i");
   }
   //https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
-  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate({path: "semester", options:{sort:{year:1, season:1}}}).exec().then(function (result) {
+  schema.Job.find(input).populate("supervisor").populate({path:"course", populate:{path:"semester"}}).populate("semester").exec().then(function (result) {
+    result.sort(function(a, b){
+      if(a.semester.year == b.semester.year){
+        if(a.semester.season < b.semester.season){
+          return -1;
+        }
+        if(a.semester.season > b.semester.season){
+          return 1;
+        }
+        return 0;
+      }
+      else{
+        return a.semester.year - b.semester.year;
+      }
+    });
     var jobs, faculty, courses, semesters;
     jobs = result;
     getFaculty().then(function(result){
@@ -84,11 +98,16 @@ jobController.get = function (req, res) {
         courses = result;
         getSemesters().then(function(result){
           semesters = result;
-          for(var i = 0; i < jobs.length; i++){
-
-          }
-          //schema.Job.find({jobHistory: jobId})
-          res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters});
+          var count = 0;
+          jobs.forEach(function(job){
+            schema.Student.find({jobHistory: job._id}).sort({lastName:1, firstName:1}).exec().then(function(result){
+              job.students = result;
+              count++;
+              if(count == jobs.length){
+                res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters});
+              }
+            });
+          });
         });
       });
     });
@@ -157,7 +176,7 @@ jobController.delete = function (req, res) {
     //students reference jobs, so check if any students are referencing before deleting
     schema.Student.find({jobHistory: id}).exec().then(function(result){
       if(result.length > 0){
-        res.render("../views/error.ejs", {string: "Could not delete job because a student is referencing it."})
+        res.render("../views/error.ejs", {string: "Could not delete job because a student is referencing it."});
       }
       else{
         //nothing references this job, so try to delete it
@@ -311,7 +330,6 @@ jobController.upload = function(req, res){
                             //save to student's job history
                             if(element.onyen != null){
                               pushStudentJob(element.onyen, result._id).then(function(result){
-                                console.log("ABC");
                                 count++;
                                 if(count == data.length){
                                   res.redirect("/job/upload/true");
@@ -435,7 +453,7 @@ jobController.assignPage = function(req, res){
               semesters = result;
               schema.Student.find().sort({lastName:1, firstName:1}).exec().then(function(result){
                 students = result;
-                schema.Student.find({jobHistory: jobId}).exec().then(function(result){
+                schema.Student.find({jobHistory: jobId}).sort({lastName:1, firstName:1}).exec().then(function(result){
                   res.render("../views/job/assign.ejs", {job: job, faculty: faculty, semesters: semesters, courses: courses, students: students, studentsWithJob: result});
                 });
               });
@@ -461,11 +479,11 @@ jobController.assign = function(req, res){
     //make sure the job is in the database
     schema.Job.findOne({_id: jobId}).exec().then(function(result){
       if(result != null){
-        console.log(typeof(input.students));
+        jobId = result._id;
         if(typeof(input.students) == "string"){
           input.students = [input.students];
         }
-        console.log(typeof(input.students));
+        //console.log(typeof(input.students));
         input.students.forEach(function(student){
           schema.Student.findOne({_id: student}).exec().then(function(result){
             if(result != null){
@@ -478,7 +496,6 @@ jobController.assign = function(req, res){
             }
           });
         });
-        console.log("ABC");
         res.redirect("/job/assign/"+jobId);
       }
       else{
@@ -506,8 +523,21 @@ jobController.unAssign = function(req, res){
 }
 
 jobController.download = function(req, res){
-
   schema.Job.find({}, "-_id -__v").populate("course").populate("supervisor").populate("semester").lean().exec().then(function(result){
+    result.sort(function(a, b){
+      if(a.semester.year == b.semester.year){
+        if(a.semester.season < b.semester.season){
+          return -1;
+        }
+        if(a.semester.season > b.semester.season){
+          return 1;
+        }
+        return 0;
+      }
+      else{
+        return a.semester.year - b.semester.year;
+      }
+    });
     var m = schema.Job.schema.obj;
     var template = {};
     for(var key in m){
@@ -531,6 +561,7 @@ jobController.download = function(req, res){
     XLSX.utils.book_append_sheet(wb, ws, "Jobs");
     var filePath = path.join(__dirname, "../data/jobTemp.xlsx");
     XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-Disposition", "filename=" + "Jobs.xlsx");
     res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     fs.createReadStream(filePath).pipe(res);
   });

@@ -1,0 +1,61 @@
+<!-- views/student/courses.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Student courses</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+				
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h1>Courses</h1>
+
+					<p><a href="/student/downloadCourses/<%=student._id%>" class="btn btn-primary">Download courses</a></p>
+
+					<% if(student.grades.length>0) { %>
+						<table align="center" border="1" class="table display-table table-dark">
+							<thead>
+								<tr>
+									<th scope="col">Grade</th>
+									<th scope="col">Course</th>
+									<th scope="col">Faculty</th>
+									<th scope="col">Semester</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% grades = student.grades %>
+								<% for(var i=0; i<grades.length; i++) { %>
+									<tr>
+										<td><%= grades[i].grade%></td>
+										<td><%= grades[i].course.department%> <%= grades[i].course.number%>, <%= grades[i].course.section%>, <%= grades[i].course.name%></td>
+										<td><%= grades[i].course.faculty.lastName%>,  <%=grades[i].course.faculty.firstName%></td>
+										<td><%= grades[i].course.semester.season%> <%=grades[i].course.semester.year%></td>
+										
+										
+									</tr>
+								<% } %>
+							</tbody>
+						</table>
+					<% } else { %>
+						<div>No courses found.</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

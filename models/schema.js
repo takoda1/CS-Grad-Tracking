@@ -67,7 +67,7 @@ var studentSchema = mongoose.Schema({
   jobHistory: [{type: mongoose.Schema.Types.ObjectId, ref: "Job"}],
   semesterStarted: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: "Faculty" },
-  courseHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
+  grades: [{type:mongoose.Schema.Types.ObjectId, ref: "Grade"}]
 });
 
 // Forms
@@ -125,9 +125,9 @@ var jobSchema = mongoose.Schema({
 var gradeSchema = mongoose.Schema({
   grade: {
     type: String,
-    enum: ["H+", "H", "H-", "P+", "P", "P-", "L+", "L", "L-"]
+    enum: ["H+", "H", "H-", "P+", "P", "P-", "L+", "L", "L-", "NA"],
+    default: "NA"
   },
-  student: {type: mongoose.Schema.Types.ObjectId, ref: "Student"},
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
 });
 
