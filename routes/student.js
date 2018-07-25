@@ -21,6 +21,12 @@ router.get("/upload/:uploadSuccess", student.uploadPage);
 
 router.get("/download", student.download);
 
+router.get("/downloadCourses/:_id", student.downloadCourses);
+
+router.get("/courses/:_id", student.courses);
+
+router.get("/uploadCourses/:uploadSuccess", student.uploadCoursePage);
+
 router.post('/post', student.post);
 
 router.post('/put', student.put);
@@ -35,6 +41,6 @@ router.post("/upload", student.upload);
 
 router.post("/addJobs", student.addJobs);
 
-
+router.post("/uploadCourses", student.uploadCourses);
 
 module.exports = router;

@@ -271,8 +271,21 @@ studentController.jobs = function(req, res){
   if(req.params._id){
     var jobs;
 
-    schema.Job.find().populate({path:"supervisor", options: {sort: {lastName:1, firstName:1}}}).populate({path: "course", options: {sort: {number:1}}})
-    .populate({path: "semester", options: {sort: {year:1, season:1}}}).sort({position:1}).exec().then(function(result){
+    schema.Job.find().populate("supervisor").populate("course").populate("semester").sort({position:1}).exec().then(function(result){
+      result.sort(function(a, b){
+        if(a.semester.year == b.semester.year){
+          if(a.semester.season < b.semester.season){
+            return -1;
+          }
+          if(a.semester.season > b.semester.season){
+            return 1;
+          }
+          return 0;
+        }
+        else{
+          return a.semester.year - b.semester.year;
+        }
+      });
       jobs = result;
 
       // schema.Student.aggregate([
@@ -359,6 +372,21 @@ studentController.jobs = function(req, res){
 
       schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
       .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
+        console.log(result);
+        result.jobHistory.sort(function(a, b){
+          if(a.semester.year == b.semester.year){
+            if(a.semester.season < b.semester.season){
+              return -1;
+            }
+            if(a.semester.season > b.semester.season){
+              return 1;
+            }
+            return 0;
+          }
+          else{
+            return a.semester.year - b.semester.year;
+          }
+        });
         res.render("../views/student/jobs", {student: result, jobs: jobs});
       });
     });
@@ -468,6 +496,284 @@ studentController.viewForm = function(req, res){
       }
     });
   }
+}
+
+studentController.courses = function(req, res){
+  if(req.params._id != null){
+    // schema.Student.aggregate([
+    // {
+    //   $match:{
+    //     _id: mongoose.Types.ObjectId(req.params._id)
+    //   }
+    // },
+    // {
+    //   $lookup: {
+    //     from: schema.Grade.collection.name,
+    //     localField: "grades",
+    //     foreignField: "_id",
+    //     as: "grades"
+    //   }
+    // },
+    // {
+    //   $unwind:{
+    //     path:"$grades"
+    //   }
+    // },
+    // {
+    //   $lookup : {
+    //     from: schema.Course.collection.name,
+    //     localField: "grades.course",
+    //     foreignField: "_id",
+    //     as: "grades.course"
+    //   }
+    // },
+    // {
+    //   $unwind:{
+    //     path: "$grades.course"
+    //   }
+    // },
+    // {
+    //   $lookup:{
+    //     from: schema.Semester.collection.name,
+    //     localField: "grades.course.semester",
+    //     foreignField: "_id",
+    //     as: "grades.course.semester"
+    //   }
+    // },
+    // {
+    //   $unwind:{
+    //     path: "$grades.course.semester"
+    //   }
+    // },
+    // {
+    //   $sort:{
+    //     "grades.course.semester.year": 1,
+    //     "grades.course.semester.season": 1
+    //   }
+    // }
+    // ]).exec().then(function(result){
+    //   console.log(result);
+    //   res.render("../views/student/courses.ejs", {student: result});
+    // }).catch(function(err){
+    //   res.json({"error": err.message, "origin": "course.put"});
+    // });
+
+    schema.Student.findOne({_id: req.params._id}).populate({
+      path:"grades",
+      populate:{path:"course", populate:{path:"semester"}}
+    }).populate({
+      path:"grades",
+      populate:{path:"course", populate:{path:"faculty"}}
+    }).exec().then(function(result){
+      result.grades.sort(function(a, b){
+        if(a.course.semester.year == b.course.semester.year){
+          if(a.course.semester.season < b.course.semester.season){
+            return -1;
+          }
+          if(a.course.semester.season > b.course.semester.season){
+            return 1;
+          }
+          return 0;
+        }
+        else{
+          return a.course.semester.year - b.course.semester.year;
+        }
+      });
+      res.render("../views/student/courses.ejs", {student: result});
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string: "Id missing."});
+  }
+}
+
+studentController.uploadCoursePage = function(req, res){
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
+  res.render("../views/student/uploadCourses.ejs", {uploadSuccess: uploadSuccess});
+}
+
+studentController.downloadCourses = function(req, res){
+  if(req.params._id != null){
+    schema.Student.findOne({_id: req.params._id}).populate({
+      path:"grades",
+      populate:{path:"course", populate:{path:"semester"}}
+    }).populate({
+      path:"grades",
+      populate:{path:"course", populate:{path:"faculty"}}
+    }).lean().exec().then(function(result){
+      result.grades.sort(function(a, b){
+        if(a.course.semester.year == b.course.semester.year){
+          if(a.course.semester.season < b.course.semester.season){
+            return -1;
+          }
+          if(a.course.semester.season > b.course.semester.season){
+            return 1;
+          }
+          return 0;
+        }
+        else{
+          return a.course.semester.year - b.course.semester.year;
+        }
+      });
+      var output = [];
+      for(var i = 0; i < result.grades.length; i++){
+        var grade = {};
+        grade.onyen = result.onyen;
+        grade.grade = result.grades[i].grade;
+        grade.department = result.grades[i].course.department;
+        grade.number = result.grades[i].course.number;
+        grade.section = result.grades[i].course.section;
+        grade.semester = result.grades[i].course.semester.season + " " + result.grades[i].course.semester.year;
+        grade.faculty = result.grades[i].course.faculty.lastName + ", " + result.grades[i].course.faculty.firstName;
+        output[i] = grade;
+      }
+      var wb = XLSX.utils.book_new();
+      var ws = XLSX.utils.json_to_sheet(output);
+      XLSX.utils.book_append_sheet(wb, ws, "grades");
+      var filePath = path.join(__dirname, "../data/gradeTemp.xlsx");
+      XLSX.writeFile(wb, filePath);
+      res.setHeader("Content-Disposition", "filename=" + result.onyen + " grades.xlsx");
+      res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      fs.createReadStream(filePath).pipe(res);
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string:"Student id wrong or missing"});
+  }
+  
+}
+
+studentController.uploadCourses = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    var f = files[Object.keys(files)[0]];
+    var workbook = XLSX.readFile(f.path, {cellDates:true});
+    var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    var headers = {};
+    var data = [];
+    headers[String.fromCharCode(65)] = "onyen"
+    headers[String.fromCharCode(66)] = "grade";
+    headers[String.fromCharCode(67)] = "department";
+    headers[String.fromCharCode(68)] = "number";
+    headers[String.fromCharCode(69)] = "section";
+    headers[String.fromCharCode(70)] = "semester";
+    headers[String.fromCharCode(71)] = "faculty";
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var tt = 0;
+        for(var i = 0; i < z.length; i++){
+          if(!isNaN(z[i])){
+            tt = i;
+            break;
+          }
+        }
+        var col = z.substring(0,tt);
+        var row = parseInt(z.substring(tt));
+        var value = worksheet[z].v;
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    var count = 0;
+    data.forEach(function(element){
+      //verify that all fields exist
+      if(element.onyen != null && element.department != null && element.number != null && element.section != null && element.semester != null && element.faculty != null){
+        var spaceReg = /\s* \s*/;
+        var commaReg = /\s*,\s*/;
+        var semester = element.semester.split(spaceReg);
+        semester[0] = semester[0].toUpperCase();
+        semester[1] = parseInt(semester[1]);
+
+        var faculty = element.faculty.split(commaReg);
+
+        schema.Semester.findOne({season: semester[0], year: parseInt(semester[1])}).exec().then(function(result){
+          if(result != null){
+            element.semester = result._id;
+          }
+          else{
+            res.render("../views/error.ejs", {string:"Semester not found."});
+          }
+          schema.Faculty.findOne({lastName: faculty[0], firstName: faculty[1]}).exec().then(function(result){
+            if(result != null){
+              element.faculty = result._id;
+            }
+            else{
+              res.render("../views/error.ejs", {string:"Faculty not found."});
+            }
+            schema.Course.findOne({
+              department: element.department,
+              number: element.number,
+              section: element.section,
+              faculty: element.faculty,
+              semester: element.semester
+              }).exec().then(function(result){
+                if(result != null){
+                  var grade = {};
+                  if(element.grade != null){
+                    grade.grade = element.grade;
+                  }
+                  grade.course = result._id;
+                  schema.Grade.findOne(grade).exec().then(function(result){
+                    if(result == null){
+                      var inputGrade = new schema.Grade(util.validateModelData(grade, schema.Grade));
+                      inputGrade.save().then(function(result){
+                        pushStudentCourse(element.onyen, result._id).then(function(result){
+                          count++;
+                          if(count == data.length){
+                            res.redirect("/student/uploadCourses/true");
+                          }
+                        }).catch(function(err){
+                          res.render("../views/error.ejs", {string: "Did not push to student grades."});
+                        });
+                      }).catch(function(err){
+                        res.render("../views/error.ejs", {string: element.onyen+" "+element.department+" "+element.number+" did not save because something was wrong with it."});
+                      });
+                    }
+                    else{
+                      pushStudentCourse(element.onyen, result._id).then(function(result){
+                        count++;
+                        if(count == data.length){
+                          res.redirect("/student/uploadCourses/true");
+                        }
+                      }).catch(function(err){
+                        res.render("../views/error.ejs", {string: "Did not push to student grades."});
+                      });
+                    }
+                  });
+                }
+                else{
+                  res.render("../views/error.ejs", {string:"Course not found."});
+                }
+              });
+          });
+        });
+        
+      }
+    });
+  });
+}
+
+function pushStudentCourse(onyen, gradeId){
+  return new Promise((resolve, reject)=>{
+    schema.Student.findOne({onyen: onyen}).exec().then(function(result){
+      if(result != null){
+
+        schema.Student.update({onyen:onyen},{$addToSet: {grades: gradeId}}).exec();
+        resolve(result);
+      }
+      else{
+        reject(result);
+      }
+    });
+  });
 }
 
 studentController.uploadPage = function(req, res){

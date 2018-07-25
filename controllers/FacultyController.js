@@ -233,6 +233,7 @@ facultyController.download = function(req, res){
     XLSX.utils.book_append_sheet(wb, ws, "Faculty");
     var filePath = path.join(__dirname, "../data/facultyTemp.xlsx");
     XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-Disposition", "filename=" + "Faculty.xlsx");
     res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     fs.createReadStream(filePath).pipe(res);
   });

@@ -21,6 +21,8 @@
 				
 					<%- include("./studentBarPartial.ejs") %>
 
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
 					<h1>Job history</h1>
 
 					<% if(student.jobHistory.length>0) { %>
@@ -41,7 +43,7 @@
 									<tr>
 										<td><%= job[i].position%></td>
 										<td><%= job[i].supervisor.lastName%>,  <%=job[i].supervisor.firstName%></td>
-										<td><%= job[i].semester.season%> <%=jobs[i].semester.year%></td>
+										<td><%= job[i].semester.season%> <%=job[i].semester.year%></td>
 										<% if(job[i].course != null) { %>
 										<td><%= job[i].course.department%> <%= job[i].course.number%>, <%=job[i].course.section%></td>
 										<% } else { %>

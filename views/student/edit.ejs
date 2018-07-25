@@ -18,8 +18,10 @@
 
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
-				
+
 					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
 					<h1>Edit student</h1>
 					<form action="/student/put" method="post">
