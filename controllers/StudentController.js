@@ -128,6 +128,9 @@ studentController.post = function (req, res) {
  */
 studentController.get = function (req, res) {
   var input = req.query;
+  for(var i = 1; i < 21; i++){
+    console.log(i+" "+(7/4 * i*i - 6*i));
+  }
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
@@ -832,11 +835,14 @@ studentController.upload = function(req, res){
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
-    console.log(data);
+    //console.log(data);
     var count = 0;
     data.forEach(function(element){
       //verify that all fields exist
       if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null){
+        element.onyen = element.onyen[0].toUpperCase() + element.onyen.toLowerCase().slice(1);
+        element.firstName = element.firstName[0].toUpperCase() + element.firstName.toLowerCase().slice(1);
+        element.lastName = element.lastName[0].toUpperCase() + element.lastName.toLowerCase().slice(1);
         var commaReg = /\s*,\s*/;
         var facultyName = [null, null];
         if(element.advisor != null){
@@ -866,17 +872,29 @@ studentController.upload = function(req, res){
             else{
               element.semesterStarted = null;
             }
-            schema.Student.findOne({$or: [{onyen: element.onyen}, {pid: element.pid}]}).exec().then(function(result){
+            schema.Student.findOne({onyen: element.onyen, pid: element.pid}).exec().then(function(result){
               if(result == null){
-                var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
-                inputStudent.save().then(function(result){
-                  count++;
-                  if(count == data.length){
-                    res.redirect("/student/upload/true");
-                  }
-                }).catch(function(err){
-                  res.render("../views/error.ejs", {string: element.lastName+" did not save because something was wrong with it."});
+                var stud1;
+                schema.Student.findOne({onyen: element.onyen}).exec().then(function(result){
+                  stud1 = result;
+                  schema.Student.findOne({pid: element.pid}).exec().then(function(result){
+                    if(stud1 != null || result != null){
+                      res.render("../views/error.ejs", {string: element.lastName+" contains an onyen or pid that already exists."});
+                    }
+                    else{
+                      var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
+                      inputStudent.save().then(function(result){
+                        count++;
+                        if(count == data.length){
+                          res.redirect("/student/upload/true");
+                        }
+                      }).catch(function(err){
+                        res.render("../views/error.ejs", {string: element.lastName+" did not save because something was wrong with it."});
+                      });
+                    }
+                  });
                 });
+                
               }
               else{
                 schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().then(function(result){

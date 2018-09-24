@@ -136,4 +136,8 @@ _.initializeAllSemesters = function(){
   }
 }
 
+_.initializeCourses = function(){
+
+}
+
 module.exports = _;
