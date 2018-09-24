@@ -1,11 +1,11 @@
-var schema = require("../models/schema")
-var util = require("./util")
+var schema = require("../models/schema");
+var util = require("./util");
 var XLSX = require("xlsx");
 var formidable = require("formidable");
 var mongoose = require("mongoose");
 var path = require("path");
 var fs = require("fs");
-var courseController = {}
+var courseController = {};
 
 /**
  * @url {post} /course/post
