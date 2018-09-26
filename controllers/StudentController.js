@@ -70,6 +70,9 @@ studentController.post = function (req, res) {
         res.render("../views/error.ejs", {string: "PID needs to be of length 9"});
       }
       else {
+        input.onyen = input.onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1);
+        input.firstName = input.firstName[0].toUpperCase()+input.firstName.toLowerCase().slice(1);
+        input.lastName = input.lastName[0].toUpperCase()+input.lastName.toLowerCase().slice(1);
         var inputStudent = new schema.Student(util.validateModelData(input, schema.Student));
         /*use the then function because save() is asynchronous. If you only have inputStudent.save(); res.redirect...
         it is possible that the data does not save in time (or load in time if performing queries that return data
@@ -186,6 +189,13 @@ studentController.put = function (req, res) {
   input = verifyBoolean(input);
   var input = util.validateModelData(input, schema.Student);
   if (input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
+    /* This comments out what makes single-student input case insensitive.
+     * We are choosing to trust the input since it is only a single entry.
+     * 
+     * input.onyen = input.onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1);
+     * input.firstName = input.firstName[0].toUpperCase()+input.firstName.toLowerCase().slice(1);
+     * input.lastName = input.lastName[0].toUpperCase()+input.lastName.toLowerCase().slice(1); 
+    */
     schema.Student.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/student/edit/"+result._id);
@@ -766,9 +776,8 @@ studentController.uploadCourses = function(req, res){
 
 function pushStudentCourse(onyen, gradeId){
   return new Promise((resolve, reject)=>{
-    schema.Student.findOne({onyen: onyen}).exec().then(function(result){
+    schema.Student.findOne({onyen: onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1)}).exec().then(function(result){
       if(result != null){
-
         schema.Student.update({onyen:onyen},{$addToSet: {grades: gradeId}}).exec();
         resolve(result);
       }

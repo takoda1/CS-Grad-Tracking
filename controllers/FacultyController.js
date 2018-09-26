@@ -47,6 +47,10 @@ facultyController.post = function (req, res) {
         res.render("../views/error.ejs", {string: "PID needs to be of length 9"});
       }
       else {
+        input.onyen = input.onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1);
+        input.firstName = input.firstName[0].toUpperCase()+input.firstName.toLowerCase().slice(1);
+        input.lastName = input.lastName[0].toUpperCase()+input.lastName.toLowerCase().slice(1); 
+   
         var inputFaculty = new schema.Faculty(util.validateModelData(input, schema.Faculty))
         /*use the then function because save() is asynchronous. If you only have inputFaculty.save(); res.redirect...
         it is possible that the data does not save in time (or load in time if performing queries that return data

@@ -42,6 +42,9 @@ courseController.post = function (req, res) {
         res.render("../views/error.ejs", {string: "Please input four letter department code"});
       }
       else {
+        input.department = input.department.toUpperCase(); //Change to uppercase
+        //input.name = input.name.toUpperCase();
+
         var inputCourse = new schema.Course(util.validateModelData(input, schema.Course));
         inputCourse.save().then(function(result){
           res.redirect("/course/edit/"+result._id);
