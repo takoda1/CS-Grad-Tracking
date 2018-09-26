@@ -99,6 +99,9 @@ jobController.get = function (req, res) {
         getSemesters().then(function(result){
           semesters = result;
           var count = 0;
+          if( jobs.length == 0){
+            res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters});
+          }
           jobs.forEach(function(job){
             schema.Student.find({jobHistory: job._id}).sort({lastName:1, firstName:1}).exec().then(function(result){
               job.students = result;
