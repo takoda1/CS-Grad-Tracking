@@ -51,7 +51,11 @@ var studentSchema = mongoose.Schema({
   },
   hoursCompleted: Number,
   citizenship: Boolean,
-  fundingEligibility: Boolean,
+  fundingEligibility: {
+	  type: String,
+	  enum: ["GUARANTEED", "PROBATION", "NOT GUARANTEED"],
+	  default: "NOT GUARANTEED"
+  },
   fundingStatus: Boolean,
   backgroundApproved: Date,
   mastersAwarded: Date,

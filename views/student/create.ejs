@@ -153,7 +153,12 @@
 								<div class="form-group row">
 									<label for="inputFundingEligibility" class="col-md-6">Funding eligibility</label>
 									<div class="col-md-6">
-										<input type="checkbox" class="form-check-input" id="inputFundingEligibility" name="fundingEligibility" value="true" />
+										<select name="fundingEligibility" class="form-control" id="inputFundingEligibility">
+											<option value=""></option>
+											<% for(var i=0; i<eligibility.length; i++) { %>
+												<option value=<%= eligibility[i]%>><%=eligibility[i]%></option>
+											<% } %>										
+										</select>
 									</div>
 								</div>
 
