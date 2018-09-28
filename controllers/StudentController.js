@@ -33,7 +33,7 @@ var studentController = {}
  * @req.body {String} researchArea
  * @req.body {Boolean} backgroundApproved
  * @req.body {String} leaveExtension
- * @req.body {Boolean} fundingEligibility
+ * @req.body {String} fundingEligibility
  * @req.body {Boolean} fundingStatus
  * @req.body {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
  * @req.body {Number} hoursCompleted
@@ -111,7 +111,7 @@ studentController.post = function (req, res) {
  * @req.query {String} researchArea
  * @req.query {Boolean} backgroundApproved
  * @req.query {String} leaveExtension
- * @req.query {Boolean} fundingEligibility
+ * @req.query {String} fundingEligibility
  * @req.query {Boolean} fundingStatus
  * @req.query {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
  * @req.query {Number} hoursCompleted
@@ -164,7 +164,7 @@ studentController.get = function (req, res) {
  * @req.body {String} researchArea
  * @req.body {Boolean} backgroundApproved
  * @req.body {String} leaveExtension
- * @req.body {Boolean} fundingEligibility
+ * @req.body {String} fundingEligibility
  * @req.body {Boolean} fundingStatus
  * @req.body {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
  * @req.body {Number} hoursCompleted
@@ -243,12 +243,14 @@ studentController.create = function(req, res){
   genders = schema.Student.schema.path("gender").enumValues;
   ethnicities = schema.Student.schema.path("ethnicity").enumValues;
   residencies = schema.Student.schema.path("residency").enumValues;
-  degrees = schema.Student.schema.path("intendedDegree").enumValues;
+  degrees = schema.Student.schema.path("intendedDegree").enumValues;    
+  eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
+
   
   schema.Semester.find().sort({year:1, season:1}).exec().then(function(result){
     semesters = result;
     schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
+      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
     });
   });
 }
