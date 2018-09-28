@@ -139,3 +139,7 @@ table {
 	display: flex;
 	flex-direction: column;
 }
+
+label.autoHyphen {
+	hyphens: auto;
+}
