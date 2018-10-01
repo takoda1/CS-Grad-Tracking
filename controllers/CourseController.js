@@ -32,7 +32,10 @@ var courseController = {};
  */
 courseController.post = function (req, res) {
   var input = req.body;
-  if(util.allFieldsExist(input, schema.Course)){
+  console.log(input);
+  if(input.department != null && input.courseInfo != null &&
+    input.univNumber != null && input.category != null &&
+    input.section != null && input.faculty != null && input.semester != null){
     //attempt to populate faculty and course, if they don't exist, error will be caught
     schema.Course.findOne(input).populate("faculty").populate("semester").exec().then(function (result) {
       if (result != null) {
@@ -42,13 +45,24 @@ courseController.post = function (req, res) {
         res.render("../views/error.ejs", {string: "Please input four letter department code"});
       }
       else {
-        input.department = input.department.toUpperCase(); //Change to uppercase
-        //input.name = input.name.toUpperCase();
+        schema.CourseInfo.findOne(input.Course).exec().then(function(result){
+          if(result != null){
+            input.number = result.number;
+            input.name = result.name;
+            input.hours = result.hours;
+            input.department = input.department.toUpperCase(); //Change to uppercase
 
-        var inputCourse = new schema.Course(util.validateModelData(input, schema.Course));
-        inputCourse.save().then(function(result){
-          res.redirect("/course/edit/"+result._id);
+            var inputCourse = new schema.Course(util.validateModelData(input, schema.Course));
+            inputCourse.save().then(function(result){
+              res.redirect("/course/edit/"+result._id);
+            });
+          }
+          else{
+            res.render("../views/error.ejs", {string: "You were messing with the html :<"});
+          }
+          
         });
+        
       }
     /*this is catching the error if the faculty or semester
     provided does not exist (shouldn't occur if frontend
@@ -107,74 +121,6 @@ courseController.get = function (req, res) {
   }).catch(function(err){
     res.json({"error": err.message, "origin": "course.put"});
   });
-  // var match;
-  // if(input.semester == null && input.number == null){
-  //   match = {
-  //     $match: {
-  //       name:new RegExp(input.name, "i")
-  //     }
-  //   }
-  // }
-  // else if(input.semester == null && input.number != null){
-  //   match = {
-  //     $match: {
-  //       name:new RegExp(input.name, "i"),
-  //       number: input.number
-  //     }
-  //   }
-  // }
-  // else if(input.semester != null && input.number == null){
-  //    match = {
-  //       $match: {
-  //         name:new RegExp(input.name, "i"),
-  //         semester: new mongoose.Types.ObjectId(input.semester)
-  //       }
-  //     }
-  // }
-  // else{
-  //    match = {
-  //       $match: {
-  //         name:new RegExp(input.name, "i"),
-  //         semester: new mongoose.Types.ObjectId(input.semester),
-  //         number: input.number
-  //       }
-  //     }
-  // }
-  
-  // schema.Course.aggregate([
-  // match,
-  // {
-  //   $lookup: {
-  //     from: schema.Faculty.collection.name,
-  //     localField: "faculty",
-  //     foreignField: "_id",
-  //     as: "faculty"
-  //   }
-  // },
-  // {
-  //   $unwind:"$faculty"
-  // },
-  // {
-  //   $lookup : {
-  //     from: schema.Semester.collection.name,
-  //     localField: "semester",
-  //     foreignField: "_id",
-  //     as: "semester"
-  //   }
-  // },
-  // {
-  //   $unwind:{
-  //     path: "$semester"
-  //   }
-  // },
-  // {
-  //   $sort:{
-  //     "semester.year": 1,
-  //     "semester.season": 1,
-  //     "number": 1
-  //   }
-  // }
-  // ]).exec().then(function(result){
 }
 
 /**
@@ -203,9 +149,6 @@ courseController.put = function (req, res) {
   var input = req.body;
   input = util.validateModelData(input, schema.Course);
   if(util.allFieldsExist(input, schema.Course)){
-    if(input.department.length != 4){
-      res.render("../views/error.ejs", {string: "Please input four letter department code"});
-    }
     schema.Course.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/course/edit/"+result._id);
@@ -279,21 +222,25 @@ courseController.delete = function (req, res) {
  *
  */
 courseController.create = function (req, res){
-  var faculty, semesters;
+  var courseInfo, faculty, semesters;
   /*provide all the faculty and semesters to the view
   so that the user can not input custom faculty or
   semesters*/
-  schema.Faculty.find(
-    {},
-    {lastName:1, firstName:1} //projection
-  ).sort({lastName:1}).exec().then(function(result){
-    faculty = result;
-    schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
-      semesters = result;
-      var categories = schema.Course.schema.path("category").enumValues;
-      res.render("../views/course/create", {faculty: faculty, semesters: semesters, categories: categories});
+  schema.CourseInfo.find({}).sort({number:1, name:1}).exec().then(function(result){
+    courseInfo = result;
+    schema.Faculty.find(
+      {},
+      {lastName:1, firstName:1} //projection
+    ).sort({lastName:1}).exec().then(function(result){
+      faculty = result;
+      schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+        semesters = result;
+        var categories = schema.Course.schema.path("category").enumValues;
+        res.render("../views/course/create", {faculty: faculty, semesters: semesters, categories: categories, courseInfo: courseInfo});
+      });
     });
   });
+  
 }
 
 /**
@@ -480,47 +427,6 @@ courseController.download = function(req, res){
         return a.semester.year - b.semester.year;
       }
     });
-
-  // });
-  // schema.Course.aggregate([
-  // {
-  //   $project: {
-  //     _id: 0,
-  //     __v: 0
-  //   }
-  // },
-  // {
-  //   $lookup: {
-  //     from: schema.Faculty.collection.name,
-  //     localField: "faculty",
-  //     foreignField: "_id",
-  //     as: "faculty"
-  //   }
-  // },
-  // {
-  //   $unwind:"$faculty"
-  // },
-  // {
-  //   $lookup : {
-  //     from: schema.Semester.collection.name,
-  //     localField: "semester",
-  //     foreignField: "_id",
-  //     as: "semester"
-  //   }
-  // },
-  // {
-  //   $unwind:{
-  //     path: "$semester"
-  //   }
-  // },
-  // {
-  //   $sort:{
-  //     "semester.year": 1,
-  //     "semester.season": 1,
-  //     "number": 1
-  //   }
-  // }
-  // ]).exec().then(function(result){
     var wb = XLSX.utils.book_new();
      for(var i = 0; i < result.length; i++){
        result[i].faculty = result[i].faculty.lastName + ", " + result[i].faculty.firstName;
@@ -535,9 +441,68 @@ courseController.download = function(req, res){
     fs.createReadStream(filePath).pipe(res);
 
   });
+}
 
-  
+courseController.uploadInfoPage = function(req, res){
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
+  //always have to provide semesters because search requires it
+  schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+    res.render("../views/course/uploadInfo.ejs", {semesters: result, uploadSuccess: uploadSuccess});
+  });
+}
 
+courseController.uploadInfo = function(req, res){
+
+  schema.CourseInfo.find({}).remove().exec();
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    var f = files[Object.keys(files)[0]];
+    var workbook = XLSX.readFile(f.path, {cellDates:true});
+    var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    var headers = {};
+    var data = [];
+    var i = 0;
+    var j = 0;
+    for(var field in schema.CourseInfo.schema.obj){
+      headers[String.fromCharCode(i+65)] = field;
+      i++;
+    }
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var col = z.substring(0,1);
+        var row = parseInt(z.substring(1));
+        var value = worksheet[z].v;
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    //try to create models
+    //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    //console.log(data);
+    var count = 0;
+    data.forEach(function(element){
+      //verify that all fields exist
+      if(util.allFieldsExist(element, schema.CourseInfo)){
+        var inputCourseInfo = new schema.CourseInfo(element);
+        inputCourseInfo.save().then(function(result){
+          count++;
+          if(count == data.length){
+            res.redirect("/course/uploadInfo/true");
+          }
+        });
+      }
+      else{
+        res.render("../views/error.ejs", {string: "A column is missing information."});
+      }
+    });
+  });               
 }
 
 module.exports = courseController;

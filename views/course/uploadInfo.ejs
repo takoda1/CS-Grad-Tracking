@@ -1,0 +1,58 @@
+<!-- views/course/uploadInfo.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Upload course info</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-2 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<%- include('./search-course.ejs') %>
+				</div>
+
+				<div class='col-lg-10 panelbg text-center'>
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Upload success!</strong>
+					</div>
+					<% } %>
+
+					<h1>Upload course info</h1>
+					<form action="/course/uploadInfo" enctype="multipart/form-data" method="post">
+						<div class="form-group row">
+							<label for="inputSheet" class="col-md-3 offset-md-3">Spreadsheet</label>
+							<div class="col-md-4">
+								<input type="file" name="upload" class="form-control-file" id="inputSheet" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
+							</div>
+						</div>
+						<div class="col-md-4 offset-md-4">
+							<button type="submit" value="Upload" class="btn btn-primary">Submit</button>
+						</div>
+						<h3>Upload format</h3>
+						<img src="/images/courseInfoUploadFormat.png">
+
+						<div class="col-md-4 offset-md-4">
+							<h3>Requirements</h2>
+							<ul class="list-group">
+								<li class="list-group-item">Columns must be in displayed order, headers don't need to be what is displayed above.</li>
+							</ul>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+</html>
