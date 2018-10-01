@@ -895,6 +895,7 @@ studentController.upload = function(req, res){
                       res.render("../views/error.ejs", {string: element.lastName+" contains an onyen or pid that already exists."});
                     }
                     else{
+                    	console.log(element);
                       var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
                       inputStudent.save().then(function(result){
                         count++;
@@ -910,6 +911,7 @@ studentController.upload = function(req, res){
                 
               }
               else{
+              	console.log(element);
                 schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().then(function(result){
                   count++;
                   if(count == data.length){
