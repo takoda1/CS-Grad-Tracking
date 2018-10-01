@@ -1,6 +1,6 @@
 <!-- views/course/create.ejs -->
 <!DOCTYPE html>
-
+ 
 <html>
 	<head>
 		<title>Create course</title>
@@ -23,35 +23,41 @@
 					<h1>Create course</h1>
 					<form action="/course/post" method="post">
 						<div class="form-group row">
-							<label for="inputDepartment" class="col-md-2 offset-md-3">Department *</label>
+							<label class="col-md-2 offset-md-3">Department</label>
+							<div class="col-md-4">
+								<div>COMP</div>
+								<input type="hidden" class="form-control" name="department" value="COMP" required/>
+							</div>
+						</div>
+
+						<!-- <div class="form-group row">
+							<label for="inputDepartment" class="col-md-2 offset-md-3">Department</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="inputDepartment" name="department" placeholder="Department" minlength="4" maxlength="4" required/>
 							</div>
-						</div>
+						</div> -->
 
 						<div class="form-group row">
-							<label for="inputNumber" class="col-md-2 offset-md-3">Course number *</label>
+							<label for="inputCourse" class="col-md-2 offset-md-3">Course</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputNumber" name="number" placeholder="Course number" required/>
+								<select name="courseInfo" class="form-control" id="inputCourse" required>
+									<option value=""></option>
+									<% for(var i=0; i<courseInfo.length; i++) { %>
+										<option value=<%= courseInfo[i]._id%>><%=courseInfo[i].number%>, <%=courseInfo[i].name%>, <%=courseInfo[i].hours%> hours</option>
+									<% } %>
+								</select>
 							</div>
 						</div>
 
 						<div class="form-group row">
-							<label for="inputUnivNumber" class="col-md-2 offset-md-3">University course number *</label>
+							<label for="inputUnivNumber" class="col-md-2 offset-md-3">University course number</label>
 							<div class="col-md-4">
 								<input type="number" class="form-control" id="inputUnivNumber" placeholder="University course number" name="univNumber" required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
-							<label for="inputName" class="col-md-2 offset-md-3">Course name *</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="inputName" name="name" placeholder="Course name" required/>
-							</div>
-						</div>
-
-						<div class="form-group row">
-							<label for="inputCategory" class="col-md-2 offset-md-3">Category *</label>
+							<label for="inputCategory" class="col-md-2 offset-md-3">Category</label>
 							<div class="col-md-4">
 								<select name="category" class="form-control" id="inputCategory" required>
 									<option value=""></option>
@@ -63,21 +69,21 @@
 						</div>
 
 						<div class="form-group row">
-							<label for="inputHours" class="col-md-2 offset-md-3">Hours *</label>
+							<label for="inputTopic" class="col-md-2 offset-md-3">Topic</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputHours" placeholder="Hours" name="hours" min=1 max=10 />
+								<input type="text" class="form-control" id="inputTopic" placeholder="Topic" name="topic" value="N/A" required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
-							<label for="inputSection" class="col-md-2 offset-md-3">Section *</label>
+							<label for="inputSection" class="col-md-2 offset-md-3">Section</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputSection" placeholder="Section" name="section"/>
+								<input type="number" class="form-control" id="inputSection" placeholder="Section" name="section" required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
-							<label for="inputFaculty" class="col-md-2 offset-md-3">Faculty *</label>
+							<label for="inputFaculty" class="col-md-2 offset-md-3">Faculty</label>
 							<div class="col-md-4">
 								<select name="faculty" class="form-control" id="inputFaculty" required>
 									<option value=""></option>
@@ -89,7 +95,7 @@
 						</div>
 
 						<div class="form-group row">
-							<label for="inputSemester" class="col-md-2 offset-md-3">Semester *</label>
+							<label for="inputSemester" class="col-md-2 offset-md-3">Semester</label>
 							<div class="col-md-4">
 								<select name="semester" class="form-control" id="inputSemester" required>
 									<option value=""></option>
