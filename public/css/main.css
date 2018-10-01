@@ -143,3 +143,7 @@ table {
 label.autoHyphen {
 	hyphens: auto;
 }
+
+div.container-fluid > div > div.col-lg-10 {
+	overflow-y : scroll;
+}
