@@ -1,7 +1,7 @@
 <!-- views/course/edit.ejs -->
 <!DOCTYPE html>
 
-<html>
+<html> 
 	<head>
 		<title>Edit course</title>
 		<%- include('../partials/head.ejs') %>
@@ -22,12 +22,21 @@
 					<h1>Edit course</h1>
 					<form action="/course/put" method="post">
 						<input type="hidden" name="_id" value=<%=course._id%>></input>
+
 						<div class="form-group row">
+							<label class="col-md-2 offset-md-3">Department</label>
+							<div class="col-md-4">
+								<div>COMP</div>
+								<input type="hidden" class="form-control" name="department" value="COMP" required/>
+							</div>
+						</div>
+						
+						<!--<div class="form-group row">
 							<label for="inputDepartment" class="col-md-2 offset-md-3">Department</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="inputDepartment" name="department" value="<%=course.department%>" minlength="4" maxlength="4" required/>
 							</div>
-						</div>
+						</div> -->
 
 						<div class="form-group row">
 							<label for="inputNumber" class="col-md-2 offset-md-3">Course number</label>
@@ -62,16 +71,23 @@
 						</div>
 
 						<div class="form-group row">
+							<label for="inputTopic" class="col-md-2 offset-md-3">Topic</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputTopic" name="topic" value="<%=course.topic%>" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
 							<label for="inputHours" class="col-md-2 offset-md-3">Hours</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputHours" value=<%=course.hours%> name="hours" />
+								<input type="number" class="form-control" id="inputHours" value=<%=course.hours%> name="hours" required/>
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label for="inputSection" class="col-md-2 offset-md-3">Section</label>
 							<div class="col-md-4">
-								<input type="number" class="form-control" id="inputSection" name="section" value=<%=course.section%> />
+								<input type="number" class="form-control" id="inputSection" name="section" value=<%=course.section%> required/>
 							</div>
 						</div>
 

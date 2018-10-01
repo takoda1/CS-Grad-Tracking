@@ -106,11 +106,18 @@ var courseSchema = mongoose.Schema({
     type: String,
     enum: ["NA", "Theory", "Systems", "Appls"]
   },
+  topic: String,
   hours: Number,
   section: Number,
   faculty: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
   semester: {type: mongoose.Schema.Types.ObjectId, ref: "Semester"}
 });
+
+var courseInfoSchema = mongoose.Schema({
+  number: Number,
+  name: String,
+  hours: Number
+})
 
 // Jobs
 var jobSchema = mongoose.Schema({
@@ -146,6 +153,7 @@ schema.Student = mongoose.model("Student", studentSchema);
 schema.Form = mongoose.model("Form", formSchema);
 schema.Semester = mongoose.model("Semester", semesterSchema);
 schema.Course = mongoose.model("Course", courseSchema);
+schema.CourseInfo = mongoose.model("CourseInfo", courseInfoSchema);
 schema.Job = mongoose.model("Job", jobSchema);
 schema.Grade = mongoose.model("Grade", gradeSchema);
 schema.SemesterReference = mongoose.model("SemesterReference", semesterReferenceSchema);
