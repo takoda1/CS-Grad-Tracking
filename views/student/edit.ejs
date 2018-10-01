@@ -238,7 +238,7 @@
 									<label for="inputDissertationDefencePassed" class="col-md-4">Dissertation defence passed</label>
 									<div class="col-md-8">
 										<input type="date" class="form-control" id="inputDissertationDefencePassed" name="dissertationDefencePassed" <% if(student.dissertationDefencePassed != null) { %> value=<%=student.dissertationDefencePassed.toISOString().substring(0,10)%> <% } %>/>
-									</div>
+									</div>	
 								</div>
 
 								<div class="form-group row">
@@ -271,6 +271,14 @@
 										</select>
 									</div>
 								</div>
+								
+								<div class="form-group row">
+									<label for="inputNotes" class="col-md-4">Notes</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="inputNotes" name="notes" value="<%=student.notes%>" required/>
+									</div>
+								</div>
+
 
 								<!-- no courseHistory field, have a dedicated page for adding courseHistory to students -->
 

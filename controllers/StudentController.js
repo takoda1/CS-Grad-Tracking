@@ -50,6 +50,7 @@ var studentController = {}
  * @req.body {Object} semesterStarted
  * @req.body {String} advisor
  * @req.body {Object} courseHistory (MongoID array)
+ * @req.body {String} notes
  *
  * @success redirects to /student/edit/:_id route (which uses studentController.edit)
  * @failure renders error page with duplicate student message
@@ -265,6 +266,7 @@ studentController.edit = function(req, res){
         ethnicities = schema.Student.schema.path("ethnicity").enumValues;
         residencies = schema.Student.schema.path("residency").enumValues;
         degrees = schema.Student.schema.path("intendedDegree").enumValues;
+		eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
         schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
           semesters = result;
           schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
