@@ -236,7 +236,6 @@ courseController.create = function (req, res){
       schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
         semesters = result;
         var categories = schema.Course.schema.path("category").enumValues;
-        res.write("../views/student/uploadCourses.ejs", {courses: courses});
         res.render("../views/course/create", {faculty: faculty, semesters: semesters, categories: categories, courseInfo: courseInfo});
 
       });
