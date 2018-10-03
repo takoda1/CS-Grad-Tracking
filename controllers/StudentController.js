@@ -605,11 +605,16 @@ studentController.courses = function(req, res){
 }
 
 studentController.uploadCoursePage = function(req, res){
-  var uploadSuccess = false;
-  if(req.params.uploadSuccess == "true"){
-    uploadSuccess = true;
-  }
-  res.render("../views/student/uploadCourses.ejs", {uploadSuccess: uploadSuccess});
+  schema.Course.find().exec().then(function(result){
+    var courses = result;
+    console.log("\nINSIDE\n");
+    var uploadSuccess = false;
+    if(req.params.uploadSuccess == "true"){
+     uploadSuccess = true;
+    }
+    res.render("../views/student/uploadCourses.ejs", {courses: courses ,uploadSuccess: uploadSuccess});
+  });
+  console.log("\nheyoo\n");
 }
 
 studentController.downloadCourses = function(req, res){

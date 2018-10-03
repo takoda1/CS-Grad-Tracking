@@ -12,11 +12,8 @@
 			<div class="row h-100">
 
 				<div class='col-lg-2 sidebar text-center'>
-
 					<%- include('../partials/admin-sidebar.ejs') %>
-
 					<%- include('./search-course.ejs') %>
-
 				</div>
 				
 				<div class='col-lg-10 panelbg text-center'>
@@ -43,7 +40,7 @@
 								<select name="courseInfo" class="form-control" id="inputCourse" required>
 									<option value=""></option>
 									<% for(var i=0; i<courseInfo.length; i++) { %>
-										<option value=<%= courseInfo[i]._id%>><%=courseInfo[i].number%>, <%=courseInfo[i].name%>, <%=courseInfo[i].hours%> hours</option>
+										<option value=<%= courseInfo[i]._id%>><%=courseInfo[i].number%>, <%=courseInfo[i].name%>, <%=courseInfo[i].hours%> hour(s)</option>
 									<% } %>
 								</select>
 							</div>
