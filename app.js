@@ -39,9 +39,9 @@ app.use(express.static(path.join(__dirname, "public")))
 // routes to use for api
 //app.use("/api", index);
 
-/*app.get("/", (req, res) => {
-  res.render("faculty/index.ejs", {faculty: {}});
-});*/
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
 
 app.use("/course", require("./routes/course"));
 
