@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Profile</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+				</div>
+
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h1>Profile</h1>
+
+					<form action="/student/put" method="post">
+						<input type="hidden" name="_id" value=<%=student._id%>></input>
+
+						<div class="row">
+							<div class="col-md-4">
+								<div class="row">
+									<label class="col-md-4">Onyen</label>
+									<div class="col-md-8">
+										<div><%=student.onyen%></div>
+									</div>
+								</div>
+
+								<div class="row">
+									<label for="inputFirstname" class="col-md-4">First name *</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="inputFirstname" name="firstName" value="<%=student.firstName%>" required/>
+									</div>
+								</div>
+
+								<div class="row">
+									<label for="inputLastname" class="col-md-4">Last name *</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="inputLastname" name="lastName" value="<%=student.lastName%>" required/>
+									</div>
+								</div>
+
+								<div class="row">
+									<label class="col-md-4">PID</label>
+									<div class="col-md-8">
+										<div><%=student.pid%></div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputActive" class="col-md-4">Active</label>
+									<div class="col-md-8">
+										<div><%=student.active%></div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputAltname" class="col-md-4">Alternative name</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="inputAltname" name="alternativeName" <% if(student.alternativeName != null) { %> value="<%=student.alternativeName%>" <% } %>/>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputGender" class="col-md-4">Gender</label>
+									<div class="col-md-8">
+										
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputEthnicity" class="col-md-4">Ethnicity</label>
+									<div class="col-md-8">
+										
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputResidency" class="col-md-4">Residency</label>
+									<div class="col-md-8">
+										
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputEnteringStatus" class="col-md-4">Entering status</label>
+									<div class="col-md-8">
+										<div><% if(student.enteringStatus != null) { %> "<%=student.enteringStatus%>" <% } %></div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputResearchArea" class="col-md-4">Research area</label>
+									<div class="col-md-8">
+										<div><% if(student.researchArea != null) { %> "<%=student.researcharea%>" <% } %></div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputLeaveExtension" class="col-md-4">Leave extension</label>
+									<div class="col-md-8">
+										<div><% if(student.leaveExtension != null) { %> "<%=student.leaveExtension%>" <% } %></div>
+									</div>
+								</div>
+
+							</div>
+							<div class="col-md-4">
+
+								
+
+								<div class="form-group row">
+									<label for="inputIntendedDegree" class="col-md-4">Intended degree</label>
+									<div class="col-md-8">
+										<div><% if(student.intendedDegree != null) { %> "<%=student.intendedDegree%>" <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputHoursCompleted" class="col-md-4">Hours completed</label>
+									<div class="col-md-8">
+										<div><% if(student.hoursCompleted != null) { %> <%=student.hoursCompleted%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputCitizenship" class="col-md-4">Citizenship</label>
+									<div class="col-md-8">
+										<div><%=student.citizenship%></div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputFundingEligibility" class="col-md-4">Funding eligibility</label>
+									<div class="col-md-8">
+										<div><% if(student.fundingEligibility != null) { %> <%=student.fundingEligibility%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputFundingStatus" class="col-md-4">Funding status</label>
+									<div class="col-md-8">
+										<div><% if(student.fundingEligibility != null) { %> <%=student.fundingEligibility%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputBackgroundApproved" class="col-md-4">Background approved</label>
+									<div class="col-md-8">
+										<div> <% if(student.backgroundApproved != null) { %> <%=student.backgroundApproved.toISOString().substring(0,10)%> <% } %>  </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputMastersAwarded" class="col-md-4">Masters awarded</label>
+									<div class="col-md-8">
+										<div><% if(student.mastersAwarded != null) { %> <%=student.mastersAwarded.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPrpPassed" class="col-md-4">prp passed</label>
+									<div class="col-md-8">
+										<div> <% if(student.prpPassed != null) { %> <%=student.prpPassed.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputBackgroundPrepWorksheetApproved" class="col-md-4">Background prep worksheet approved</label>
+									<div class="col-md-8">
+										<div> <% if(student.backgroundPrepWorksheetApproved != null) { %> <%=student.backgroundPrepWorksheetApproved.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputProgramOfStudyApproved" class="col-md-4">Program of study approved</label>
+									<div class="col-md-8">
+										<div> <% if(student.programOfStudyApproved != null) { %> <%=student.programOfStudyApproved.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+							</div>
+							<div class="col-md-4">
+
+								<div class="form-group row">
+									<label for="inputResearchPlanningMeeting" class="col-md-4">Research planning meeting</label>
+									<div class="col-md-8">
+										<div> <% if(student.researchPlanningMeeting != null) { %> <%=student.researchPlanningMeeting.toISOString().substring(0,10)%> <% } %></div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputCommitteeCompApproved" class="col-md-4">Committee comp approved</label>
+									<div class="col-md-8">
+										<div> <% if(student.committeeCompApproved != null) { %> <%=student.committeeCompApproved.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPhdProposalApproved" class="col-md-4">phD proposal approved</label>
+									<div class="col-md-8">
+										<div><% if(student.phdProposalApproved != null) { %> <%=student.phdProposalApproved.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputOralExamPassed" class="col-md-4">Oral exam passed</label>
+									<div class="col-md-8">
+										<div> <% if(student.oralExamPassed != null) { %> <%=student.oralExamPassed.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputDissertationDefencePassed" class="col-md-4">Dissertation defence passed</label>
+									<div class="col-md-8">
+										<div> <% if(student.dissertationDefencePassed != null) { %> value=<%=student.dissertationDefencePassed.toISOString().substring(0,10)%> <% } %> </div>
+									</div>	
+								</div>
+
+								<div class="form-group row">
+									<label for="inputDissertationSubmitted" class="col-md-4">Dissertation submitted</label>
+									<div class="col-md-8">
+										<div> <% if(student.dissertationSubmitted != null) { %> value=<%=student.dissertationSubmitted.toISOString().substring(0,10)%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputSemesterStarted" class="col-md-4">Semester started</label>
+									<div class="col-md-8">
+										<div> <% if(student.semesterStarted != null) {%> <%=student.semesterStarted.season%> <%=student.semesterStarted.year%> <% } %> </div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputAdvisor" class="col-md-4">Advisor</label>
+									<div class="col-md-8">
+										<div> <% if(student.advisor != null) {%> <%=student.advisor.lastName%> <%=student.advisor.firstName%> <% } %> </div>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label for="inputNotes" class="col-md-4">Notes</label>
+									<div class="col-md-8">
+										<div> <%=student.notes%> </div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="col-md-8 offset-md-2">
+							<button type="submit" class="btn btn-success">Update</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

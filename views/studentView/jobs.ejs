@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Student jobs</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+				
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h1>Job history</h1>
+
+					<% if(student.jobHistory.length>0) { %>
+						<table align="center" border="1" class="table display-table table-dark">
+							<thead>
+								<tr>
+									<th scope="col">Position</th>
+									<th scope="col">Supervisor</th>
+									<th scope="col">Semester</th>
+									<th scope="col">Course</th>
+									<th scope="col">Description</th>
+									<th scope="col">Delete job</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% job = student.jobHistory %>
+								<% for(var i=0; i<job.length; i++) { %>
+									<tr>
+										<td><%= job[i].position%></td>
+										<td><%= job[i].supervisor.lastName%>,  <%=job[i].supervisor.firstName%></td>
+										<td><%= job[i].semester.season%> <%=job[i].semester.year%></td>
+										<% if(job[i].course != null) { %>
+										<td><%= job[i].course.department%> <%= job[i].course.number%>, <%=job[i].course.section%></td>
+										<% } else { %>
+										<td></td>
+										<% } %>
+										<% if(job[i].description != null) { %>
+										<td><%= job[i].description%></td>
+										<% } else { %>
+										<td></td>
+										<% } %>
+									</tr>
+								<% } %>
+							</tbody>
+						</table>
+					<% } else { %>
+						<div>No jobs found.</div>
+					<% } %>
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
