@@ -3,7 +3,7 @@
 
 <html>
 	<head>
-		<title>Upload courses</title>
+		<title>Upload grades</title>
 		<%- include("../partials/head.ejs") %>
 	</head>
 	
@@ -34,22 +34,21 @@
 							<label for="inputSheet" class="col-md-3 offset-md-3">Spreadsheet</label>
 							<div class="col-md-4">
 								<input type="file" name="upload" class="form-control-file" id="inputSheet" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
+							</div>
+						</div>
 
-							<div class="form-group row">
+						<div class="form-group row">
 							<label for="inputCourse" class="col-md-2 offset-md-3">Course</label>
 							<div class="col-md-4">
 								<select name="courses" class="form-control" id="inputCourse" required>
 									<option value=""></option>
-									<% for(var i=0; i<courses.length; i++) { %>
-										<option value=<%= courses[i]._id%>><%=courses[i].number%>, <%=courses[i].name%></option>
+									<% for(var i=0; i< courses.length; i++) { %>
+										<option value=<%= courses[i]._id%>><%=courses[i].number%>, <%=courses[i].name%>, <%=courses[i].section%>, <%=courses[i].semester%></option>
 									<% } %>
 								</select>
 							</div>
-
 						</div>
 
-							<div> Select Semester </div>
-						</div>
 						<div class="col-md-4 offset-md-4">
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>

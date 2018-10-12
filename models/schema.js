@@ -53,7 +53,7 @@ var studentSchema = mongoose.Schema({
   citizenship: Boolean,
   fundingEligibility: {
 	  type: String,
-	  enum: ["GUARANTEED", "PROBATION", "NOT GUARANTEED"],
+	  enum: ["NOT GUARANTEED", "GUARANTEED", "PROBATION"],
 	  default: "NOT GUARANTEED"
   },
   fundingStatus: Boolean,

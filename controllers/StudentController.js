@@ -26,7 +26,6 @@ var studentController = {}
  * @req.body {String} alternativeName
  * @req.body {enum: ["MALE", "FEMALE", "OTHER"]} gender
  * @req.body {enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE"]} ethnicity
- * @req.body {String} fundingStatus
  * @req.body {Boolean} citizenship
  * @req.body {enum: ["YES", "NO", "APPLIED"]} residency
  * @req.body {String} enteringStatus
@@ -190,13 +189,6 @@ studentController.put = function (req, res) {
   input = verifyBoolean(input);
   var input = util.validateModelData(input, schema.Student);
   if (input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
-    /* This comments out what makes single-student input case insensitive.
-     * We are choosing to trust the input since it is only a single entry.
-     * 
-     * input.onyen = input.onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1);
-     * input.firstName = input.firstName[0].toUpperCase()+input.firstName.toLowerCase().slice(1);
-     * input.lastName = input.lastName[0].toUpperCase()+input.lastName.toLowerCase().slice(1); 
-    */
     schema.Student.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
       if(result != null){
         res.redirect("/student/edit/"+result._id);
@@ -266,11 +258,11 @@ studentController.edit = function(req, res){
         ethnicities = schema.Student.schema.path("ethnicity").enumValues;
         residencies = schema.Student.schema.path("residency").enumValues;
         degrees = schema.Student.schema.path("intendedDegree").enumValues;
-		eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
+		    eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
         schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
           semesters = result;
           schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders});
+            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
           });
         });
       }
@@ -607,14 +599,12 @@ studentController.courses = function(req, res){
 studentController.uploadCoursePage = function(req, res){
   schema.Course.find().exec().then(function(result){
     var courses = result;
-    console.log("\nINSIDE\n");
     var uploadSuccess = false;
     if(req.params.uploadSuccess == "true"){
      uploadSuccess = true;
     }
     res.render("../views/student/uploadCourses.ejs", {courses: courses ,uploadSuccess: uploadSuccess});
   });
-  console.log("\nheyoo\n");
 }
 
 studentController.downloadCourses = function(req, res){

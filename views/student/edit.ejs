@@ -157,7 +157,11 @@
 								<div class="form-group row">
 									<label for="inputFundingEligibility" class="col-md-4">Funding eligibility</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputFundingEligibility" name="fundingEligibility" value="true" <% if(student.fundingEligibility === true) { %> checked <% } %>/>
+										<select name="fundingEligibility" class="form-control" id="inputFundingEligibility">
+											<% for(var i=0;i<eligibility.length; i++) { %>
+												<option value=<%= eligibility[i]%> <% if(student.fundingEligibility === eligibility[i]) { %> selected <% } %>><%=eligibility[i]%></option>
+											<% } %>
+										</select>
 									</div>
 								</div>
 
@@ -275,7 +279,7 @@
 								<div class="form-group row">
 									<label for="inputNotes" class="col-md-4">Notes</label>
 									<div class="col-md-8">
-										<input type="text" class="form-control" id="inputNotes" name="notes" value="<%=student.notes%>" required/>
+										<input type="text" class="form-control" id="inputNotes" name="notes" value="<%=student.notes%>"/>
 									</div>
 								</div>
 
