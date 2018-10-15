@@ -40,7 +40,9 @@ app.use(express.static(path.join(__dirname, "public")))
 //app.use("/api", index);
 
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  var student = {};
+  student._id = 0;
+  res.render("studentView/index.ejs", {student: student});
 });
 
 app.use("/course", require("./routes/course"));
