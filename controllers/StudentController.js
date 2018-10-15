@@ -686,7 +686,6 @@ studentController.uploadCourses = function(req, res){
         var col = z.substring(0,tt);
         var row = parseInt(z.substring(tt));
         var value = worksheet[z].v;
-
         if(!data[row]) data[row]={};
         data[row][headers[col]] = value;
     }

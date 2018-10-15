@@ -93,7 +93,7 @@ var semesterSchema = mongoose.Schema({
   year: Number,
   season: {
     type: String,
-    enum: ["FALL", "SPRING", "SUMMER"]
+    enum: ["FA", "SP", "S1", "S2"]
   }
 });
 
@@ -109,7 +109,7 @@ var courseSchema = mongoose.Schema({
   },
   topic: String,
   hours: Number,
-  section: Number,
+  section: String,
   faculty: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
   semester: {type: mongoose.Schema.Types.ObjectId, ref: "Semester"}
 });

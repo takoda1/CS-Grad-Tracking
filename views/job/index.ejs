@@ -42,7 +42,7 @@
 										<td><%= jobs[i].position%></td>
 										<td><%= jobs[i].supervisor.lastName%>, <%= jobs[i].supervisor.firstName%></td>
 										<% if(jobs[i].course != null){ %>
-										<td><%= jobs[i].course.name%> <%= jobs[i].course.number%>, section <%=jobs[i].course.section%>, <%=jobs[i].course.semester.season%> <%=jobs[i].course.semester.year%></td>
+										<td><%= jobs[i].course.number%>-<%= jobs[i].course.section%>, <%=jobs[i].course.semester.season%> <%=jobs[i].course.semester.year%></td>
 										<% } else {%>
 										<td></td>
 										<% } %>
