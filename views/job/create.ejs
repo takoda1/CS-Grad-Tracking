@@ -48,10 +48,13 @@
 							<label for="inputCourse" class="col-md-2 offset-md-3">Course *</label>
 							<div class="col-md-4">
 								<select name="course" class="form-control" id="inputCourse">
-									<option value=""></option>
-									<% for(var i=0; i < courses.length; i++){ %>
-										<option value=<%=courses[i]._id%> id=<%=courses[i].faculty._id%> class=<%=courses[i].semester._id%> ><%=courses[i].name%> <%=courses[i].number%>, section <%=courses[i].section%>, <%=courses[i].semester.season%> <%=courses[i].semester.year%></option>
-									<% } %>
+								<option value=""/>
+								<% for(var i=0; i < courses.length; i++){ %>
+									<option value=<%=courses[i]._id%>
+										id=<%=courses[i].faculty._id%> class=<%=courses[i].semester._id%>>
+										<%=courses[i].number%>-<%=courses[i].section%>, <%=courses[i].semester.season%> <%=courses[i].semester.year%>
+									</option>
+								<% } %>
 								</select>
 							</div>
 						</div>

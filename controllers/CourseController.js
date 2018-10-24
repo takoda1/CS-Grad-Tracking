@@ -101,7 +101,9 @@ courseController.get = function (req, res) {
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
   schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
     result.sort(function(a, b){
+      console.log("heyooo")
       if(a.semester.year == b.semester.year){
+        console.log("heyooo11111")
         if(a.semester.season < b.semester.season){
           return -1;
         }
@@ -111,6 +113,7 @@ courseController.get = function (req, res) {
         return 0;
       }
       else{
+        console.log("heyooo22222")
         return a.semester.year - b.semester.year;
       }
     });
