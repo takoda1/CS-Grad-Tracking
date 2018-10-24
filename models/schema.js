@@ -77,15 +77,16 @@ var studentSchema = mongoose.Schema({
 
 // Forms
 var formSchema = mongoose.Schema({
-  title: {
+  title: String,
+  student: {type:mongoose.Schema.Types.ObjectId, ref: "Student"},
+  defaultTitle: {
     type: String,
     enum: ["Background Preparation Worksheet", "Course Waiver", "M.S. Program of Study",
       "Outside Review Option", "Request for Appointment of M.S. Committee", "Ph.D. Program of Study",
       "Report of Disapproval of Dissertation Proposal", "Technical Writing Requirement",
-      "Report of Preliminary Research Presentation", "Teaching Requirement",
-      "Report of Research Discussion", "Program Product Requirement", "Transfer Credit Request", "Student Progress Report"]
-  },
-  data: Buffer
+      "Report of Preliminary Research Presentation", "Teaching Requirement", "Report of Research Discussion",
+      "Program Product Requirement", "Transfer Credit Request", "Student Progress Report", "Other"]
+  }
 });
 
 // Semesters

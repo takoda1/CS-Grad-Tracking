@@ -1,4 +1,4 @@
-var schema = require("../models/schema.js");
+ var schema = require("../models/schema.js");
 var util = require("./util.js");
 var formidable = require("formidable");
 var fs = require("fs");
@@ -131,9 +131,6 @@ studentController.post = function (req, res) {
  */
 studentController.get = function (req, res) {
   var input = req.query;
-  for(var i = 1; i < 21; i++){
-    console.log(i+" "+(7/4 * i*i - 6*i));
-  }
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
@@ -381,7 +378,6 @@ studentController.jobs = function(req, res){
 
       schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
       .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
-        console.log(result);
         result.jobHistory.sort(function(a, b){
           if(a.semester.year == b.semester.year){
             if(a.semester.season < b.semester.season){
@@ -446,12 +442,17 @@ studentController.addJobs = function(req, res){
 studentController.formPage = function(req, res){
   if(req.params._id != null){
     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
-      var formTitles = schema.Form.schema.path("title").enumValues;
-      var uploadSuccess = false;
-      if(req.params.uploadSuccess == "true"){
-        uploadSuccess = true;
-      }
-      res.render("../views/student/forms", {student: result, formTitles: formTitles, uploadSuccess: uploadSuccess});
+      var student = result;
+      schema.Form.find({student:result._id}).exec().then(function(result){
+        var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
+        var existingForms = result;
+        var uploadSuccess = false;
+        if(req.params.uploadSuccess == "true"){
+          uploadSuccess = true;
+        }
+        res.render("../views/student/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
+      });
+      
     });
   }
   else{
@@ -468,10 +469,28 @@ studentController.uploadForm = function(req, res){
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files){
           if(fields.title != null){
-            var f = files[Object.keys(files)[0]];
-            var newpath = path.join(__dirname, "../data/forms/"+student._id+fields.title+".pdf");
-            fs.rename(f.path, newpath, function(err){
-              res.redirect("/student/forms/"+studId+"/true");
+            var formObject = {title:"", student:""};
+            if(fields.title == "Other"){
+              formObject.title = fields.other;
+            }
+            else{
+              formObject.title = fields.title;
+            }
+            formObject.student = student._id;
+            schema.Form.findOne({title: formObject.title}).exec().then(function(result){
+              if(result == null){
+                var inputForm = new schema.Form(util.validateModelData(formObject, schema.Form));
+                inputForm.save().then(function(result){
+
+                }).catch(function(err){
+                res.render("../views/error.ejs", {string: "form failed to save"});
+                });
+              }
+              var f = files[Object.keys(files)[0]];
+              var newpath = path.join(__dirname, "../data/forms/"+student._id+formObject.title+".pdf");
+              fs.rename(f.path, newpath, function(err){
+                res.redirect("/student/forms/"+studId+"/true");
+              });
             });
           }
         });
@@ -789,7 +808,6 @@ function pushStudentCourse(onyen, gradeId){
 
 studentController.uploadPage = function(req, res){
   var uploadSuccess = false;
-  console.log(req.params);
   if(req.params.uploadSuccess == "true"){
     uploadSuccess = true;
   }
