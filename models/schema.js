@@ -6,7 +6,8 @@ var schema = {};
 var adminSchema = mongoose.Schema({
   onyen: String,
   firstName: String,
-  lastName: String
+  lastName: String,
+  pid: Number
 });
 
 // Faculty
@@ -15,7 +16,8 @@ var facultySchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   pid: Number,
-  active: Boolean
+  active: Boolean,
+  admin: Boolean
 });
 
 // Students

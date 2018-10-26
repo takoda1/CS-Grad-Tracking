@@ -136,4 +136,23 @@ _.initializeAllSemesters = function(){
   }
 }
 
+_.checkAdmin = function(){ //SHANE: Shouldn't this take 'input' onyen?
+  //process.env.userPID
+  return new Promise((resolve, reject)=>{
+    schema.Faculty.find({pid: process.env.userPID}).exec().then(function(result){
+      if(result != null){
+        if(result.admin == true){
+          resolve(true);
+        }
+        else{
+          resolve(false);
+        }
+      }
+      else{
+        resolve(false);
+      }
+    });
+  });
+}
+
 module.exports = _;

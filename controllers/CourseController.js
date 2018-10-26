@@ -97,32 +97,36 @@ courseController.post = function (req, res) {
  * just indicates that none are found
  */
 courseController.get = function (req, res) {
-  var input = req.query;
-  input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
-  schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
-    result.sort(function(a, b){
-      console.log("heyooo")
-      if(a.semester.year == b.semester.year){
-        console.log("heyooo11111")
-        if(a.semester.season < b.semester.season){
-          return -1;
-        }
-        if(a.semester.season > b.semester.season){
-          return 1;
-        }
-        return 0;
-      }
-      else{
-        console.log("heyooo22222")
-        return a.semester.year - b.semester.year;
-      }
-    });
-    var courses = result;
-    schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
-      res.render("../views/course/index.ejs", {courses: courses, semesters: result});
-    });
-  }).catch(function(err){
-    res.json({"error": err.message, "origin": "course.put"});
+  util.checkAdmin().then(function(result){
+    if(result){
+      var input = req.query;
+      input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
+      schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
+        result.sort(function(a, b){
+          if(a.semester.year == b.semester.year){
+            if(a.semester.season < b.semester.season){
+              return -1;
+            }
+            if(a.semester.season > b.semester.season){
+              return 1;
+            }
+            return 0;
+          }
+          else{
+            return a.semester.year - b.semester.year;
+          }
+        });
+        var courses = result;
+        schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
+          res.render("../views/course/index.ejs", {courses: courses, semesters: result});
+        });
+      }).catch(function(err){
+        res.json({"error": err.message, "origin": "course.put"});
+      });
+    }
+    else{
+      res.render("../views/error.ejs", {string: "Not admin!"});
+    }
   });
 }
 
@@ -447,7 +451,7 @@ courseController.download = function(req, res){
   });
 }
 
-courseController.uploadInfoPage = function(req, res){
+courseController.uploadInfoPage = function(req, res){ //SHANE
   var uploadSuccess = false;
   if(req.params.uploadSuccess == "true"){
     uploadSuccess = true;
