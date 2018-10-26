@@ -41,26 +41,26 @@ app.use(express.static(path.join(__dirname, "public")))
 //app.use("/api", index);
 
 //adds user pid to environmental variable if it doesn't already exist.
-app.use(function(req, res, next){
-	if(!process.env.userPID){
-		var user = req.get("X-REMOTE-USER-1");
-		https.get("https://onyenldap.cs.unc.edu/onyenldap.php?onyen="+user, resp=>{
-			let data="";
-			resp.on("data", (chunk)=>{
-				data+=chunk;
-			})
-			resp.on("end", ()=>{
-				var pid = data.substring(data.length - 10, data.length);
-				console.log(pid);
-				process.env.userPID = parseInt(pid);
-				res.redirect("/");
-			})
-		})
-	}
-	else{
-		next();
-	}
-})
+// app.use(function(req, res, next){
+// 	if(!process.env.userPID){
+// 		var user = req.get("X-REMOTE-USER-1");
+// 		https.get("https://onyenldap.cs.unc.edu/onyenldap.php?onyen="+user, resp=>{
+// 			let data="";
+// 			resp.on("data", (chunk)=>{
+// 				data+=chunk;
+// 			})
+// 			resp.on("end", ()=>{
+// 				var pid = data.substring(data.length - 10, data.length);
+// 				console.log(pid);
+// 				process.env.userPID = parseInt(pid);
+// 				res.redirect("/");
+// 			})
+// 		})
+// 	}
+// 	else{
+// 		next();
+// 	}
+// })
 
 app.get("/", (req, res) => {
   var student = {};

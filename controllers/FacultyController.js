@@ -35,6 +35,9 @@ facultyController.post = function (req, res) {
   if(input.active == null){
     input.active = false;
   }
+  if(input.admin == null){
+    input.admin = false;
+  }
   //Verify that all fields exist. Should be though if front end is done correctly.
   if(util.allFieldsExist(input, schema.Faculty)){
     /*onyen and pid are unique, so look for faculty using those two fields to check
@@ -126,6 +129,9 @@ facultyController.put = function (req, res) {
   var input = req.body;
   if(input.active == null){
     input.active = false;
+  }
+  if(input.admin == null){
+    input.admin = false;
   }
   var input = util.validateModelData(input, schema.Faculty);
   if (util.allFieldsExist(input, schema.Faculty)) {
