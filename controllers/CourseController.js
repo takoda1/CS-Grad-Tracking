@@ -74,6 +74,7 @@ courseController.post = function (req, res) {
   else{
     res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
+  
 }
 
 /**
@@ -97,36 +98,29 @@ courseController.post = function (req, res) {
  * just indicates that none are found
  */
 courseController.get = function (req, res) {
-  util.checkAdmin().then(function(result){
-    if(result){
-      var input = req.query;
-      input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
-      schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
-        result.sort(function(a, b){
-          if(a.semester.year == b.semester.year){
-            if(a.semester.season < b.semester.season){
-              return -1;
-            }
-            if(a.semester.season > b.semester.season){
-              return 1;
-            }
-            return 0;
-          }
-          else{
-            return a.semester.year - b.semester.year;
-          }
-        });
-        var courses = result;
-        schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
-          res.render("../views/course/index.ejs", {courses: courses, semesters: result});
-        });
-      }).catch(function(err){
-        res.json({"error": err.message, "origin": "course.put"});
-      });
-    }
-    else{
-      res.render("../views/error.ejs", {string: "Not admin!"});
-    }
+  var input = req.query;
+  input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
+  schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
+    result.sort(function(a, b){
+      if(a.semester.year == b.semester.year){
+        if(a.semester.season < b.semester.season){
+          return -1;
+        }
+        if(a.semester.season > b.semester.season){
+          return 1;
+        }
+        return 0;
+      }
+      else{
+        return a.semester.year - b.semester.year;
+      }
+    });
+    var courses = result;
+    schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
+      res.render("../views/course/index.ejs", {courses: courses, semesters: result});
+    });
+  }).catch(function(err){
+    res.json({"error": err.message, "origin": "course.put"});
   });
 }
 
@@ -170,7 +164,6 @@ courseController.put = function (req, res) {
   else{
     res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
-  
 }
 
 /**
@@ -219,7 +212,8 @@ courseController.delete = function (req, res) {
   else{
     res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
-  
+
+
 }
 
 /*
@@ -248,7 +242,6 @@ courseController.create = function (req, res){
       });
     });
   });
-  
 }
 
 /**
@@ -268,28 +261,28 @@ courseController.create = function (req, res){
  */
 courseController.edit = function (req, res){
   if(req.params._id){
-    //populate the faculty and semester fields with document data
-    schema.Course.findOne({_id: req.params._id}).populate("faculty").populate("semester").exec().then(function(result){
-      if(result != null){
-        var course, faculty, semesters;
-        course = result;
-        //get list of faculty and semesters so that user can't input custom data for those fields
-        schema.Faculty.find(
-          {},
-          {lastName:1, firstName:1}
-        ).sort({onyen:1}).exec().then(function(result){
-          faculty = result;
-          schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
-            semesters = result;
-            var categories = schema.Course.schema.path("category").enumValues;
-            res.render("../views/course/edit.ejs", {course: course, faculty: faculty, semesters: semesters, categories: categories});
-          });
+  //populate the faculty and semester fields with document data
+  schema.Course.findOne({_id: req.params._id}).populate("faculty").populate("semester").exec().then(function(result){
+    if(result != null){
+      var course, faculty, semesters;
+      course = result;
+      //get list of faculty and semesters so that user can't input custom data for those fields
+      schema.Faculty.find(
+        {},
+        {lastName:1, firstName:1}
+      ).sort({onyen:1}).exec().then(function(result){
+        faculty = result;
+        schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
+          semesters = result;
+          var categories = schema.Course.schema.path("category").enumValues;
+          res.render("../views/course/edit.ejs", {course: course, faculty: faculty, semesters: semesters, categories: categories});
         });
-      }
-      else{
-        res.render("../views/error.ejs", {string: "Course not found"});
-      }
-    });
+      });
+    }
+    else{
+      res.render("../views/error.ejs", {string: "Course not found"});
+    }
+  });
   }
   //catches error if _id is null
   else{
@@ -447,11 +440,10 @@ courseController.download = function(req, res){
     res.setHeader("Content-Disposition", "filename=" + "Courses.xlsx");
     res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     fs.createReadStream(filePath).pipe(res);
-
   });
 }
 
-courseController.uploadInfoPage = function(req, res){ //SHANE
+courseController.uploadInfoPage = function(req, res){
   var uploadSuccess = false;
   if(req.params.uploadSuccess == "true"){
     uploadSuccess = true;
@@ -460,6 +452,7 @@ courseController.uploadInfoPage = function(req, res){ //SHANE
   schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
     res.render("../views/course/uploadInfo.ejs", {semesters: result, uploadSuccess: uploadSuccess});
   });
+  
 }
 
 courseController.uploadInfo = function(req, res){
