@@ -1,7 +1,19 @@
 var express = require("express");
 var router = express.Router();
+var util = require("../controllers/util");
 
 var course = require("../controllers/CourseController");
+
+router.use(function(req, res, next){
+	util.checkAdmin().then(function(result){
+		if(result){
+			next();
+		}
+		else{
+			res.render("../views/error.ejs", {string:"Not admin"});
+		}
+	});
+});
 
 router.get("/", course.get);
 
