@@ -24,7 +24,6 @@ _.validateModelData = function (input, model) {
       } else if (m[key].instance === "ObjectID") {
         result[key] = input[key] === "" ? null : input[key];
       } else if (m[key].instance === "Date") {
-        console.log(input[key]);
         result[key] = new Date(input[key]);
       } else {
         result[key] = input[key];
@@ -136,21 +135,67 @@ _.initializeAllSemesters = function(){
   }
 }
 
-_.checkAdmin = function(){ //SHANE: Shouldn't this take 'input' onyen?
+_.checkAdmin = function(){
   //process.env.userPID
   return new Promise((resolve, reject)=>{
-    console.log(process.env.userPID);
     schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
       if(result != null){
         if(result.admin == true){
           resolve(true);
-          console.log("ABC");
         }
         else{
           resolve(false);
         }
       }
       else{
+        resolve(false);
+      }
+    });
+  });
+}
+
+_.checkFaculty = function(){
+  return new Promise((resolve, reject)=>{
+    schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
+      if(result != null){
+        resolve(true);
+      }
+      else{
+        resolve(false);
+      }
+    });
+  });
+}
+
+_.checkAdvisor = function(studentID){
+  //process.env.userPID
+  return new Promise((resolve, reject)=>{
+    schema.Student.findOne({_id: studentID}).exec().then(function(result){
+      if(result != null){
+        if(result.advisor != null){
+          schema.Faculty.findOne({_id: result.advisor}).exec().then(function(result){
+            if(result.pid == process.env.userPID){
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          });
+        } else {
+          resolve(false);
+        }
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+_.checkStudent = function(){
+  return new Promise((resolve, reject)=>{
+    schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
+      if(result != null){
+        resolve(true);
+      } else {
         resolve(false);
       }
     });

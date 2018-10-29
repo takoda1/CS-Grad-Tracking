@@ -32,7 +32,6 @@ var courseController = {};
  */
 courseController.post = function (req, res) {
   var input = req.body;
-  console.log(input);
   if(input.department != null && input.courseInfo != null &&
     input.univNumber != null && input.category != null &&
     input.section != null && input.faculty != null && input.semester != null){

@@ -1,8 +1,20 @@
 // /routes/job.js
 var express = require("express");
 var router = express.Router();
+var util = require("../controllers/util");
 
 var job = require("../controllers/JobController.js");
+
+router.use(function(req, res, next){
+	util.checkAdmin().then(function(result){
+		if(result){
+			next();
+		}
+		else{
+			res.render("../views/error.ejs", {string:"Not admin"});
+		}
+	});
+});
 
 router.get("/", job.get);
 

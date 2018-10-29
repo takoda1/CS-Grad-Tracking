@@ -529,64 +529,6 @@ studentController.viewForm = function(req, res){
 
 studentController.courses = function(req, res){
   if(req.params._id != null){
-    // schema.Student.aggregate([
-    // {
-    //   $match:{
-    //     _id: mongoose.Types.ObjectId(req.params._id)
-    //   }
-    // },
-    // {
-    //   $lookup: {
-    //     from: schema.Grade.collection.name,
-    //     localField: "grades",
-    //     foreignField: "_id",
-    //     as: "grades"
-    //   }
-    // },
-    // {
-    //   $unwind:{
-    //     path:"$grades"
-    //   }
-    // },
-    // {
-    //   $lookup : {
-    //     from: schema.Course.collection.name,
-    //     localField: "grades.course",
-    //     foreignField: "_id",
-    //     as: "grades.course"
-    //   }
-    // },
-    // {
-    //   $unwind:{
-    //     path: "$grades.course"
-    //   }
-    // },
-    // {
-    //   $lookup:{
-    //     from: schema.Semester.collection.name,
-    //     localField: "grades.course.semester",
-    //     foreignField: "_id",
-    //     as: "grades.course.semester"
-    //   }
-    // },
-    // {
-    //   $unwind:{
-    //     path: "$grades.course.semester"
-    //   }
-    // },
-    // {
-    //   $sort:{
-    //     "grades.course.semester.year": 1,
-    //     "grades.course.semester.season": 1
-    //   }
-    // }
-    // ]).exec().then(function(result){
-    //   console.log(result);
-    //   res.render("../views/student/courses.ejs", {student: result});
-    // }).catch(function(err){
-    //   res.json({"error": err.message, "origin": "course.put"});
-    // });
-
     schema.Student.findOne({_id: req.params._id}).populate({
       path:"grades",
       populate:{path:"course", populate:{path:"semester"}}
@@ -878,7 +820,6 @@ studentController.upload = function(req, res){
         }
         var spaceReg = /\s* \s*/;
         var semester = [null, 0];
-        console.log(typeof(element.semesterStarted));
         if(element.semesterStarted != null){
           semester = element.semesterStarted.split(spaceReg);
           semester[0] = semester[0].toUpperCase();
@@ -908,7 +849,6 @@ studentController.upload = function(req, res){
                       res.render("../views/error.ejs", {string: element.lastName+" contains an onyen or pid that already exists."});
                     }
                     else{
-                    	console.log(element);
                       var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
                       inputStudent.save().then(function(result){
                         count++;
@@ -924,7 +864,6 @@ studentController.upload = function(req, res){
                 
               }
               else{
-              	console.log(element);
                 schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().then(function(result){
                   count++;
                   if(count == data.length){
