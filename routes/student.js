@@ -2,45 +2,87 @@
 
 var express = require('express');
 var router = express.Router();
+var util = require("../controllers/util");
 
 var student = require('../controllers/StudentController.js');
 
-router.get('/', student.get);
 
-router.get('/create', student.create);
+function authorizeAdmin(req, res, next){
+	util.checkAdmin().then(function(result){
+		if(result){
+			next();
+		}
+		else{
+			res.render("../views/error.ejs", {string:"Not admin"});
+		}
+	});
+}
 
-router.get('/edit/:_id', student.edit);
+function authorizeFaculty(req, res, next){
+	util.checkFaculty().then(function(result){
+		if(result){
+			next();
+		}
+		else{
+			res.render("../views/error.ejs", {string:"Not faculty"});
+		}
+	});
+}
 
-router.get("/jobs/:_id", student.jobs);
+function authorizeAdvisor(req, res, next){
+	util.checkAdmin().then(function(result){
+		if(result){
+			next();
+		}
+		else{
+			util.checkAdvisor(req.params._id).then(function(result){
+				if(result){
+					next();
+				}
+				else{
+					res.render("../views/error.ejs", {string:"Not the advisor of the student"});
+				}
+			})
+		}
+	});
+}
 
-router.get("/forms/:_id/:uploadSuccess", student.formPage);
+router.get('/', authorizeFaculty, student.get);
 
-router.get("/viewForm/:_id/:title", student.viewForm);
+router.get('/create', authorizeAdmin, student.create);
 
-router.get("/upload/:uploadSuccess", student.uploadPage);
+router.get('/edit/:_id', authorizeAdvisor, student.edit);
 
-router.get("/download", student.download);
+router.get("/jobs/:_id", authorizeAdvisor, student.jobs);
 
-router.get("/downloadCourses/:_id", student.downloadCourses);
+router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
 
-router.get("/courses/:_id", student.courses);
+router.get("/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
 
-router.get("/uploadCourses/:uploadSuccess", student.uploadCoursePage);
+router.get("/upload/:uploadSuccess", authorizeAdmin, student.uploadPage);
 
-router.post('/post', student.post);
+router.get("/download", authorizeFaculty, student.download);
 
-router.post('/put', student.put);
+router.get("/downloadCourses/:_id", authorizeAdvisor, student.downloadCourses);
 
-router.post('/delete/:_id', student.delete);
+router.get("/courses/:_id", authorizeAdvisor, student.courses);
 
-router.post("/deleteJob", student.deleteJob);
+router.get("/uploadCourses/:uploadSuccess", authorizeAdmin, student.uploadCoursePage);
 
-router.post("/uploadForm/:_id", student.uploadForm);
+router.post('/post', authorizeAdmin, student.post);
 
-router.post("/upload", student.upload);
+router.post('/put', authorizeAdmin, student.put);
 
-router.post("/addJobs", student.addJobs);
+router.post('/delete/:_id', authorizeAdmin, student.delete);
 
-router.post("/uploadCourses", student.uploadCourses);
+router.post("/deleteJob", authorizeAdmin, student.deleteJob);
+
+router.post("/uploadForm/:_id", authorizeAdmin, student.uploadForm);
+
+router.post("/upload", authorizeAdmin, student.upload);
+
+router.post("/addJobs", authorizeAdmin, student.addJobs);
+
+router.post("/uploadCourses", authorizeAdmin, student.uploadCourses);
 
 module.exports = router;
