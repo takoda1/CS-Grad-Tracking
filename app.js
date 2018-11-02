@@ -4,6 +4,7 @@ var path = require("path")
 var bodyParser = require("body-parser")
 var compress = require("compression")
 var https = require("https");
+ var schema = require("./models/schema.js");
 
 var app = express()
 
@@ -51,7 +52,6 @@ app.use(function(req, res, next){
 			})
 			resp.on("end", ()=>{
 				var pid = data.substring(data.length - 10, data.length);
-				console.log(pid);
 				process.env.userPID = parseInt(pid);
 				res.redirect("/");
 			})
@@ -63,9 +63,28 @@ app.use(function(req, res, next){
 })
 
 app.get("/", (req, res) => {
-  var student = {};
-  student._id = 0;
-  res.render("studentView/index.ejs", {student: student});
+  schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
+    if(result != null){
+      if(result.admin == true){ //admin
+        res.redirect("/student");
+      } else { //advisor
+        res.redirect("/student");
+      }
+    }
+    else{
+      schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
+        if(result != null){ //student
+          //res.redirect("/student");
+          res.redirect("/studentView");
+        } else {
+          res.render("./error.ejs", {string: "Failed Authentication"});
+        }
+      });
+    }
+  });
+  // var student = {};
+  // student._id = 0;
+  // res.render("studentView/index.ejs", {student: student});
 });
 
 app.use("/course", require("./routes/course"));
@@ -77,6 +96,8 @@ app.use("/faculty", require("./routes/faculty"));
 app.use("/job", require("./routes/job"));
 
 app.use("/student", require("./routes/student"));
+
+app.use("/studentView", require("./routes/studentView"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res) {
