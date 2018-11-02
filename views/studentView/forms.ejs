@@ -1,4 +1,4 @@
-<!-- views/student/forms.ejs -->
+<!-- views/studentView/forms.ejs -->
 <!DOCTYPE html>
 
 <html>
@@ -20,17 +20,21 @@
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
 					<h3 class="space">View a form</h3>
-					<% for(var i = 0; i < formTitles.length; i++) { %>
+					<% for(var i = 0; i < existingForms.length; i++) { %>
 					<div class="col-md-4 offset-md-4">
-						<a href="/student/viewForm/<%=student._id%>/<%=formTitles[i]%>" target="_blank"><%=formTitles[i]%></a>
+						<a href="/student/viewForm/<%=student._id%>/<%=existingForms[i].title%>" target="_blank"><%=existingForms[i].title%></a>
 					</div>
 					<% } %>
 
 					<h3 class="space">Fillable forms; fill then download and then upload on this page.</h3>
 					<a href="https://cs.unc.edu/academics/graduate/ms-requirements/progress-forms/" target="_blank" >Forms</a>
+
 				</div>
 			</div>
 		</div>
 		<%- include("../partials/bootstrapScripts.ejs") %>
 	</body>
+	<script type="text/javascript">
+
+	</script>
 </html>

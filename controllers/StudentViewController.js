@@ -9,14 +9,29 @@ var mongoose = require("mongoose");
 
 var studentViewController = {};
 
+
+/*
+Students only allowed to edit their:
+firstName
+lastName
+alternativeName
+gender
+ethnicity
+notes
+*/
 studentViewController.put = function (req, res) {
   var input = req.body;
-  input = verifyBoolean(input);
-  var input = util.validateModelData(input, schema.Student);
-  if (input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
-    schema.Student.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
+  var editableFields = ["firstName", "lastName", "alternativeName", "gender", "ethnicity", "notes"];
+  if (input.firstName != null && input.lastName != null && input._id != null) {
+    schema.Student.findOne({_id: input._id}, input).exec().then(function(result){
       if(result != null){
-        res.redirect("/student/edit/"+result._id);
+        for(var i = 0; i < editableFields.length; i++){
+          result[editableFields[i]] = input[editableFields[i]];
+        }
+        console.log(result);
+        result.save(function(err, updated){
+          res.redirect("/studentView");
+        });
       }
       else res.render("../views/error.ejs", {string: "StudentNotFound"});
     });
@@ -27,145 +42,59 @@ studentViewController.put = function (req, res) {
 }
 
 studentViewController.get = function(req, res){
-  if(req.params._id){
-    schema.Student.findOne({_id: req.params._id}).populate("semesterStarted").populate("advisor").exec().then(function(result){
-      if(result != null){
-        var genders, ethnicities, residencies, degrees, semesters, student;
-        student = result;
-        genders = schema.Student.schema.path("gender").enumValues;
-        ethnicities = schema.Student.schema.path("ethnicity").enumValues;
-        residencies = schema.Student.schema.path("residency").enumValues;
-        degrees = schema.Student.schema.path("intendedDegree").enumValues;
-		    eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
-        schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
-          semesters = result;
-          schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
-          });
-        });
-      }
-      else{
-        res.render("../views/error.ejs", {string: "Student not found"});
-      }
-    });
-  }
-  else{
-    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
-  }
+  schema.Student.findOne({pid: process.env.userPID}).populate("semesterStarted").populate("advisor").exec().then(function(result){
+    if(result != null){
+      var genders, ethnicities, student;
+      student = result;
+      genders = schema.Student.schema.path("gender").enumValues;
+      ethnicities = schema.Student.schema.path("ethnicity").enumValues;
+      schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
+        console.log(student);
+        res.render("../views/studentView/index", {student: student, faculty: result, ethnicities: ethnicities, genders: genders});
+      });
+    }
+    else{
+      res.render("../views/error.ejs", {string: "Student not found"});
+    }
+  });
 }
 
 studentViewController.jobs = function(req, res){
-  if(req.params._id){
-    var jobs;
 
-    schema.Job.find().populate("supervisor").populate("course").populate("semester").sort({position:1}).exec().then(function(result){
-      result.sort(function(a, b){
-        if(a.semester.year == b.semester.year){
-          if(a.semester.season < b.semester.season){
-            return -1;
-          }
-          if(a.semester.season > b.semester.season){
-            return 1;
-          }
-          return 0;
+  schema.Student.findOne({pid: process.env.userPID}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
+  .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
+    result.jobHistory.sort(function(a, b){
+      if(a.semester.year == b.semester.year){
+        if(a.semester.season < b.semester.season){
+          return -1;
         }
-        else{
-          return a.semester.year - b.semester.year;
+        if(a.semester.season > b.semester.season){
+          return 1;
         }
-      });
-      jobs = result;
-
-      schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
-      .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
-        result.jobHistory.sort(function(a, b){
-          if(a.semester.year == b.semester.year){
-            if(a.semester.season < b.semester.season){
-              return -1;
-            }
-            if(a.semester.season > b.semester.season){
-              return 1;
-            }
-            return 0;
-          }
-          else{
-            return a.semester.year - b.semester.year;
-          }
-        });
-        res.render("../views/student/jobs", {student: result, jobs: jobs});
-      });
-    });
-    
-  }
-  else{
-    //this shouldn't happen if frontend done correctly
-    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
-  }
-}
-
-studentViewController.formPage = function(req, res){
-  if(req.params._id != null){
-    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
-      var student = result;
-      schema.Form.find({student:result._id}).exec().then(function(result){
-        var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
-        var existingForms = result;
-        var uploadSuccess = false;
-        if(req.params.uploadSuccess == "true"){
-          uploadSuccess = true;
-        }
-        res.render("../views/student/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
-      });
-      
-    });
-  }
-  else{
-    res.render("../views/error.ejs", {string: "StudentId incorrect"});
-  }
-}
-
-studentViewController.uploadForm = function(req, res){
-  var studId = req.params._id;
-  if(studId != null){
-    schema.Student.findOne({_id: studId}).exec().then(function(result){
-      if(result != null){
-        var student = result;
-        var form = new formidable.IncomingForm();
-        form.parse(req, function(err, fields, files){
-          if(fields.title != null){
-            var formObject = {title:"", student:""};
-            if(fields.title == "Other"){
-              formObject.title = fields.other;
-            }
-            else{
-              formObject.title = fields.title;
-            }
-            formObject.student = student._id;
-            schema.Form.findOne({title: formObject.title}).exec().then(function(result){
-              if(result == null){
-                var inputForm = new schema.Form(util.validateModelData(formObject, schema.Form));
-                inputForm.save().then(function(result){
-
-                }).catch(function(err){
-                res.render("../views/error.ejs", {string: "form failed to save"});
-                });
-              }
-              var f = files[Object.keys(files)[0]];
-              var newpath = path.join(__dirname, "../data/forms/"+student._id+formObject.title+".pdf");
-              fs.rename(f.path, newpath, function(err){
-                res.redirect("/student/forms/"+studId+"/true");
-              });
-            });
-          }
-        });
+        return 0;
       }
       else{
-        res.render("../views/error.ejs", {string: "Student not found"});
+        return a.semester.year - b.semester.year;
       }
     });
-  }
-  else{
-    res.render("../views/error.ejs", {string: "Required param not found"});
-  }
+    res.render("../views/studentView/jobs", {student: result});
+  });
+}
+
+studentViewController.forms = function(req, res){
+  schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
+    var student = result;
+    schema.Form.find({student:result._id}).exec().then(function(result){
+      var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
+      var existingForms = result;
+      var uploadSuccess = false;
+      if(req.params.uploadSuccess == "true"){
+        uploadSuccess = true;
+      }
+      res.render("../views/studentView/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
+    });
+    
+  });
 }
 
 studentViewController.viewForm = function(req, res){
@@ -190,34 +119,29 @@ studentViewController.viewForm = function(req, res){
 }
 
 studentViewController.courses = function(req, res){
-  if(req.params._id != null){
-    schema.Student.findOne({_id: req.params._id}).populate({
-      path:"grades",
-      populate:{path:"course", populate:{path:"semester"}}
-    }).populate({
-      path:"grades",
-      populate:{path:"course", populate:{path:"faculty"}}
-    }).exec().then(function(result){
-      result.grades.sort(function(a, b){
-        if(a.course.semester.year == b.course.semester.year){
-          if(a.course.semester.season < b.course.semester.season){
-            return -1;
-          }
-          if(a.course.semester.season > b.course.semester.season){
-            return 1;
-          }
-          return 0;
+  schema.Student.findOne({pid: process.env.userPID}).populate({
+    path:"grades",
+    populate:{path:"course", populate:{path:"semester"}}
+  }).populate({
+    path:"grades",
+    populate:{path:"course", populate:{path:"faculty"}}
+  }).exec().then(function(result){
+    result.grades.sort(function(a, b){
+      if(a.course.semester.year == b.course.semester.year){
+        if(a.course.semester.season < b.course.semester.season){
+          return -1;
         }
-        else{
-          return a.course.semester.year - b.course.semester.year;
+        if(a.course.semester.season > b.course.semester.season){
+          return 1;
         }
-      });
-      res.render("../views/student/courses.ejs", {student: result});
+        return 0;
+      }
+      else{
+        return a.course.semester.year - b.course.semester.year;
+      }
     });
-  }
-  else{
-    res.render("../views/error.ejs", {string: "Id missing."});
-  }
+    res.render("../views/studentView/courses.ejs", {student: result});
+  });
 }
 
 studentViewController.downloadCourses = function(req, res){
