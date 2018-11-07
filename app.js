@@ -58,7 +58,18 @@ app.use(function(req, res, next){
 		})
 	}
 	else{
-		next();
+    var user = req.get("X-REMOTE-USER-1");
+    https.get("https://onyenldap.cs.unc.edu/onyenldap.php?onyen="+user, resp=>{
+      let data="";
+      resp.on("data", (chunk)=>{
+        data+=chunk;
+      })
+      resp.on("end", ()=>{
+        var pid = data.substring(data.length - 10, data.length);
+        process.env.userPID = parseInt(pid);
+        next();
+      })
+    })
 	}
 })
 
