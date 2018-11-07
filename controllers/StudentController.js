@@ -183,6 +183,7 @@ studentController.get = function (req, res) {
  * @throws {Object} RequiredParamNotFound (should not occur if frontend done correctly)
  */
 studentController.put = function (req, res) {
+  console.log(req.body);
   var input = req.body;
   input = verifyBoolean(input);
   var input = util.validateModelData(input, schema.Student);
