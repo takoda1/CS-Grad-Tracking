@@ -73,6 +73,10 @@ app.use(function(req, res, next){
 	}
 })
 
+app.get("/logout", (req, res)=>{
+  
+})
+
 app.get("/", (req, res) => {
   schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
     if(result != null){
