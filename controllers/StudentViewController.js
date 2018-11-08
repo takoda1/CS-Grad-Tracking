@@ -145,80 +145,49 @@ studentViewController.courses = function(req, res){
 }
 
 studentViewController.downloadCourses = function(req, res){
-  if(req.params._id != null){
-    schema.Student.findOne({_id: req.params._id}).populate({
-      path:"grades",
-      populate:{path:"course", populate:{path:"semester"}}
-    }).populate({
-      path:"grades",
-      populate:{path:"course", populate:{path:"faculty"}}
-    }).lean().exec().then(function(result){
-      result.grades.sort(function(a, b){
-        if(a.course.semester.year == b.course.semester.year){
-          if(a.course.semester.season < b.course.semester.season){
-            return -1;
-          }
-          if(a.course.semester.season > b.course.semester.season){
-            return 1;
-          }
-          return 0;
+  schema.Student.findOne({pid: process.env.userPID}).populate({
+    path:"grades",
+    populate:{path:"course", populate:{path:"semester"}}
+  }).populate({
+    path:"grades",
+    populate:{path:"course", populate:{path:"faculty"}}
+  }).lean().exec().then(function(result){
+    result.grades.sort(function(a, b){
+      if(a.course.semester.year == b.course.semester.year){
+        if(a.course.semester.season < b.course.semester.season){
+          return -1;
         }
-        else{
-          return a.course.semester.year - b.course.semester.year;
+        if(a.course.semester.season > b.course.semester.season){
+          return 1;
         }
-      });
-      var output = [];
-      for(var i = 0; i < result.grades.length; i++){
-        var grade = {};
-        grade.onyen = result.onyen;
-        grade.grade = result.grades[i].grade;
-        grade.department = result.grades[i].course.department;
-        grade.number = result.grades[i].course.number;
-        grade.section = result.grades[i].course.section;
-        grade.semester = result.grades[i].course.semester.season + " " + result.grades[i].course.semester.year;
-        grade.faculty = result.grades[i].course.faculty.lastName + ", " + result.grades[i].course.faculty.firstName;
-        output[i] = grade;
-      }
-      var wb = XLSX.utils.book_new();
-      var ws = XLSX.utils.json_to_sheet(output);
-      XLSX.utils.book_append_sheet(wb, ws, "grades");
-      var filePath = path.join(__dirname, "../data/gradeTemp.xlsx");
-      XLSX.writeFile(wb, filePath);
-      res.setHeader("Content-Disposition", "filename=" + result.onyen + " grades.xlsx");
-      res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-      fs.createReadStream(filePath).pipe(res);
-    });
-  }
-  else{
-    res.render("../views/error.ejs", {string:"Student id wrong or missing"});
-  }
-  
-}
-
-function pushStudentCourse(onyen, gradeId){
-  return new Promise((resolve, reject)=>{
-    schema.Student.findOne({onyen: onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1)}).exec().then(function(result){
-      if(result != null){
-        schema.Student.update({onyen:onyen},{$addToSet: {grades: gradeId}}).exec();
-        resolve(result);
+        return 0;
       }
       else{
-        reject(result);
+        return a.course.semester.year - b.course.semester.year;
       }
     });
-  });
-}
-
-function verifyBoolean(input){
-  var m = schema.Student.schema.paths
-  for(var key in m){
-    if(m[key].instance === "Boolean"){
-      if(input[key] == null){
-        input[key] = false;
-      }
+    var output = [];
+    for(var i = 0; i < result.grades.length; i++){
+      var grade = {};
+      grade.onyen = result.onyen;
+      grade.grade = result.grades[i].grade;
+      grade.department = result.grades[i].course.department;
+      grade.number = result.grades[i].course.number;
+      grade.section = result.grades[i].course.section;
+      grade.semester = result.grades[i].course.semester.season + " " + result.grades[i].course.semester.year;
+      grade.faculty = result.grades[i].course.faculty.lastName + ", " + result.grades[i].course.faculty.firstName;
+      output[i] = grade;
     }
-  }
-  return input;
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(output);
+    XLSX.utils.book_append_sheet(wb, ws, "grades");
+    var filePath = path.join(__dirname, "../data/gradeTemp.xlsx");
+    XLSX.writeFile(wb, filePath);
+    res.setHeader("Content-Disposition", "filename=" + result.onyen + " grades.xlsx");
+    res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    fs.createReadStream(filePath).pipe(res);
+  });
+  
 }
 
 module.exports = studentViewController;
