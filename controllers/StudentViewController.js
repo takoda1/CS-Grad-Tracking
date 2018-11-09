@@ -44,12 +44,17 @@ studentViewController.put = function (req, res) {
 studentViewController.get = function(req, res){
   schema.Student.findOne({pid: process.env.userPID}).populate("semesterStarted").populate("advisor").exec().then(function(result){
     if(result != null){
+      console.log(result);
+      result = result.toJSON();
+      for(property in result){
+        console.log(property);
+        console.log(result[property]);
+      }
       var genders, ethnicities, student;
       student = result;
       genders = schema.Student.schema.path("gender").enumValues;
       ethnicities = schema.Student.schema.path("ethnicity").enumValues;
       schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-        console.log(student);
         res.render("../views/studentView/index", {student: student, faculty: result, ethnicities: ethnicities, genders: genders});
       });
     }
