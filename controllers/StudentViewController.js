@@ -42,6 +42,7 @@ studentViewController.put = function (req, res) {
 }
 
 studentViewController.get = function(req, res){
+  console.log("ABCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
   schema.Student.findOne({pid: process.env.userPID}).populate("semesterStarted").populate("advisor").exec().then(function(result){
     if(result != null){
       console.log(result);
