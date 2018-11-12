@@ -51,7 +51,9 @@ app.use(function(req, res, next){
 				data+=chunk;
 			})
 			resp.on("end", ()=>{
-				var pid = data.substring(data.length - 10, data.length);
+        var index = data.indexOf("pid");
+        //maybe change this to be more robust
+				var pid = data.substring(index + 5, index + 14);
 				process.env.userPID = parseInt(pid);
 				res.redirect("/");
 			})
@@ -65,7 +67,9 @@ app.use(function(req, res, next){
         data+=chunk;
       })
       resp.on("end", ()=>{
-        var pid = data.substring(data.length - 10, data.length);
+        var index = data.indexOf("pid");
+        //maybe change this to be more robust
+        var pid = data.substring(index + 5, index + 14);
         process.env.userPID = parseInt(pid);
         next();
       })
