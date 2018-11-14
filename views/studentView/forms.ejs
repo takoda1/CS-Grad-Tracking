@@ -11,11 +11,11 @@
 		<div class="container-fluid h-100">
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
-
+					<%- include("../partials/logout.ejs") %>
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
 
-					<%- include("./studentBarPartial.ejs") %>
+					<%- include("../partials/studentBarPartial.ejs") %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
