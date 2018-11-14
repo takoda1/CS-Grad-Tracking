@@ -28,7 +28,6 @@ studentViewController.put = function (req, res) {
         for(var i = 0; i < editableFields.length; i++){
           result[editableFields[i]] = input[editableFields[i]];
         }
-        console.log(result);
         result.save(function(err, updated){
           res.redirect("/studentView");
         });
@@ -42,15 +41,9 @@ studentViewController.put = function (req, res) {
 }
 
 studentViewController.get = function(req, res){
-  console.log("ABCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
   schema.Student.findOne({pid: process.env.userPID}).populate("semesterStarted").populate("advisor").exec().then(function(result){
     if(result != null){
-      console.log(result);
       result = result.toJSON();
-      for(property in result){
-        console.log(property);
-        console.log(result[property]);
-      }
       var genders, ethnicities, student;
       student = result;
       genders = schema.Student.schema.path("gender").enumValues;
