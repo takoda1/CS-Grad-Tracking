@@ -43,6 +43,7 @@ app.use(express.static(path.join(__dirname, "public")))
 
 //adds user pid to environmental variable if it doesn't already exist.
 app.use(function(req, res, next){
+	console.log("used");
 	if(!process.env.userPID){
 		var user = req.get("X-REMOTE-USER-1");
 		https.get("https://onyenldap.cs.unc.edu/onyenldap.php?onyen="+user, resp=>{
@@ -78,10 +79,14 @@ app.use(function(req, res, next){
 })
 
 app.get("/logout", (req, res)=>{
-  
+	 process.env.userPID = "---------";
+	 res.redirect("http://logout@csgrad.cs.unc.edu");
 })
 
 app.get("/", (req, res) => {
+  console.log("Check!");
+  console.log(process.env.userPID);
+
   schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
     if(result != null){
       if(result.admin == true){ //admin
