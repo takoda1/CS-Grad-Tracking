@@ -11,6 +11,8 @@
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
 
+					<%- include("../partials/logout.ejs") %>
+
 					<form action="/studentView/put" method="post">
 						<input type="hidden" name="_id" value=<%=student._id%>></input>
 
@@ -73,7 +75,7 @@
 
 				<div align ="center" class="col-lg-10 panelbg text-center studentView">
 
-					<%- include("./studentBarPartial.ejs") %>
+					<%- include("../partials/studentBarPartial.ejs") %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
