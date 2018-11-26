@@ -140,6 +140,10 @@ table {
 	flex-direction: column;
 }
 
+.lightGreen {
+	color: #99ff66;
+}
+
 label.autoHyphen {
 	hyphens: auto;
 }
