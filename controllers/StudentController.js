@@ -131,6 +131,7 @@ studentController.post = function (req, res) {
  * that no students are found.
  */
 studentController.get = function (req, res) {
+  console.log(res.locals);
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case

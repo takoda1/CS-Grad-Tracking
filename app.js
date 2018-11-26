@@ -43,22 +43,21 @@ app.use(express.static(path.join(__dirname, "public")))
 
 //adds user pid to environmental variable if it doesn't already exist.
 app.use(function(req, res, next){
-	console.log("used");
 	if(!process.env.userPID){
 		var user = req.get("X-REMOTE-USER-1");
 		https.get("https://onyenldap.cs.unc.edu/onyenldap.php?onyen="+user, resp=>{
 			let data="";
 			resp.on("data", (chunk)=>{
 				data+=chunk;
-			})
+			});
 			resp.on("end", ()=>{
         var index = data.indexOf("pid");
         //maybe change this to be more robust
 				var pid = data.substring(index + 5, index + 14);
 				process.env.userPID = parseInt(pid);
 				res.redirect("/");
-			})
-		})
+			});
+		});
 	}
 	else{
     var user = req.get("X-REMOTE-USER-1");
@@ -66,25 +65,33 @@ app.use(function(req, res, next){
       let data="";
       resp.on("data", (chunk)=>{
         data+=chunk;
-      })
+      });
       resp.on("end", ()=>{
         var index = data.indexOf("pid");
         //maybe change this to be more robust
         var pid = data.substring(index + 5, index + 14);
         process.env.userPID = parseInt(pid);
         next();
-      })
-    })
+      });
+    });
 	}
-})
+});
+
+//global username locals (middleware)
+app.use(function(req, res, next){
+  res.locals = {
+    user: req.get("X-REMOTE-USER-1"),
+  };
+  next();
+});
 
 app.get("/logout", (req, res)=>{
 	 process.env.userPID = "---------";
+   //res.render("./error.ejs", {string: "logout"});
 	 res.redirect("http://logout@csgrad.cs.unc.edu");
 })
 
 app.get("/", (req, res) => {
-  console.log("Check!");
   console.log(process.env.userPID);
 
   schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
