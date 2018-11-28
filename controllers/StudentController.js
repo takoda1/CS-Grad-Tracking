@@ -135,11 +135,29 @@ studentController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
-  schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
-    res.render("../views/student/index.ejs", {students: result});
-  }).catch(function (err) {
-    res.json({"error": err.message, "origin": "student.get"})
+  var admin, faculty;
+  util.checkAdmin().then(function(result){
+    if(result){
+      admin = true;
+    }
+    else{
+      admin = false;
+    }
+    schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
+      if(admin){
+
+      }
+      else{
+        input.advisor = result._id;
+      }
+      schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
+        res.render("../views/student/index.ejs", {students: result, admin: admin});
+      }).catch(function (err) {
+        res.json({"error": err.message, "origin": "student.get"})
+      });
+    });
   });
+  
 }
 
 /**
@@ -808,6 +826,7 @@ studentController.upload = function(req, res){
     //console.log(data);
     var count = 0;
     data.forEach(function(element){
+      console.log(element);
       //verify that all fields exist
       if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null){
         element.onyen = element.onyen[0].toUpperCase() + element.onyen.toLowerCase().slice(1);

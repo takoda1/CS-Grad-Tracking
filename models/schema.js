@@ -26,7 +26,10 @@ var studentSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   pid: Number,
-  active: Boolean,
+  active: {
+    type:Boolean,
+    default: true
+  },
   alternativeName: String,
   gender: {
     type: String,

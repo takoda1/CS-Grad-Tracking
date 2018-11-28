@@ -3,6 +3,7 @@
 <%- include("./logout.ejs")%>
 
 <!--Links to search pages-->
+<% if(locals.admin) { %>
 <p>
 	<a href="/course" class="btn btn-primary btn-block">Course</a>
 </p>
@@ -12,6 +13,7 @@
 <p>
 	<a href="/job" class="btn btn-primary btn-block">Job</a>
 </p>
+<% } %>
 <!--<p>
 	<a href="/semester" class="btn btn-primary btn-block">Semester</a>
 </p>-->

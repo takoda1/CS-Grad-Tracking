@@ -79,9 +79,7 @@ app.use(function(req, res, next){
 
 //global username locals (middleware)
 app.use(function(req, res, next){
-  res.locals = {
-    user: req.get("X-REMOTE-USER-1"),
-  };
+  res.locals.user = req.get("X-REMOTE-USER-1");
   next();
 });
 
