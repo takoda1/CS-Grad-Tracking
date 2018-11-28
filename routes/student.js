@@ -6,45 +6,69 @@ var util = require("../controllers/util");
 
 var student = require('../controllers/StudentController.js');
 
+function adminRole(res){
+	return new Promise((resolve, reject)=>{
+	    util.checkAdmin().then(function(result){
+	    	if(result){
+			 	res.locals.admin = true;
+			 	resolve(true);
+	    	}
+	    	else{
+			 	res.locals.admin = false;
+			 	resolve(false);
+	    	}
+	    });
+ 	});
+}
 
 function authorizeAdmin(req, res, next){
-	util.checkAdmin().then(function(result){
-		if(result){
-			next();
-		}
-		else{
-			res.render("../views/error.ejs", {string:"Not admin"});
-		}
+	adminRole(res).then(function(result){
+		util.checkAdmin().then(function(result){
+			if(result){
+				next();
+			}
+			else{
+				res.render("../views/error.ejs", {string:"Not admin"});
+			}
+		});
 	});
+	
 }
 
 function authorizeFaculty(req, res, next){
-	util.checkFaculty().then(function(result){
-		if(result){
-			next();
-		}
-		else{
-			res.render("../views/error.ejs", {string:"Not faculty"});
-		}
+	adminRole(res).then(function(result){
+		util.checkFaculty().then(function(result){
+			if(result){
+				next();
+			}
+			else{
+				res.render("../views/error.ejs", {string:"Not faculty"});
+			}
+		});
 	});
+	
+	
 }
 
 function authorizeAdvisor(req, res, next){
-	util.checkAdmin().then(function(result){
-		if(result){
-			next();
-		}
-		else{
-			util.checkAdvisor(req.params._id).then(function(result){
-				if(result){
-					next();
-				}
-				else{
-					res.render("../views/error.ejs", {string:"Not the advisor of the student"});
-				}
-			})
-		}
+	adminRole(res).then(function(result){
+		util.checkAdmin().then(function(result){
+			if(result){
+				next();
+			}
+			else{
+				util.checkAdvisor(req.params._id).then(function(result){
+					if(result){
+						next();
+					}
+					else{
+						res.render("../views/error.ejs", {string:"Not the advisor of the student"});
+					}
+				})
+			}
+		});
 	});
+	
 }
 
 router.get('/', authorizeFaculty, student.get);
