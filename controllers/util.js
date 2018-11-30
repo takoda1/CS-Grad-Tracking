@@ -42,6 +42,7 @@ document exist for the corresponding model
 
 @return true or false
 */
+
 _.allFieldsExist = function(input, model) {
   var m = model.schema.obj;
   for (var key in m){
@@ -104,6 +105,7 @@ _.regexTransform = function (input) {
 
   @return the document with text fields as regular expressions
 */
+
 _.makeRegexp = function(input){
   for(var key in input){
     if(input[key].constructor == Array){
@@ -168,7 +170,6 @@ _.checkFaculty = function(){
 }
 
 _.checkAdvisor = function(studentID){
-  //process.env.userPID
   return new Promise((resolve, reject)=>{
     schema.Student.findOne({_id: studentID}).exec().then(function(result){
       if(result != null){
