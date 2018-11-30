@@ -4,7 +4,7 @@ var path = require("path")
 var bodyParser = require("body-parser")
 var compress = require("compression")
 var https = require("https");
- var schema = require("./models/schema.js");
+var schema = require("./models/schema.js");
 
 var app = express()
 
@@ -85,7 +85,6 @@ app.use(function(req, res, next){
 
 app.get("/logout", (req, res)=>{
 	 process.env.userPID = "---------";
-   //res.render("./error.ejs", {string: "logout"});
 	 res.redirect("http://logout@csgrad.cs.unc.edu");
 })
 
@@ -103,7 +102,6 @@ app.get("/", (req, res) => {
     else{
       schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
         if(result != null){ //student
-          //res.redirect("/student");
           res.redirect("/studentView");
         } else {
           res.render("./error.ejs", {string: "Failed Authentication"});
@@ -111,16 +109,11 @@ app.get("/", (req, res) => {
       });
     }
   });
-  // var student = {};
-  // student._id = 0;
-  // res.render("studentView/index.ejs", {student: student});
 });
 
 app.use("/course", require("./routes/course"));
 
 app.use("/faculty", require("./routes/faculty"));
-
-//app.use("/semester", require("./routes/semester")); just manually create all semesters
 
 app.use("/job", require("./routes/job"));
 

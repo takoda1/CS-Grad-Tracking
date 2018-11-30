@@ -71,7 +71,7 @@ studentController.post = function (req, res) {
         res.render("../views/error.ejs", {string: "PID needs to be of length 9"});
       }
       else {
-        input.onyen = input.onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1);
+        input.onyen = input.onyen.toLowerCase();
         input.firstName = input.firstName[0].toUpperCase()+input.firstName.toLowerCase().slice(1);
         input.lastName = input.lastName[0].toUpperCase()+input.lastName.toLowerCase().slice(1);
         var inputStudent = new schema.Student(util.validateModelData(input, schema.Student));
@@ -756,7 +756,7 @@ studentController.uploadCourses = function(req, res){
 
 function pushStudentCourse(onyen, gradeId){
   return new Promise((resolve, reject)=>{
-    schema.Student.findOne({onyen: onyen[0].toUpperCase()+input.onyen.toLowerCase().slice(1)}).exec().then(function(result){
+    schema.Student.findOne({onyen: input.onyen.toLowerCase()}).exec().then(function(result){
       if(result != null){
         schema.Student.update({onyen:onyen},{$addToSet: {grades: gradeId}}).exec();
         resolve(result);
