@@ -151,3 +151,10 @@ label.autoHyphen {
 div.container-fluid > div > div.col-lg-10 {
 	overflow-y : scroll;
 }
+
+/*
+This is for highlighting search text on index pages
+*/
+.searchTextColor {
+	color:#73a073;
+}

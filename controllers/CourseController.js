@@ -115,9 +115,17 @@ courseController.get = function (req, res) {
       }
     });
     var courses = result;
-    schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
-      res.render("../views/course/index.ejs", {courses: courses, semesters: result});
+    schema.Semester.findOne({_id:input.semester}).exec().then(function(result){
+      console.log(result);
+      if(result != null){
+        input.semester = result.season + " " + result.year;
+      }
+      var search = util.listObjectToString(input);
+      schema.Semester.find().sort({year: 1, season: 1}).exec().then(function(result){
+        res.render("../views/course/index.ejs", {courses: courses, semesters: result, search: search});
+      });
     });
+    
   }).catch(function(err){
     res.json({"error": err.message, "origin": "course.put"});
   });

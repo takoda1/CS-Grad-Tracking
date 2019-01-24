@@ -134,6 +134,7 @@ studentController.get = function (req, res) {
   console.log(res.locals);
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
+  var search = util.listObjectToString(input);
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   var admin, faculty;
   util.checkAdmin().then(function(result){
@@ -151,7 +152,7 @@ studentController.get = function (req, res) {
         input.advisor = result._id;
       }
       schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
-        res.render("../views/student/index.ejs", {students: result, admin: admin});
+        res.render("../views/student/index.ejs", {students: result, admin: admin, search: search});
       }).catch(function (err) {
         res.json({"error": err.message, "origin": "student.get"})
       });
