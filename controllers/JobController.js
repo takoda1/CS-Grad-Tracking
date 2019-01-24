@@ -70,6 +70,7 @@ jobController.post = function (req, res) {
  */
 jobController.get = function (req, res) {
   var input = req.query;
+  var search = util.listObjectToString(input);
   input = util.validateModelData(input, schema.Job); //remove fields that are empty/not part of job definition
   if(input.position != null){
     input.position = new RegExp(input.position, "i");
@@ -100,14 +101,14 @@ jobController.get = function (req, res) {
           semesters = result;
           var count = 0;
           if( jobs.length == 0){
-            res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters});
+            res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters, search: search});
           }
           jobs.forEach(function(job){
             schema.Student.find({jobHistory: job._id}).sort({lastName:1, firstName:1}).exec().then(function(result){
               job.students = result;
               count++;
               if(count == jobs.length){
-                res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters});
+                res.render("../views/job/index.ejs", {jobs: jobs, faculty: faculty, courses: courses, semesters: semesters, search: search});
               }
             });
           });

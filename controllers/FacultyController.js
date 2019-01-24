@@ -3,6 +3,7 @@ var util = require("./util.js");
 var XLSX = require("xlsx");
 var fs = require("fs");
 var path = require("path");
+var formidable = require("formidable");
 
 var facultyController = {};
 
@@ -97,10 +98,11 @@ facultyController.post = function (req, res) {
 facultyController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Faculty); //remove fields that are empty/not part of Faculty definition
+  var search = util.listObjectToString(input);
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
   //find the faculty and sort by onyen, render /faculty/index.ejs on completion
   schema.Faculty.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
-    res.render("../views/faculty/index.ejs", {faculty: result});
+    res.render("../views/faculty/index.ejs", {faculty: result, search: search});
   }).catch(function (err) {
     res.json({"error": err.message, "origin": "faculty.get"});
   });
@@ -246,6 +248,92 @@ facultyController.download = function(req, res){
     res.setHeader("Content-Disposition", "filename=" + "Faculty.xlsx");
     res.setHeader("Content-type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     fs.createReadStream(filePath).pipe(res);
+  });
+}
+
+facultyController.uploadPage = function(req, res){
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
+  res.render("../views/faculty/upload.ejs", {uploadSuccess: uploadSuccess});
+
+}
+
+facultyController.upload = function(req, res){
+  var form = new formidable.IncomingForm();
+  form.parse(req, function(err, fields, files){
+    var f = files[Object.keys(files)[0]];
+    var workbook = XLSX.readFile(f.path);
+    var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    var headers = {};
+    var data = [];
+    var i = 0;
+    for(var field in schema.Faculty.schema.obj){
+      headers[String.fromCharCode(i+65)] = field;
+      i++;
+    }
+    for(z in worksheet) {
+        if(z[0] === '!') continue;
+        //parse out the column, row, and value
+        var col = z.substring(0,1);
+        var row = parseInt(z.substring(1));
+        var value = worksheet[z].v;
+
+        if(!data[row]) data[row]={};
+        data[row][headers[col]] = value;
+    }
+    //drop those first two rows which are empty
+    data.shift();
+    data.shift();
+    //try to create models
+    var count = 0;
+    //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+    data.forEach(function(element){
+      if(element.active == null){
+        element.active = true;
+      }
+      if(element.admin == null){
+        element.admin = false;
+      }
+      //verify that all fields exist
+      if(util.allFieldsExist(element, schema.Faculty)){
+        //get faculty lastname/firstname
+        schema.Faculty.findOne({pid: element.pid}).exec().then(function(result){
+          if(result != null){
+            result.onyen = element.onyen;
+            result.firstName = element.firstName;
+            result.lastName = element.lastName;
+            result.active = element.active;
+            result.admin = element.admin;
+            result.save(function(error){
+              if(error){
+                res.render("../views/error.ejs", {string: element.firstName + " did not save because there is something wrong with the data."});
+              }
+              count++;
+              console.log(count);
+              if(count == data.length){
+                res.redirect("/faculty/upload/true");
+              }
+            });
+          }
+          else{
+            var inputFaculty = new schema.Faculty(element);
+            inputFaculty.save().then(function(result){
+              count++;
+              if(count == data.length){
+                res.redirect("/faculty/upload/true");
+              }
+            }).catch(function(err){
+              res.render("../views/error.ejs", {string: element.firstName+" did not save because something is wrong with it."});
+            });
+          }
+        });
+      }
+      else{
+        res.render("../views/error.ejs", {string: element.firstName+" did not save because it is missing a field."});
+      }
+    });
   });
 }
 

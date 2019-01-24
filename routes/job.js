@@ -6,13 +6,8 @@ var util = require("../controllers/util");
 var job = require("../controllers/JobController.js");
 
 router.use(function(req, res, next){
-	util.checkAdmin().then(function(result){
-		if(result){
-			next();
-		}
-		else{
-			res.render("../views/error.ejs", {string:"Not admin"});
-		}
+	util.adminRole(res).then(function(result){
+		next();
 	});
 });
 

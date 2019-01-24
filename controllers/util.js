@@ -203,4 +203,28 @@ _.checkStudent = function(){
   });
 }
 
+_.listObjectToString = function (input) {
+  var result = "Search: ";
+  for (var key in input) {
+    result = result + key + ":";
+    result = result + input[key] + ". ";
+  }
+  return result;
+}
+
+_.adminRole = function(res){
+  return new Promise((resolve, reject)=>{
+      _.checkAdmin().then(function(result){
+        if(result){
+          res.locals.admin = true;
+          resolve(true);
+        }
+        else{
+          res.locals.admin = false;
+          resolve(false);
+        }
+      });
+  });
+}
+
 module.exports = _;
