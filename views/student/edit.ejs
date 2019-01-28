@@ -170,13 +170,6 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputFundingStatus" class="col-md-4">Funding status</label>
-									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputFundingStatus" name="fundingStatus" value="true" <% if(student.fundingStatus === true) { %> checked <% } %>/>
-									</div>
-								</div>
-
-								<div class="form-group row">
 									<label for="inputBackgroundApproved" class="col-md-4">Background approved</label>
 									<div class="col-md-8">
 										<input type="date" class="form-control" id="inputBackgroundApproved" name="backgroundApproved" <% if(student.backgroundApproved != null) { %> value=<%=student.backgroundApproved.toISOString().substring(0,10)%> <% } %> />
