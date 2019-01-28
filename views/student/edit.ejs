@@ -59,9 +59,13 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputActive" class="col-md-4">Active</label>
+									<label for="inputStatus" class="col-md-4">Status</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputActive" name="active" <% if(student.active === true) { %> checked <% } %> value="true"/>
+										<select name="status" class="form-control" id="inputStatus">
+											<% for(var i=0; i<status.length; i++) { %>
+												<option value=<%= status[i]%> <% if(student.status === status[i]) { %> selected <% } %>><%=status[i]%></option>
+											<% } %>
+										</select>
 									</div>
 								</div>
 

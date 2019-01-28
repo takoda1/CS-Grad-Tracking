@@ -1,5 +1,4 @@
-
- var schema = require("../models/schema.js");
+var schema = require("../models/schema.js");
 var util = require("./util.js");
 var formidable = require("formidable");
 var fs = require("fs");
@@ -135,7 +134,12 @@ studentController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   var search = util.listObjectToString(input);
+  var temp = input.status;
   input = util.makeRegexp(input); //make all text fields regular expressions with ignore case
+  if(temp != "" && temp != null && temp != undefined){
+   input.status = temp;
+  }
+  console.log(input);
   var admin, faculty;
   util.checkAdmin().then(function(result){
     if(result){
@@ -251,18 +255,18 @@ studentController.delete = function (req, res) {
 }
 
 studentController.create = function(req, res){
-  var genders, ethnicities, residencies, degrees, semesters;
+  var genders, ethnicities, residencies, degrees, semesters, status;
   genders = schema.Student.schema.path("gender").enumValues;
   ethnicities = schema.Student.schema.path("ethnicity").enumValues;
   residencies = schema.Student.schema.path("residency").enumValues;
   degrees = schema.Student.schema.path("intendedDegree").enumValues;    
   eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
-
+  status = schema.Student.schema.path("status").enumValues;
   
   schema.Semester.find().sort({year:1, season:1}).exec().then(function(result){
     semesters = result;
     schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
+      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility, status: status});
     });
   });
 }
@@ -278,10 +282,11 @@ studentController.edit = function(req, res){
         residencies = schema.Student.schema.path("residency").enumValues;
         degrees = schema.Student.schema.path("intendedDegree").enumValues;
 		    eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
+        status = schema.Student.schema.path("status").enumValues;
         schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
           semesters = result;
           schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
+            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility, status: status});
           });
         });
       }

@@ -51,9 +51,14 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputActive" class="col-md-4">Active</label>
+									<label for="inputStatus" class="col-md-4">Status</label>
 									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputActive" name="active" value="true" />
+										<select name="status" class="form-control" id="inputStatus">
+											<option value=""></option>
+											<% for(var i=0; i<status.length; i++) { %>
+												<option value=<%= status[i]%>> <%=status[i]%> </option>
+											<% } %>
+										</select>
 									</div>
 								</div>
 
