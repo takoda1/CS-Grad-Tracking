@@ -62,7 +62,6 @@ var studentSchema = mongoose.Schema({
 	  enum: ["NOT GUARANTEED", "GUARANTEED", "PROBATION"],
 	  default: "NOT GUARANTEED"
   },
-  fundingStatus: Boolean,
   backgroundApproved: Date,
   mastersAwarded: Date,
   prpPassed: Date,
