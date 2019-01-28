@@ -3,6 +3,7 @@
 var express = require('express');
 var router = express.Router();
 var util = require("../controllers/util");
+var schema = require("../models/schema");
 
 var student = require('../controllers/StudentController.js');
 
@@ -68,7 +69,11 @@ router.use(function(req, res, next){
 	util.adminRole(res).then(function(result){
 		next();
 	});
-	
+});
+
+router.use(function(req, res, next){
+	res.locals.status = schema.Student.schema.path("status").enumValues;
+	next();
 });
 
 router.get('/', authorizeFaculty, student.get);

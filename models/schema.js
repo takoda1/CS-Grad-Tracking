@@ -26,9 +26,10 @@ var studentSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   pid: Number,
-  active: {
-    type:Boolean,
-    default: true
+  status: {
+    type: String,
+    enum: ["Active", "Inactive", "Leave", "Graduated", "Ineligible"],
+    default: "Active"
   },
   alternativeName: String,
   gender: {
