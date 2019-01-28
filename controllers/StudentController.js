@@ -9,53 +9,7 @@ var mongoose = require("mongoose");
 
 var studentController = {}
 
-/**
- * @url {post} /student/post
- *
- * @description Called when a student is to be created,
- * receives fields from an html form, onyen, first name,
- * last name, and pid required.
- *
- * A form is submitted when student/post is called, and
- * the form data is stored in req.body
- *
- * @req.body {String} onyen (Required)
- * @req.body {String} firstName (Required)
- * @req.body {String} lastName (Required)
- * @req.body {Number} pid (Required)
- * @req.body {String} alternativeName
- * @req.body {enum: ["MALE", "FEMALE", "OTHER"]} gender
- * @req.body {enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE"]} ethnicity
- * @req.body {Boolean} citizenship
- * @req.body {enum: ["YES", "NO", "APPLIED"]} residency
- * @req.body {String} enteringStatus
- * @req.body {String} researchArea
- * @req.body {Boolean} backgroundApproved
- * @req.body {String} leaveExtension
- * @req.body {String} fundingEligibility
- * @req.body {Boolean} fundingStatus
- * @req.body {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
- * @req.body {Number} hoursCompleted
- * @req.body {Boolean} prpPassed
- * @req.body {Boolean} backgroundPrepWorksheetApproved
- * @req.body {Boolean} programOfStudyApproved
- * @req.body {Boolean} researchPlanningMeeting
- * @req.body {Boolean} committeeCompApproved
- * @req.body {Boolean} phdProposalApproved
- * @req.body {Boolean} oralExamPassed
- * @req.body {Boolean} dissertationDefencePassed
- * @req.body {Boolean} dissertationSubmitted
- * @req.body {Boolean} active
- * @req.body {Object} semesterStarted
- * @req.body {String} advisor
- * @req.body {Object} courseHistory (MongoID array)
- * @req.body {String} notes
- *
- * @success redirects to /student/edit/:_id route (which uses studentController.edit)
- * @failure renders error page with duplicate student message
- *
- * @throws {Object} RequiredParamNotFound (should not occur if frontend is done correctly)
- */
+
 studentController.post = function (req, res) {
   var input = req.body;
   input = verifyBoolean(input);
@@ -91,44 +45,6 @@ studentController.post = function (req, res) {
   }
 }
 
-/**
- * @url {get} /student
- *
- * @description Called when /student/index.ejs is to be rendered,
- * accepts search fields as an html query, all fields optional
- *
- * @req.query {String} onyen
- * @req.query {String} firstName
- * @req.query {String} lastName
- * @req.query {Number} pid
- * @req.query {String} alternativeName
- * @req.query {enum: ["MALE", "FEMALE", "OTHER"]} gender
- * @req.query {enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE"]} ethnicity
- * @req.query {String} status
- * @req.query {Boolean} citizenship
- * @req.query {enum: ["YES", "NO", "APPLIED"]} residency
- * @req.query {String} enteringStatus
- * @req.query {String} researchArea
- * @req.query {Boolean} backgroundApproved
- * @req.query {String} leaveExtension
- * @req.query {String} fundingEligibility
- * @req.query {Boolean} fundingStatus
- * @req.query {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
- * @req.query {Number} hoursCompleted
- * @req.query {Boolean} prp
- * @req.query {Boolean} oralExam
- * @req.query {Boolean} committeeMeeting
- * @req.query {Boolean} allButDissertation
- * @req.query {Boolean} dissertationDefence
- * @req.query {Boolean} finalDissertation
- * @req.query {String} semesterStarted (MongoID)
- * @req.query {String} advisor (MongoID)
- * @req.query {Object} courseHistory (MongoID array)
- *
- * @finish renders /student/index.ejs with found students
- * if no students found, then the page indicates
- * that no students are found.
- */
 studentController.get = function (req, res) {
   console.log(res.locals);
   var input = req.query;
@@ -139,7 +55,6 @@ studentController.get = function (req, res) {
   if(temp != "" && temp != null && temp != undefined){
    input.status = temp;
   }
-  console.log(input);
   var admin, faculty;
   util.checkAdmin().then(function(result){
     if(result){
@@ -165,47 +80,7 @@ studentController.get = function (req, res) {
   
 }
 
-/**
- * @url {post} /student/put
- *
- * @description Called when a student is to be updated,
- * field datat is sent as an html form, and onyen,
- * first name, last name, and pid are required.
- *
- * @req.body {String} onyen
- * @req.body {String} firstName
- * @req.body {String} lastName 
- * @req.body {Number} pid
- * @req.body {String} alternativeName
- * @req.body {enum: ["MALE", "FEMALE", "OTHER"]} gender
- * @req.body {enum: ["AIAN", "ASIAN", "BLACK", "HISPANIC", "PACIFIC", "WHITE"]} ethnicity
- * @req.body {String} status
- * @req.body {Boolean} citizenship
- * @req.body {enum: ["YES", "NO", "APPLIED"]} residency
- * @req.body {String} enteringStatus
- * @req.body {String} researchArea
- * @req.body {Boolean} backgroundApproved
- * @req.body {String} leaveExtension
- * @req.body {String} fundingEligibility
- * @req.body {Boolean} fundingStatus
- * @req.body {enum: ["MASTERS", "PHD", "BOTH"]} intendedDegree
- * @req.body {Number} hoursCompleted
- * @req.body {Boolean} prp
- * @req.body {Boolean} oralExam
- * @req.body {Boolean} committeeMeeting
- * @req.body {Boolean} allButDissertation
- * @req.body {Boolean} dissertationDefence
- * @req.body {Boolean} finalDissertation
- * @req.body {String} semesterStarted (MongoID)
- * @req.body {String} advisor (MongoID)
- * @req.body {Object} courseHistory (MongoID array)
- *
- * @success redirects to /student/edit/:_id (studentController.edit)
- * which displays the newly updated student data
- *
- * @throws {Object} StudentNotFound (should not occur if frontend done correctly)
- * @throws {Object} RequiredParamNotFound (should not occur if frontend done correctly)
- */
+
 studentController.put = function (req, res) {
   console.log(req.body);
   var input = req.body;
@@ -224,20 +99,6 @@ studentController.put = function (req, res) {
   }
 }
 
-/**
- * @url {post} /student/delete/:_id
- *
- * @description Called when a student is to be deleted,
- * requires _id, to be sent as an html parameter
- *
- * @req.params {String} _id (Required)
- *
- * @success redirects to /student (studentController.get)
- * @faillure renders error.ejs with error message
- *
- * @throws {Object} StudentNotFound (should not be thrown if front end is done correctly)
- * @throws {Object} RequiredParamNotFound (should not be thrown if front end is done correctly)
- */
 studentController.delete = function (req, res) {
   var id = req.params._id
   if (id != null) {
@@ -255,18 +116,17 @@ studentController.delete = function (req, res) {
 }
 
 studentController.create = function(req, res){
-  var genders, ethnicities, residencies, degrees, semesters, status;
+  var genders, ethnicities, residencies, degrees, semesters;
   genders = schema.Student.schema.path("gender").enumValues;
   ethnicities = schema.Student.schema.path("ethnicity").enumValues;
   residencies = schema.Student.schema.path("residency").enumValues;
   degrees = schema.Student.schema.path("intendedDegree").enumValues;    
   eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
-  status = schema.Student.schema.path("status").enumValues;
   
   schema.Semester.find().sort({year:1, season:1}).exec().then(function(result){
     semesters = result;
     schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility, status: status});
+      res.render("../views/student/create", {faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
     });
   });
 }
@@ -282,11 +142,10 @@ studentController.edit = function(req, res){
         residencies = schema.Student.schema.path("residency").enumValues;
         degrees = schema.Student.schema.path("intendedDegree").enumValues;
 		    eligibility = schema.Student.schema.path("fundingEligibility").enumValues;
-        status = schema.Student.schema.path("status").enumValues;
         schema.Semester.find({}).sort({year:1, season:1}).exec().then(function(result){
           semesters = result;
           schema.Faculty.find({}).sort({lastName:1, firstName:1}).exec().then(function(result){
-            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility, status: status});
+            res.render("../views/student/edit", {student: student, faculty: result, semesters: semesters, degrees: degrees, residencies: residencies, ethnicities: ethnicities, genders: genders, eligibility: eligibility});
           });
         });
       }
@@ -321,88 +180,6 @@ studentController.jobs = function(req, res){
       });
       jobs = result;
 
-      // schema.Student.aggregate([
-      // {
-      //   $match: {
-      //     _id: new mongoose.Types.ObjectId(req.params._id)
-      //   }
-      // },
-      // {
-      //   $unwind: "$jobHistory"
-      // },
-      // {
-      //   $lookup: {
-      //     from: schema.Job.collection.name,
-      //     localField: "jobHistory",
-      //     foreignField: "_id",
-      //     as: "jobHistoryObject"
-      //   }
-      // },
-      // {
-      //   $unwind: {
-      //     path: "$jobHistoryObject",
-      //     preserveNullAndEmptyArrays: true
-      //   }
-      // },
-      // {
-      //   $group:{
-      //     "_id":"$_id",
-      //     "jobHistory": {$push: "$jobHistory"},
-      //     "jobHistoryObject": {"$push": "$jobHistoryObject"}
-      //   }
-      // },
-      // {
-      //   $lookup: {
-      //     from: schema.Faculty.collection.name,
-      //     localField: "jobHistory.supervisor",
-      //     foreignField: "_id",
-      //     as: "supervisor"
-      //   }
-      // },
-      // {
-      //   $unwind: {
-      //     path: "$supervisor",
-      //     preserveNullAndEmptyArrays: true
-      //   }
-      // },
-      // {
-      //   $lookup: {
-      //     from: schema.Semester.collection.name,
-      //     localField: "jobHistory.semester",
-      //     foreignField: "_id",
-      //     as: "semester"
-      //   }
-      // },
-      // {
-      //   $unwind: {
-      //     path: "$semester",
-      //     preserveNullAndEmptyArrays: true
-      //   }
-      // },
-      // {
-      //   $lookup: {
-      //     from: schema.Course.collection.name,
-      //     localField: "jobHistory.course",
-      //     foreignField: "_id",
-      //     as: "course"
-      //   }
-      // },
-      // {
-      //   $unwind:{
-      //     path:"$course",
-      //     preserveNullAndEmptyArrays: true
-      //   }
-      // },
-      // {
-      //   $sort: {
-      //     "jobHistory.semester.year": 1
-      //   }
-      // }
-      // ]).exec().then(function(result){
-      //   console.log(result);
-      //   res.render("../views/student/jobs", {student: result, jobs: jobs});
-      // });
-
       schema.Student.findOne({_id: req.params._id}).populate("jobHistory").populate({path:"jobHistory", populate:{path:"supervisor"}})
       .populate({path:"jobHistory", populate:{path:"semester"}}).populate({path:"jobHistory", populate:{path:"course"}}).exec().then(function(result){
         result.jobHistory.sort(function(a, b){
@@ -422,7 +199,6 @@ studentController.jobs = function(req, res){
         res.render("../views/student/jobs", {student: result, jobs: jobs});
       });
     });
-    
   }
   else{
     //this shouldn't happen if frontend done correctly
