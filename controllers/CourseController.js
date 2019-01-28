@@ -97,6 +97,7 @@ courseController.post = function (req, res) {
  * just indicates that none are found
  */
 courseController.get = function (req, res) {
+  
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
   schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
@@ -347,6 +348,9 @@ courseController.upload = function(req, res){
       if(element.category == null){
         element.category = "NA";
       }
+      if(element.topic == null){
+        element.topic = "NA";
+      }
       //verify that all fields exist
       if(util.allFieldsExist(element, schema.Course)){
         //get faculty lastname/firstname
@@ -356,6 +360,22 @@ courseController.upload = function(req, res){
         facultyName[1] = new RegExp(facultyName[1], "i");
         var spaceReg = /\s* \s*/;
         var semester = element.semester.split(spaceReg);
+        switch(semester[0]){
+          case "Spring":
+          case "spring":
+            semester[0] = "SP"
+          case "Fall":
+          case "fall":
+            semester[0] = "FA"
+          case "Summer1":
+          case "summer1":
+            semester[0] = "S1"
+          case "Summer2":
+          case "summer2":
+            semester[0] = "S2"
+          default:
+            //res.render("../views/error.ejs", {string: "Issue with semester formatting, check" + element.semester[0] + " " + element.semester[1]})
+        }
         schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
           if(result != null){
             element.faculty = result._id;
@@ -391,7 +411,8 @@ courseController.upload = function(req, res){
                         res.redirect("/course/upload/true");
                       }
                     }).catch(function(err){
-                      res.render("../views/error.ejs", {string: element.name+" did not save because something is wrong with it."});
+
+                      //res.render("../views/error.ejs", {string: element.name+" did not save because something is wrong with it."});
                     });
                   }
                   else{
@@ -403,17 +424,21 @@ courseController.upload = function(req, res){
                 });
               }
               else{
-                res.render("../views/error.ejs", {string: element.name+" did not save because the semester is incorrect."});
+                //res.render("../views/error.ejs", {string: element.name+" did not save because the semester is incorrect."});
+                console.log(element.name+" did not save because the semester is incorrect.");
+
               }
             });
           }
           else{
-            res.render("../views/error.ejs", {string: element.name+" did not save because the faculty is incorrect."});
+           // res.render("../views/error.ejs", {string: element.name+" did not save because the faculty is incorrect."});
+            console.log(element.name+" did not save because the faculty is incorrect.");
           }
         });
       }
       else{
-        res.render("../views/error.ejs", {string: element.name+" did not save because it is missing a field."});
+       // res.render("../views/error.ejs", {string: element.name+" did not save because it is missing a field."});
+        console.log(element.name+" did not save because it is missing a field.");
       }
     });
   });
