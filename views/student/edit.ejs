@@ -170,13 +170,6 @@
 								</div>
 
 								<div class="form-group row">
-									<label for="inputFundingStatus" class="col-md-4">Funding status</label>
-									<div class="col-md-8">
-										<input type="checkbox" class="form-check-input" id="inputFundingStatus" name="fundingStatus" value="true" <% if(student.fundingStatus === true) { %> checked <% } %>/>
-									</div>
-								</div>
-
-								<div class="form-group row">
 									<label for="inputBackgroundApproved" class="col-md-4">Background approved</label>
 									<div class="col-md-8">
 										<input type="date" class="form-control" id="inputBackgroundApproved" name="backgroundApproved" <% if(student.backgroundApproved != null) { %> value=<%=student.backgroundApproved.toISOString().substring(0,10)%> <% } %> />
@@ -271,7 +264,7 @@
 								<div class="form-group row">
 									<label for="inputAdvisor" class="col-md-4">Advisor</label>
 									<div class="col-md-8">
-										<select name="advisor" class="form-control" id="inputAdvisor">
+										<select name="advisor" class="form-control" id="inputAdvisor" required>
 											<option value=""></option>
 											<% for(var i=0; i<faculty.length; i++) { %>
 												<option value=<%= faculty[i]._id%> <% if(student.advisor != null && student.advisor._id.equals(faculty[i]._id)) { %> selected <% } %>><%=faculty[i].lastName%>, <%=faculty[i].firstName%></option>
