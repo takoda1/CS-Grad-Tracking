@@ -60,7 +60,7 @@ studentController.post = function (req, res) {
   var input = req.body;
   input = verifyBoolean(input);
   //verify that the required fields are not null
-  if(input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN){
+  if(input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN && input.advisor != null){
     //try to find a student by unique identifiers: onyen or PID, display error page if one found
     schema.Student.findOne({$or: [{onyen: input.onyen}, {pid: input.pid}]}).exec().then(function (result) {
       if (result != null){
@@ -831,20 +831,22 @@ studentController.upload = function(req, res){
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
     //console.log(data);
     var count = 0;
-    data.forEach(function(element){
+    console.log(data.length);
+    for(let element of data){
       console.log(element);
       //verify that all fields exist
-      if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null){
+      if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null && element.advisor != null){
+        console.log("ABC");
         element.onyen = element.onyen[0].toUpperCase() + element.onyen.toLowerCase().slice(1);
         element.firstName = element.firstName[0].toUpperCase() + element.firstName.toLowerCase().slice(1);
         element.lastName = element.lastName[0].toUpperCase() + element.lastName.toLowerCase().slice(1);
         var commaReg = /\s*,\s*/;
         var facultyName = [null, null];
-        if(element.advisor != null){
+        //if(element.advisor != null){
           facultyName = element.advisor.split(commaReg);
           facultyName[0] = new RegExp(facultyName[0], "i");
           facultyName[1] = new RegExp(facultyName[1], "i");
-        }
+        //}
         var spaceReg = /\s* \s*/;
         var semester = [null, 0];
         if(element.semesterStarted != null){
@@ -874,6 +876,7 @@ studentController.upload = function(req, res){
                   schema.Student.findOne({pid: element.pid}).exec().then(function(result){
                     if(stud1 != null || result != null){
                       res.render("../views/error.ejs", {string: element.lastName+" contains an onyen or pid that already exists."});
+                      break;
                     }
                     else{
                       var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
@@ -884,6 +887,7 @@ studentController.upload = function(req, res){
                         }
                       }).catch(function(err){
                         res.render("../views/error.ejs", {string: element.lastName+" did not save because something was wrong with it."});
+                        break;
                       });
                     }
                   });
@@ -899,6 +903,7 @@ studentController.upload = function(req, res){
                 }).catch(
                   function(err){
                     res.render("../views/error.ejs", {string: element.lastName+" did not update because something was wrong with it."});
+                    break;
                   });
               }
             });
@@ -908,9 +913,16 @@ studentController.upload = function(req, res){
         });
         
       }
-    });
+      else{
+        console.log("Success");
+        res.render("../views/error.ejs", {string: element.lastName+" did not save because it is missing a field"});
+        break;
+      }
+    };
   });
 }
+
+
 
 studentController.download = function(req, res){
   schema.Student.find({}, "-_id -__v").populate("advisor").populate("semesterStarted").sort({lastName:1, firstName:1}).lean().exec().then(function(result){
