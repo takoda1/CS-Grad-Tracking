@@ -7,21 +7,6 @@ var schema = require("../models/schema");
 
 var student = require('../controllers/StudentController.js');
 
-// function adminRole(res){
-// 	return new Promise((resolve, reject)=>{
-// 	    util.checkAdmin().then(function(result){
-// 	    	if(result){
-// 			 	res.locals.admin = true;
-// 			 	resolve(true);
-// 	    	}
-// 	    	else{
-// 			 	res.locals.admin = false;
-// 			 	resolve(false);
-// 	    	}
-// 	    });
-//  	});
-// }
-
 function authorizeAdmin(req, res, next){
 	util.checkAdmin().then(function(result){
 		if(result){
@@ -84,6 +69,8 @@ router.get('/edit/:_id', authorizeAdvisor, student.edit);
 
 router.get("/jobs/:_id", authorizeAdvisor, student.jobs);
 
+router.get("/notes/:id", authorizeAdvisor, student.jobs);
+
 router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
 
 router.get("/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
@@ -113,5 +100,7 @@ router.post("/upload", authorizeAdmin, student.upload);
 router.post("/addJobs", authorizeAdmin, student.addJobs);
 
 router.post("/uploadCourses", authorizeAdmin, student.uploadCourses);
+
+//router.post("/notes", authorizeAdmin, student.addNotes);
 
 module.exports = router;
