@@ -13,9 +13,11 @@ var adminSchema = mongoose.Schema({
 // Faculty
 var facultySchema = mongoose.Schema({
   onyen: String,
+  csID: String,
   firstName: String,
   lastName: String,
   pid: Number,
+  sectionNumber: Number,
   active: Boolean,
   admin: Boolean
 });
