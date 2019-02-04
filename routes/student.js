@@ -4,7 +4,6 @@ var express = require('express');
 var router = express.Router();
 var util = require("../controllers/util");
 var schema = require("../models/schema");
-
 var student = require('../controllers/StudentController.js');
 
 function authorizeAdmin(req, res, next){
@@ -16,7 +15,6 @@ function authorizeAdmin(req, res, next){
 			res.render("../views/error.ejs", {string:"Not admin"});
 		}
 	});
-
 }
 
 function authorizeFaculty(req, res, next){
@@ -28,7 +26,6 @@ function authorizeFaculty(req, res, next){
 			res.render("../views/error.ejs", {string:"Not faculty"});
 		}
 	});
-	
 }
 
 function authorizeAdvisor(req, res, next){
@@ -69,7 +66,7 @@ router.get('/edit/:_id', authorizeAdvisor, student.edit);
 
 router.get("/jobs/:_id", authorizeAdvisor, student.jobs);
 
-router.get("/notes/:id", authorizeAdvisor, student.jobs);
+router.get("/notes/:_id", authorizeAdvisor, student.notesPage);
 
 router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
 
@@ -101,6 +98,6 @@ router.post("/addJobs", authorizeAdmin, student.addJobs);
 
 router.post("/uploadCourses", authorizeAdmin, student.uploadCourses);
 
-//router.post("/notes", authorizeAdmin, student.addNotes);
+router.post("/notes", authorizeAdmin, student.notesPage);
 
 module.exports = router;
