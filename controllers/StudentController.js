@@ -6,7 +6,6 @@ var path = require("path");
 var XLSX = require("xlsx");
 var formidable = require("formidable");
 var mongoose = require("mongoose");
-
 var studentController = {}
 
 
@@ -77,9 +76,7 @@ studentController.get = function (req, res) {
       });
     });
   });
-  
 }
-
 
 studentController.put = function (req, res) {
   console.log(req.body);
@@ -747,6 +744,24 @@ function verifyBoolean(input){
     }
   }
   return input;
+}
+
+studentController.notesPage = function(req, res){
+  console.log("hello");
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
+  res.render("../views/student/notes.ejs", {uploadSuccess: uploadSuccess});
+}
+
+studentController.addNotes = function(req, res){
+  console.log("goodbye");
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
+  }
+  res.render("../views/student/notes.ejs", {uploadSuccess: uploadSuccess});
 }
 
 module.exports = studentController;
