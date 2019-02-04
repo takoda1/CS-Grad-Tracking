@@ -45,7 +45,6 @@ studentController.post = function (req, res) {
 }
 
 studentController.get = function (req, res) {
-  console.log(res.locals);
   var input = req.query;
   input = util.validateModelData(input, schema.Student); //remove fields that are empty/not part of Student definition
   var search = util.listObjectToString(input);
@@ -79,7 +78,6 @@ studentController.get = function (req, res) {
 }
 
 studentController.put = function (req, res) {
-  console.log(req.body);
   var input = req.body;
   input = verifyBoolean(input);
   var input = util.validateModelData(input, schema.Student);
@@ -603,17 +601,13 @@ studentController.upload = function(req, res){
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
-    //console.log(data);
     var count = 0;
-    console.log(data.length);
     //for(let element of data){
     data.forEach(function(element){
 
 
-      console.log(element);
       //verify that all fields exist
       if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null && element.advisor != null){
-        console.log("ABC");
         element.onyen = element.onyen[0].toUpperCase() + element.onyen.toLowerCase().slice(1);
         element.firstName = element.firstName[0].toUpperCase() + element.firstName.toLowerCase().slice(1);
         element.lastName = element.lastName[0].toUpperCase() + element.lastName.toLowerCase().slice(1);
@@ -634,15 +628,13 @@ studentController.upload = function(req, res){
         schema.Faculty.findOne({lastName: facultyName[0], firstName: facultyName[1]}).exec().then(function(result){
           if(result != null){
             element.advisor = result._id;
-          }
-          else{
+          } else {
             element.advisor = null;
           }
           schema.Semester.findOne({season: semester[0], year: parseInt(semester[1])}).exec().then(function(result){
             if(result != null){
               element.semesterStarted = result._id;
-            }
-            else{
+            } else {
               element.semesterStarted = null;
             }
             schema.Student.findOne({onyen: element.onyen, pid: element.pid}).exec().then(function(result){
@@ -654,8 +646,7 @@ studentController.upload = function(req, res){
                     if(stud1 != null || result != null){
                       res.render("../views/error.ejs", {string: element.lastName+" contains an onyen or pid that already exists."});
                       return;
-                    }
-                    else{
+                    } else {
                       var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
                       inputStudent.save().then(function(result){
                         count++;
@@ -663,16 +654,13 @@ studentController.upload = function(req, res){
                           res.redirect("/student/upload/true");
                         }
                       }).catch(function(err){
-                      	console.log(element);
                         res.render("../views/error.ejs", {string: element.lastName+" did not save because something was wrong with it."});
                         return;
                       });
                     }
                   });
                 });
-                
-              }
-              else{
+              } else {
                 schema.Student.update({onyen: element.onyen, pid:element.pid}, util.validateModelData(element, schema.Student)).exec().then(function(result){
                   count++;
                   if(count == data.length){
@@ -685,14 +673,9 @@ studentController.upload = function(req, res){
                   });
               }
             });
-            
           });
-
         });
-        
-      }
-      else{
-        console.log("Success");
+      } else {
         res.render("../views/error.ejs", {string: element.lastName+" did not save because it is missing a field"});
         return;
       }
@@ -747,16 +730,22 @@ function verifyBoolean(input){
 }
 
 studentController.notesPage = function(req, res){
-  console.log("hello");
-  var uploadSuccess = false;
-  if(req.params.uploadSuccess == "true"){
-    uploadSuccess = true;
+  if(req.params._id) {
+    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+      if(result != null) {
+        var student;
+        student = result;
+        res.render("../views/student/notes", {student: student});
+      } else {
+        res.render("../views/error.ejs", {string: "Student not found"});
+      }
+    });
+  } else {
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
-  res.render("../views/student/notes.ejs", {uploadSuccess: uploadSuccess});
 }
 
 studentController.addNotes = function(req, res){
-  console.log("goodbye");
   var uploadSuccess = false;
   if(req.params.uploadSuccess == "true"){
     uploadSuccess = true;
