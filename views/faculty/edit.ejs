@@ -27,7 +27,14 @@
 							<label class="col-md-2 offset-md-3">Onyen</label>
 							<div class="col-md-4">
 								<div><%=faculty.onyen%></div>
-								<input type="hidden" name="onyen" value=<%=faculty.onyen%> required/>
+								<input type="hidden" name="onyen" value="<%=faculty.onyen%>" required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputCSID" class="col-md-2 offset-md-3">CSID *</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="inputCSID" name="csID" value=<%=faculty.csID%> required/>
 							</div>
 						</div>
 
@@ -50,6 +57,13 @@
 							<div class="col-md-4">
 								<div><%=faculty.pid%></div>
 								<input type="hidden" name="pid" value=<%=faculty.pid%> required/>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="inputSectionNumber" class="col-md-2 offset-md-3">Section number *</label>
+							<div class="col-md-4">
+								<input type="number" class="form-control" id="inputSectionNumber" name="sectionNumber" value=<%=faculty.sectionNumber%> required/>
 							</div>
 						</div>
 

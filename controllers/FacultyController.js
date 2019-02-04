@@ -297,13 +297,16 @@ facultyController.upload = function(req, res){
         element.admin = false;
       }
       //verify that all fields exist
-      if(util.allFieldsExist(element, schema.Faculty)){
+      //if(util.allFieldsExist(element, schema.Faculty)){
+      if(element.firstName != null && element.pid != null && element.onyen != null){
         //get faculty lastname/firstname
         schema.Faculty.findOne({pid: element.pid}).exec().then(function(result){
           if(result != null){
             result.onyen = element.onyen;
+            result.csID = element.csID;
             result.firstName = element.firstName;
             result.lastName = element.lastName;
+            result.sectionNumber = element.sectionNumber;
             result.active = element.active;
             result.admin = element.admin;
             result.save(function(error){

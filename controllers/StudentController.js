@@ -587,6 +587,7 @@ studentController.upload = function(req, res){
         if(z[0] === '!') continue;
         //parse out the column, row, and value
         var tt = 0;
+        //z contains the position in the sheet, so A1, A2, etc
         for(var i = 0; i < z.length; i++){
           if(!isNaN(z[i])){
             tt = i;
@@ -608,7 +609,10 @@ studentController.upload = function(req, res){
     //console.log(data);
     var count = 0;
     console.log(data.length);
-    for(let element of data){
+    //for(let element of data){
+    data.forEach(function(element){
+
+
       console.log(element);
       //verify that all fields exist
       if(element.onyen != null && element.firstName != null && element.lastName != null && element.pid != null && element.advisor != null){
@@ -652,7 +656,7 @@ studentController.upload = function(req, res){
                   schema.Student.findOne({pid: element.pid}).exec().then(function(result){
                     if(stud1 != null || result != null){
                       res.render("../views/error.ejs", {string: element.lastName+" contains an onyen or pid that already exists."});
-                      break;
+                      return;
                     }
                     else{
                       var inputStudent = new schema.Student(util.validateModelData(element, schema.Student));
@@ -662,8 +666,9 @@ studentController.upload = function(req, res){
                           res.redirect("/student/upload/true");
                         }
                       }).catch(function(err){
+                      	console.log(element);
                         res.render("../views/error.ejs", {string: element.lastName+" did not save because something was wrong with it."});
-                        break;
+                        return;
                       });
                     }
                   });
@@ -679,7 +684,7 @@ studentController.upload = function(req, res){
                 }).catch(
                   function(err){
                     res.render("../views/error.ejs", {string: element.lastName+" did not update because something was wrong with it."});
-                    break;
+                    return;
                   });
               }
             });
@@ -692,12 +697,11 @@ studentController.upload = function(req, res){
       else{
         console.log("Success");
         res.render("../views/error.ejs", {string: element.lastName+" did not save because it is missing a field"});
-        break;
+        return;
       }
-    };
+    });
   });
 }
-
 
 
 studentController.download = function(req, res){

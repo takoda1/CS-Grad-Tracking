@@ -24,19 +24,27 @@ table {
 
 /* faculty table column widths*/
 .col-facultyOnyen {
-	width: 20%;
+	width: 15%;
+}
+
+.col-facultyCSID {
+	width: 10%;
 }
 
 .col-facultyFirstname {
-	width: 20%;
+	width: 15%;
 }
 
 .col-facultyLastname {
-	width: 20%;
+	width: 15%;
 }
 
 .col-facultyPid {
-	width: 20%;
+	width: 15%;
+}
+
+.col-facultySectionNumber{
+	width: 10%;
 }
 
 .col-facultyActive {
@@ -46,6 +54,7 @@ table {
 .col-delete {
 	width: 10%;
 }
+
 /* semester table column widths */
 .col-SemesterYear {
 	width: 40%;
