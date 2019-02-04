@@ -149,8 +149,8 @@ table {
 	flex-direction: column;
 }
 
-.lightGreen {
-	color: #99ff66;
+.editColor {
+	color: black;
 }
 
 label.autoHyphen {

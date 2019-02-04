@@ -22,7 +22,7 @@
 					<h1>Courses</h1>
 					<h3 class="searchTextColor"><%=search%></h3>
 					 <% if(courses.length>0) { %>
-						<table align="center" border="1" class="table display-table table-dark">
+						<table align="center" border="1" class="table display-table table-striped table-bordered">
 							<thead>
 								<tr>
 									<th scope="col" class="col-course-department">Department</th>
@@ -53,7 +53,7 @@
 										<td>
 											<div class="editRow">
 												<div class="editColumn">
-													<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><i class="fas fa-edit lightGreen"></i></a>
+													<a href="/course/edit/<%=courses[i]._id%>" class="editTag"><i class="fas fa-edit editColor"></i></a>
 												</div>
 												<div class="editColumn">
 													<form action="/course/delete/<%= courses[i]._id%>" method="post">
