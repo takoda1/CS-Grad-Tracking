@@ -23,7 +23,7 @@
 					<h1>Jobs</h1>
 					<h3 class="searchTextColor"><%=search%></h3>
 					 <% if(jobs.length>0) { %>
-						<table align="center" border="1" class="table table-dark">
+						<table align="center" border="1" class="table table-striped table-bordered">
 							<thead>
 								<tr>
 									<th scope="col" class="col-1">Position</th>
@@ -68,7 +68,7 @@
 										<td>
 										<div class="editRow">
 											<div class="editColumn">	
-											<a href="/job/edit/<%=jobs[i]._id%>" class="editTag"><i class="fas fa-edit lightGreen"></i></a>
+											<a href="/job/edit/<%=jobs[i]._id%>" class="editTag"><i class="fas fa-edit editColor"></i></a>
 											</div>
 											<div class="editColumn">
 											<form action="/job/delete/<%=jobs[i]._id%>" method="post">

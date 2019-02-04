@@ -23,7 +23,7 @@
 					<h1>Faculty</h1>
 					<h3 class="searchTextColor"><%=search%></h3>
 					 <% if(faculty.length>0) { %>
-						<table align="center" border="1" class="table display-table table-dark">
+						<table align="center" border="1" class="table display-table table-striped table-bordered">
 							<thead>
 								<tr>
 									<th scope="col" class="col-facultyOnyen">Onyen</th>
@@ -50,7 +50,7 @@
 										<td>
 											<div class="editRow">
 												<div class="editColumn">
-													<a href="/faculty/edit/<%=faculty[i]._id%>" class="editTag"><i class="fas fa-edit lightGreen"></i></a>
+													<a href="/faculty/edit/<%=faculty[i]._id%>" class="editTag"><i class="fas fa-edit editColor"></i></a>
 												</div>
 												<div class="editColumn">
 													<form action="/faculty/delete/<%=faculty[i]._id%>" method="post">
