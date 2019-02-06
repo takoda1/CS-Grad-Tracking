@@ -31,8 +31,9 @@
 								<tr>
 									<th scope="col">Position</th>
 									<th scope="col">Supervisor</th>
-									<th scope="col">Semester</th>
 									<th scope="col">Course</th>
+									<th scope="col">Semester</th>
+									<th scope="col">Hours</th>
 									<th scope="col">Description</th>
 									<th scope="col">Delete job</th>
 								</tr>
@@ -43,12 +44,13 @@
 									<tr>
 										<td><%= job[i].position%></td>
 										<td><%= job[i].supervisor.lastName%>,  <%=job[i].supervisor.firstName%></td>
-										<td><%= job[i].semester.season%> <%=job[i].semester.year%></td>
 										<% if(job[i].course != null) { %>
 										<td><%= job[i].course.department%> <%= job[i].course.number%>, <%=job[i].course.section%></td>
 										<% } else { %>
 										<td></td>
 										<% } %>
+										<td><%= job[i].semester.season%> <%=job[i].semester.year%></td>
+										<td><%= job[i].hours%> </td>
 										<% if(job[i].description != null) { %>
 										<td><%= job[i].description%></td>
 										<% } else { %>

@@ -137,7 +137,9 @@ var jobSchema = mongoose.Schema({
   supervisor: {type: mongoose.Schema.Types.ObjectId, ref: "Faculty"},
   semester: {type: mongoose.Schema.Types.ObjectId, ref: "Semester"},
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"},
-  description: String
+  description: String,
+  hours: Number,
+  fundingSource: String
   
 });
 
