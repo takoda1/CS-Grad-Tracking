@@ -54,14 +54,30 @@
 						</div>
 						<% } %>
 
-						<% if(job.description != null) { %>
+						
 						<div class="form-group row">
 							<label for="inputDescription" class="col-md-2 offset-md-3">Description</label>
 							<div class="col-md-4">
 								<input type="text" name="description" class="form-control" id="inputDescription" value="<%=job.description%>"/>
 							</div>
 						</div>
-						<% } %>
+						
+						<div class="form-group row" id="hours">
+							<label for="inputHours" class="col-md-2 offset-md-3">Hours</label>
+							<div class="col-md-4">
+								<input type="number"
+								 name="hours" class="form-control" id="inputHours" value=<%=job.hours%> />
+							</div>
+						</div>
+
+						<div class="form-group row" id="fundingSource">
+							<label for="inputFundingSource" class="col-md-2 offset-md-3">Funding source</label>
+							<div class="col-md-4">
+								<input type="text"
+								 name="fundingSource" class="form-control" id="inputFundingSource" value="<%=job.fundingSource%>" />
+							</div>
+						</div>
+
 
 						<% if(job.course == null) { %>
 						<div class="form-group row">

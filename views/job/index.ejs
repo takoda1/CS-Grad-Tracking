@@ -26,14 +26,16 @@
 						<table align="center" border="1" class="table table-striped table-bordered">
 							<thead>
 								<tr>
-									<th scope="col" class="col-1">Position</th>
-									<th scope="col" class="col-1">Supervisor</th>
-									<th scope="col" class="col-1">Course</th>
+									<th scope="col" class="col-jobPosition">Position</th>
+									<th scope="col" class="col-jobSupervisor">Supervisor</th>
+									<th scope="col" class="col-jobCourse">Course</th>
 									<!--<th scope="col">Description</th>-->
-									<th scope="col" class="col-1">Semester</th>
-									<th scope="col" class="col-1">Students</th>
-									<th scope="col" class="col-1">Assign</th>
-									<th scope="col" class="col-1"></th>
+									<th scope="col" class="col-jobSemester">Semester</th>
+									<th scope="col" class="col-jobHours">Hours</th>
+									<th scope="col" 
+									class="col-jobStudents">Students</th>
+									<th scope="col" class="col-jobAssign">Assign</th>
+									<th scope="col" class="col-jobDelete"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -48,6 +50,7 @@
 										<td></td>
 										<% } %>
 
+
 										<!-- <% if(jobs[i].description != null) { %>
 										<td><%= jobs[i].description%></td>
 										<% } else {%>
@@ -55,6 +58,8 @@
 										<% } %> -->
 
 										<td><%= jobs[i].semester.season%> <%= jobs[i].semester.year%></td>
+
+										<td><%= jobs[i].hours%></td>
 
 										<td>
 										<% for(var j = 0; j < jobs[i].students.length; j++){ %>

@@ -55,17 +55,8 @@ table {
 	width: 10%;
 }
 
-/* semester table column widths */
-.col-SemesterYear {
-	width: 40%;
-}
-
-.col-SemesterSeason {
-	width: 40%;
-}
-
-.col-SemesterDelete {
-	width: 20%;
+.col-jobPosition{
+	width:10%;
 }
 
 /*course table column widths */

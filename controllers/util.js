@@ -129,7 +129,7 @@ _.makeRegexp = function(input){
 _.initializeAllSemesters = function(){
   schema.Semester.find({}).remove().exec();
   var seasons = schema.Semester.schema.path("season").enumValues;
-  for(var i = 2000; i < 2100; i++){
+  for(var i = 2018; i < 2040; i++){
     for(var j = 0; j < seasons.length; j++){
       var semester = new schema.Semester({year: i, season: seasons[j]});
       semester.save().then(function(result){}).catch(function(err){});
