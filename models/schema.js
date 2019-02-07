@@ -158,6 +158,32 @@ var gradeSchema = mongoose.Schema({
    semester: {type: mongoose.Schema.Types.ObjectId, ref:"Semester"}
  });
 
+ var grantSchema = mongoose.Schema({
+
+ })
+
+ //form schemas
+ var cs01 = mongoose.Schema({
+  name: String, pid: Number,
+  comp283Covered: String, comp283Date: String,
+  comp410Covered: String, comp410Date: String,
+  comp411Covered: String, comp411Date: String,
+  comp455Covered: String, comp455Date: String,
+  comp521Covered: String, comp521Date: String,
+  comp520Covered: String, comp520Date: String,
+  comp530Covered: String, comp530Date: String,
+  comp524Covered: String, comp524Date: String,
+  comp541Covered: String, comp541Date: String,
+  comp550Covered: String, comp550Date: String,
+  math233Covered: String, math233Date: String,
+  math381Covered: String, math381Date: String,
+  math547Covered: String, math547Date: String,
+  math661Covered: String, math661Date: String,
+  stat435Covered: String, stat435Date: String,
+  studentSignature: String, studentDateSigned: String,
+  advisorSignature: String, advisorDateSigned: String
+ })
+
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
 schema.Student = mongoose.model("Student", studentSchema);

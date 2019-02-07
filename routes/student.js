@@ -82,6 +82,9 @@ router.get("/courses/:_id", authorizeAdvisor, student.courses);
 
 router.get("/uploadCourses/:uploadSuccess", authorizeAdmin, student.uploadCoursePage);
 
+//forms
+router.get("/forms/:_id/:title", authorizeAdvisor, student.viewForm);
+
 router.post('/post', authorizeAdmin, student.post);
 
 router.post('/put', authorizeAdmin, student.put);

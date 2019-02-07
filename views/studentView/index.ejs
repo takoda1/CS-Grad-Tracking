@@ -325,7 +325,7 @@
 				-->
 
 
-					<table align="center" border="1" class="table display-table table-dark">
+					<table align="center" border="1" class="table display-table table-striped table-bordered">
 							<thead>
 								<tr>
 									<th scope="col">Field</th>
@@ -445,7 +445,11 @@
 								</tr>
 								<tr>
 									<td>advisor</td>
-									<td><%=student.advisor.lastName%>, <%=student.advisor.firstName%></td>
+									<td>
+										<% if(student.advisor != null){ %>
+										<%=student.advisor.lastName%>, <%=student.advisor.firstName%>
+										<% } %>
+										</td>
 								</tr>
 							</tbody>
 						</table>
