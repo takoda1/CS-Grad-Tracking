@@ -78,7 +78,6 @@ var studentSchema = mongoose.Schema({
   jobHistory: [{type: mongoose.Schema.Types.ObjectId, ref: "Job"}],
   semesterStarted: { type: mongoose.Schema.Types.ObjectId, ref: "Semester" },
   advisor: { type: mongoose.Schema.Types.ObjectId, ref: "Faculty" },
-  notes: String,
   grades: [{type:mongoose.Schema.Types.ObjectId, ref: "Grade"}]
 });
 
@@ -165,6 +164,7 @@ var gradeSchema = mongoose.Schema({
  var noteSchema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   title: String,
+  date: Date;
   note: String
  })
 
