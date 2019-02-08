@@ -162,8 +162,15 @@ var gradeSchema = mongoose.Schema({
 
  })
 
+ var noteSchema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  title: String,
+  note: String
+ })
+
  //form schemas
- var cs01 = mongoose.Schema({
+ var CS01Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number,
   comp283Covered: String, comp283Date: String,
   comp410Covered: String, comp410Date: String,
@@ -182,7 +189,7 @@ var gradeSchema = mongoose.Schema({
   stat435Covered: String, stat435Date: String,
   studentSignature: String, studentDateSigned: String,
   advisorSignature: String, advisorDateSigned: String
- })
+ });
 
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
@@ -194,5 +201,7 @@ schema.CourseInfo = mongoose.model("CourseInfo", courseInfoSchema);
 schema.Job = mongoose.model("Job", jobSchema);
 schema.Grade = mongoose.model("Grade", gradeSchema);
 schema.SemesterReference = mongoose.model("SemesterReference", semesterReferenceSchema);
+schema.Note = mongoose.model("Note", noteSchema);
+schema.CS01 = mongoose.model("CS01", CS01Schema);
 
 module.exports = schema;
