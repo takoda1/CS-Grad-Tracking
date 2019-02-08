@@ -70,7 +70,8 @@ router.get("/notes/:_id", authorizeAdvisor, student.notesPage);
 
 router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
 
-router.get("/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
+//pdf version of forms
+//router.get("/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
 
 router.get("/upload/:uploadSuccess", authorizeAdmin, student.uploadPage);
 
@@ -82,8 +83,10 @@ router.get("/courses/:_id", authorizeAdvisor, student.courses);
 
 router.get("/uploadCourses/:uploadSuccess", authorizeAdmin, student.uploadCoursePage);
 
-//forms
-router.get("/forms/:_id/:title", authorizeAdvisor, student.viewForm);
+//next two are new form routes
+router.get("/forms/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
+
+router.post("/forms/update/:_id/:title", authorizeAdvisor, student.updateForm);
 
 router.post('/post', authorizeAdmin, student.post);
 

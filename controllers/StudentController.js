@@ -303,10 +303,66 @@ studentController.uploadForm = function(req, res){
   }
 }
 
-studentController.viewForm = funtion(req, res){
-  
+studentController.viewForm = function(req, res){
+  if(req.params.title != null && req.params._id != null){
+    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+      if(result != null){
+        var student = result;
+        console.log(req.params.title)
+        schema.CS01.find().exec().then(function(result){
+          console.log(result);
+          console.log(student._id);
+        })
+        schema[req.params.title].findOne({student: result._id}).exec().then(function(result){
+          console.log(result);
+          var form = {};
+          if(result != null){
+            form = result;
+          }
+          res.render("../views/student/"+req.params.title, {student: student, form: form});
+        });
+      }
+      else{
+        res.render("..views/error.ejs", {string: "Student id not specified."});
+      }
+    });
+  }
 }
 
+studentController.updateForm = function(req, res){
+  var input = req.body;
+  if(req.params.title != null && req.params._id != null){
+    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+      if(result != null){
+        var studentId = result._id;
+
+        
+        schema[req.params.title].findOneAndUpdate({student: studentId}, input).exec().then(function(result){
+          if(result != null){
+
+          }
+          else{
+            //still working on this
+            var inputModel = new schema[req.params.title](input);
+            inputModel.save().then(function(result){
+              console.log(result);
+              res.redirect("/student/forms/viewForm/"+studentId+"/"+req.params.title);
+            });
+          }
+          res.redirect("/student/forms/viewForm/"+studentId+"/"+req.params.title);
+        });
+      }
+      else{
+        res.render("../views/error.ejs", {string: "Student not found"});
+      }
+    })
+  }
+  else{
+    res.render("../views/error.ejs", {string: "Did not include student ID or title of form"});
+  }
+}
+
+//pdf version of forms
 // studentController.viewForm = function(req, res){
 //   if(req.params.title != null && req.params._id != null){
 //     //make sure student exists

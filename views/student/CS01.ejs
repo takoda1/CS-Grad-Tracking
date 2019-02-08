@@ -1,0 +1,45 @@
+<!-- views/student/cs01.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS01 Background Preperation Worksheet</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Background preperation worksheet</h3>
+					<h3>CS-01</h3>
+
+					<form action="/student/forms/update/<%=student._id%>/CS01" method="post">
+
+						<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+						<input type="text" class="form-control" id="" name="name" value="<%=form.name%>" required/>
+
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>
