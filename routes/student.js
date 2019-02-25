@@ -106,7 +106,9 @@ router.post("/addJobs", authorizeAdmin, student.addJobs);
 
 router.post("/uploadCourses", authorizeAdmin, student.uploadCourses);
 
-router.post("/notes/upload/:_id/:noteId", authorizeAdmin, student.addNotes);
+router.post("/notes/upload/:_id", authorizeAdvisor, student.addNewNote)
+
+router.post("/notes/upload/:_id/:noteId", authorizeAdvisor, student.updateNote);
 
 router.post("/notes/delete/:_id", authorizeAdvisor, student.deleteNotes);
 

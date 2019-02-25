@@ -818,20 +818,19 @@ studentController.notesPage = function(req, res){
   }
 }
 
-studentController.addNotes = function (req, res) {
+studentController.updateNote = function (req, res) {
+  console.log(input+" " +_id)
   var input = req.body;
   var _id = req.params.noteId;
   //verify that the required fields are not null
   if(req.params._id != null){
     //try to find a student by unique identifiers: onyen or PID, display error page if one found
+
     schema.Student.findOne({_id: req.params._id}).exec().then(function (result) {
       if (result != null){
         input.student = req.params._id;
         util.allFieldsExist(input, schema.Note);
-        
-        schema.Note.find().exec().then(function(result){
-          console.log(result);
-        })
+
         console.log(input);
         schema.Note.findOneAndUpdate({_id: _id}, input).exec().then(function(result){
           if(result != null){
@@ -853,6 +852,33 @@ studentController.addNotes = function (req, res) {
     res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
   }
 }
+
+studentController.addNewNote = function (req, res) {
+  var input = req.body;
+  //verify that the required fields are not null
+  if(req.params._id != null){
+    //try to find a student by unique identifiers: onyen or PID, display error page if one found
+
+    schema.Student.findOne({_id: req.params._id}).exec().then(function (result) {
+      if (result != null){
+        input.student = req.params._id;
+        util.allFieldsExist(input, schema.Note);
+
+        console.log(input);
+        var inputModel = new schema.Note(input);
+        inputModel.save().then(function(result){
+          res.redirect("/student/notes/"+req.params._id);
+        })
+      }
+    }).catch(function (err) {
+      res.json({"error": err.message, "origin": "student.post"})
+    });
+  }
+  else{
+    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
+  }
+}
+
 
 studentController.deleteNotes = function(req, res){
   var noteID = req.body.noteID;

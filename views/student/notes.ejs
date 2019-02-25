@@ -30,10 +30,7 @@
 									<div class="col-md-4">
 										<input type="text" class="form-control" name="title" value="<%=notes[i].title%>" required/>
 									</div>
-								</div>
-
-								<div class="row">
-									<label class="col-md-1">Date</label>
+									<label class="col-md-1 offset-md-1">Date</label>
 									<div class="col-md-4">
 										<input type="hidden" class="form-control" name="date" value="<%=notes[i].date%>" required><%=notes[i].date%></input>
 									</div>
@@ -41,8 +38,8 @@
 
 								<div class="row">
 									<label class="col-md-1">Note</label>
-									<div class="col-md-4">
-										<input type="text" class="form-control" name="note" value="<%=notes[i].note%>" required/>
+									<div class="col-md-11">
+										<textarea class="form-control" name="note" value="<%=notes[i].note%>" required><%=notes[i].note%></textarea>
 									</div>
 								</div>
 
@@ -63,19 +60,22 @@
 					<form action="/student/notes/upload/<%=student._id%>" method="post">
 						<div class="form-group row">
 							<div class="col-md-12">
-								<label class="col-md-4">Title</label>
-								<div class="col-md-8">
-									<input type="text" class="form-control" name="title" required/>
+								<div class="row">
+									<label class="col-md-1">Title</label>
+									<div class="col-md-4">
+										<input type="text" class="form-control" name="title" required/>
+									</div>
+									<label class="col-md-1 offset-md-1">Date</label>
+									<div class="col-md-4">
+										<input type="Date" class="form-control" name="date" value="<%=Date().toString()%>" required/>
+									</div>
 								</div>
 
-								<label class="col-md-4">Date</label>
-								<div class="col-md-8">
-									<input type="Date" class="form-control" name="date" value="<%=Date().toString()%>" required/>
-								</div>
-
-								<label class="col-md-4">Note</label>
-								<div class="col-md-8">
-									<input type="text" class="form-control" name="note" required/>
+								<div class="row">
+									<label class="col-md-1">Note</label>
+									<div class="col-md-11">
+										<input type="text" class="form-control" name="note" required/>
+									</div>
 								</div>
 
 								<div class="col-md-8 offset-md-2">
