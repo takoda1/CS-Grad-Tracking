@@ -241,36 +241,22 @@ studentController.formPage = function(req, res){
   if(req.params._id != null){
     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
       var student = result;
-      res.render("../views/student/forms.ejs", {student: student});
+      schema.Form.find({student:result._id}).exec().then(function(result){
+        var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
+        var existingForms = result;
+        var uploadSuccess = false;
+        if(req.params.uploadSuccess == "true"){
+          uploadSuccess = true;
+        }
+        res.render("../views/student/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
+      });
+      
     });
   }
   else{
     res.render("../views/error.ejs", {string: "StudentId incorrect"});
   }
 }
-
-
-// studentController.formPage = function(req, res){
-//   if(req.params._id != null){
-//     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
-//       var student = result;
-//       schema.Form.find({student:result._id}).exec().then(function(result){
-//         var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
-//         var existingForms = result;
-//         var uploadSuccess = false;
-//         if(req.params.uploadSuccess == "true"){
-//           uploadSuccess = true;
-//         }
-//         res.render("../views/student/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
-//       });
-      
-//     });
-//   }
-//   else{
-//     res.render("../views/error.ejs", {string: "StudentId incorrect"});
-//   }
-// }
-
 
 studentController.uploadForm = function(req, res){
   var studId = req.params._id;
@@ -318,83 +304,25 @@ studentController.uploadForm = function(req, res){
 }
 
 studentController.viewForm = function(req, res){
-  if(req.params.title != null && req.params._id != null && req.params.uploadSuccess != null){
-    var uploadSuccess = false;
-    if(req.params.uploadSuccess == "true"){
-      uploadSuccess = true;
-    }
+  if(req.params.title != null && req.params._id != null){
+    //make sure student exists
     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
       if(result != null){
-        var student = result;
-        console.log(req.params.title);
-        schema[req.params.title].findOne({student: result._id}).exec().then(function(result){
-          console.log(result);
-          var form = {};
-          if(result != null){
-            form = result;
+        var filePath = path.join(__dirname, "../data/forms/"+req.params._id+req.params.title+".pdf");
+        fs.access(filePath, function(err){
+          if(err){
+            res.render("../views/error.ejs", {string: "File does not exist."});
+          } 
+          else{
+            var file = fs.createReadStream(filePath);
+            res.setHeader("Content-type", "application/pdf");
+            file.pipe(res);
           }
-         res.render("../views/student/"+req.params.title, {student: student, form: form, uploadSuccess: uploadSuccess});
         });
-      }
-      else{
-        res.render("..views/error.ejs", {string: "Student id not specified."});
       }
     });
   }
 }
-
-studentController.updateForm = function(req, res){
-  var input = req.body;
-  if(req.params.title != null && req.params._id != null){
-    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
-      if(result != null){
-        var studentId = result._id;
-
-        
-        schema[req.params.title].findOneAndUpdate({student: studentId}, input).exec().then(function(result){
-          if(result != null){
-            res.redirect("/student/forms/viewForm/"+studentId+"/"+req.params.title+"/true");
-          }
-          else{
-            var inputModel = new schema[req.params.title](input);
-            inputModel.save().then(function(result){
-              console.log(result);
-              res.redirect("/student/forms/viewForm/"+studentId+"/"+req.params.title+"/true");
-            });
-          }
-        });
-      }
-      else{
-        res.render("../views/error.ejs", {string: "Student not found"});
-      }
-    })
-  }
-  else{
-    res.render("../views/error.ejs", {string: "Did not include student ID or title of form"});
-  }
-}
-
-//pdf version of forms
-// studentController.viewForm = function(req, res){
-//   if(req.params.title != null && req.params._id != null){
-//     //make sure student exists
-//     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
-//       if(result != null){
-//         var filePath = path.join(__dirname, "../data/forms/"+req.params._id+req.params.title+".pdf");
-//         fs.access(filePath, function(err){
-//           if(err){
-//             res.render("../views/error.ejs", {string: "File does not exist."});
-//           } 
-//           else{
-//             var file = fs.createReadStream(filePath);
-//             res.setHeader("Content-type", "application/pdf");
-//             file.pipe(res);
-//           }
-//         });
-//       }
-//     });
-//   }
-// }
 
 studentController.courses = function(req, res){
   if(req.params._id != null){
@@ -755,7 +683,6 @@ studentController.upload = function(req, res){
   });
 }
 
-
 studentController.download = function(req, res){
   schema.Student.find({}, "-_id -__v").populate("advisor").populate("semesterStarted").sort({lastName:1, firstName:1}).lean().exec().then(function(result){
     var m = schema.Student.schema.obj;
@@ -805,10 +732,9 @@ studentController.notesPage = function(req, res){
   if(req.params._id) {
     schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
       if(result != null) {
-        var student = result;
-        schema.Note.find({student: req.params._id}).exec().then(function(result){
-          res.render("../views/student/notes", {student: student, notes: result});
-        });
+        var student;
+        student = result;
+        res.render("../views/student/notes", {student: student});
       } else {
         res.render("../views/error.ejs", {string: "Student not found"});
       }
@@ -818,50 +744,12 @@ studentController.notesPage = function(req, res){
   }
 }
 
-studentController.addNotes = function (req, res) {
-  var input = req.body;
-  var _id = req.params.noteId;
-  //verify that the required fields are not null
-  if(req.params._id != null){
-    //try to find a student by unique identifiers: onyen or PID, display error page if one found
-    schema.Student.findOne({_id: req.params._id}).exec().then(function (result) {
-      if (result != null){
-        input.student = req.params._id;
-        util.allFieldsExist(input, schema.Note);
-        
-        schema.Note.find().exec().then(function(result){
-          console.log(result);
-        })
-        console.log(input);
-        schema.Note.findOneAndUpdate({_id: _id}, input).exec().then(function(result){
-          if(result != null){
-            res.redirect("/student/notes/"+req.params._id);
-          }
-          else{
-            var inputModel = new schema.Note(input);
-            inputModel.save().then(function(result){
-              res.redirect("/student/notes/"+req.params._id);
-            })
-          }
-        });
-      }
-    }).catch(function (err) {
-      res.json({"error": err.message, "origin": "student.post"})
-    });
+studentController.addNotes = function(req, res){
+  var uploadSuccess = false;
+  if(req.params.uploadSuccess == "true"){
+    uploadSuccess = true;
   }
-  else{
-    res.render("../views/error.ejs", {string: "RequiredParamNotFound"});
-  }
+  res.render("../views/student/notes.ejs", {uploadSuccess: uploadSuccess});
 }
-
-studentController.deleteNotes = function(req, res){
-  var noteID = req.body.noteID;
-  schema.Note.findOneAndRemove({_id: noteID}).exec().then(function(result){
-    res.redirect("/student/notes/"+req.params._id);
-  }).catch(function(error){
-    //handle error if note not delete
-  });
-}
-
 
 module.exports = studentController;

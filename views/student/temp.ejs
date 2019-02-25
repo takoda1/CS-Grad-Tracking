@@ -1,0 +1,28 @@
+<!-- views/job/notes.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Student Notes</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-2 sidebar text-center'>
+					<%- include('../partials/admin-sidebar.ejs') %>
+				</div>
+				
+				<div class='col-lg-10 panelbg text-center'>
+					<%- include("./studentBarPartial.ejs") %>
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+					<h1>Notes</h1>
+
+				</div>
+			</div>
+		</div>
+	</body>
+	
+</html>
