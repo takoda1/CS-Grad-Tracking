@@ -164,7 +164,7 @@ var gradeSchema = mongoose.Schema({
  var noteSchema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   title: String,
-  date: Date;
+  date: Date,
   note: String
  })
 
@@ -191,6 +191,75 @@ var gradeSchema = mongoose.Schema({
   advisorSignature: String, advisorDateSigned: String
  });
 
+ var CS02Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number, dateSubmitted: String,
+  courseNumber: String,
+  basisWaiver: String,
+  advisorSignature: String, advisorDateSigned: String,
+  instructorSignature: String, instructorDateSigned: String
+ })
+
+ var CS04Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number, dateSubmitted: String,
+  projectDescription: String,
+  docProprietary: Boolean,
+  studentSignature: String, studentDateSigned: String,
+  chairmanSignature: String, chairmanDateSigned: String,
+  approved: Boolean
+ })
+
+ var CS05Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number, dateSubmitted: String,
+  oralComprehensiveExam: Boolean,
+  thesis: Boolean,
+  nominee1: String, nominee1Department:String, nominee1Status: String,
+  nominee2: String, nominee2Department:String, nominee2Status: String,
+  nominee3: String, nominee3Department:String, nominee3Status: String,
+  nominee4: String, nominee4Department:String, nominee4Status: String,
+  nominee5: String, nominee5Department:String, nominee5Status: String,
+  thesisAdviser: String,
+  committeeChairman: String,
+  directorSignature: String, directorDateSigned: String
+ })
+
+  var CS06Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number, dateSubmitted: String, dateEntered: String,
+  dissTitle: String,
+  comp915: Boolean,
+  breadthCourseCategory1: String, breadthCourseInfo1: String, breadthCourseDate1: String, breadthCourseGrade1: String,
+  breadthCourseCategory2: String, breadthCourseInfo2: String, breadthCourseDate2: String, breadthCourseGrade2: String,
+  breadthCourseCategory3: String, breadthCourseInfo3: String, breadthCourseDate3: String, breadthCourseGrade3: String,
+  breadthCourseCategory4: String, breadthCourseInfo4: String, breadthCourseDate4: String, breadthCourseGrade4: String,
+  breadthCourseCategory5: String, breadthCourseInfo5: String, breadthCourseDate5: String, breadthCourseGrade5: String,
+  breadthCourseCategory6: String, breadthCourseInfo6: String, breadthCourseDate6: String, breadthCourseGrade6: String,
+  concentrationCourseInfo1: String, concentrationCourseDate1: String, concentrationCourseHours1: String,
+  concentrationCourseInfo2: String, concentrationCourseDate2: String, concentrationCourseHours2: String,
+  concentrationCourseInfo3: String, concentrationCourseDate3: String, concentrationCourseHours3: String,
+  concentrationCourseInfo4: String, concentrationCourseDate4: String, concentrationCourseHours4: String,
+  otherCourseInfo1: String, otherCourseHours1: String,
+  otherCourseInfo2: String, otherCourseHours2: String,
+  otherCourseInfo3: String, otherCourseHours3: String,
+  otherCourseInfo4: String, otherCourseHours4: String,
+  note: String,
+  otherCourses: String,
+  minor: String,
+  adviser: String, chairman: String,
+  committeeMember1: String,
+  committeeMember2: String,
+  committeeMember3: String,
+  committeeMember4: String,
+  committeeMember5: String,
+  committeeMember6: String,
+  committeeAdviserSignature: String,
+  PHDProgramApproved: Boolean,
+  disapproveReason: String,
+  directorSignature: String
+ })
+
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
 schema.Student = mongoose.model("Student", studentSchema);
@@ -203,5 +272,10 @@ schema.Grade = mongoose.model("Grade", gradeSchema);
 schema.SemesterReference = mongoose.model("SemesterReference", semesterReferenceSchema);
 schema.Note = mongoose.model("Note", noteSchema);
 schema.CS01 = mongoose.model("CS01", CS01Schema);
+schema.CS02 = mongoose.model("CS02", CS02Schema);
+
+schema.CS04 = mongoose.model("CS04", CS04Schema);
+schema.CS05 = mongoose.model("CS05", CS05Schema);
+schema.CS06 = mongoose.model("CS06", CS06Schema);
 
 module.exports = schema;

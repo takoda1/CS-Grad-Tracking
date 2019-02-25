@@ -1,0 +1,83 @@
+<!-- views/student/forms.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Student forms</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Upload success!</strong>
+					</div>
+					<% } %>
+
+					<h3 class="space">View a form</h3>
+					<% for(var i = 0; i < existingForms.length; i++) { %>
+					<div class="col-md-4 offset-md-4">
+						<a href="/student/viewForm/<%=student._id%>/<%=existingForms[i].title%>" target="_blank"><%=existingForms[i].title%></a>
+					</div>
+					<% } %>
+
+					<h3 class="space">Fillable forms; fill then download and then upload on this page.</h3>
+					<a href="https://cs.unc.edu/academics/graduate/ms-requirements/progress-forms/" target="_blank" >Forms</a>
+
+					<h3 class="space">Upload a form</h3>
+					<form action="/student/uploadForm/<%=student._id%>" enctype="multipart/form-data" method="post">
+						<div class="form-group row">
+							<label for="inputTitle" class="col-md-2 offset-md-4">Title</label>
+							<div class="col-md-2">
+								<select name="title" class="form-control" id="inputTitle" required>
+									<option value=""></option>
+									<% for(var i = 0; i < formTitles.length; i++){ %>
+									<option value="<%=formTitles[i]%>"><%=formTitles[i]%></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="inputOther" class="col-md-2 offset-md-4">Name of Other form:</label>
+							<div class="col-md-2">
+								<input type="text" name="other" class="form-control" id="inputOther"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="inputForm" class="col-md-2 offset-md-4">Form</label>
+							<div class="col-md-2">
+								<input type="file" name="form" class="form-control-file" id="inputSheet" accept="application/pdf" required/>
+							</div>
+						</div>
+						<div class="col-md-4 offset-md-4">
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>

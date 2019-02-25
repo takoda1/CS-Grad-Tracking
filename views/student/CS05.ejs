@@ -1,0 +1,333 @@
+<!-- views/student/CS05.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS05 Request for Appointment of M.S. Committee</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Request for Appointment of M.S. Committee</h3>
+					<h3>CS-05</h3>
+
+					<div align="left">
+
+						<form action="/student/forms/update/<%=student._id%>/CS05" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-4">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+								<div class="col-md-4">
+									<div>Date submitted</div>
+									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-2">
+									<div>Oral Comprehensive Examination</div>
+								</div>
+								<div class="col-md-2">
+									<select name="oralComprehensiveExam" class="form-control" id="inputStatus">
+										<option value=<%=form.oralComprehensiveExam%>><%=form.oralComprehensiveExam%></option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="verticalSpace"/>
+
+							<div class="row">
+								<div class="col-md-2">
+									<div>Thesis</div>
+								</div>
+								<div class="col-md-2">
+									<select name="thesis" class="form-control" id="inputStatus">
+										<option value=<%=form.thesis%>><%=form.thesis%></option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-4">
+									<strong>Nominee name</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Department</strong>
+								</div>
+								<div class="col-md-3">
+									<strong>Graduate Faculty status</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Select Adviser</strong>
+								</div>
+								<div class="col-md-1">
+									<strong>Select Chairman</strong>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-4">
+
+									<div class="form-group row">
+										<label class="col-md-1">1. </label>
+										<div class="col-md-11">
+											<input type="text" class="form-control" name="nominee1" value="<%=form.nominee1%>" id="nominee1Name" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-1">2. </label>
+										<div class="col-md-11">
+											<input type="text" class="form-control" name="nominee2" value="<%=form.nominee2%>" id="nominee2Name" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-1">3. </label>
+										<div class="col-md-11">
+											<input type="text" class="form-control" name="nominee3" value="<%=form.nominee3%>" id="nominee3Name" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-1">4. </label>
+										<div class="col-md-11">
+											<input type="text" class="form-control" name="nominee4" value="<%=form.nominee4%>" id="nominee4Name" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-1">5. </label>
+										<div class="col-md-11">
+											<input type="text" class="form-control" name="nominee5" value="<%=form.nominee5%>" id="nominee5Name" />
+										</div>
+									</div>
+
+								</div>
+								<div class="col-md-3">
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee1Department" value="<%=form.nominee1Department%>"/>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee2Department" value="<%=form.nominee2Department%>"/>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee3Department" value="<%=form.nominee3Department%>"/>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee4Department" value="<%=form.nominee4Department%>"/>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee5Department" value="<%=form.nominee5Department%>"/>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group row">
+										<div class="col-md-12">
+											<select name="nominee1Status" class="form-control">
+												<option value=<%=form.nominee1Status%>><%=form.nominee1Status%></option>
+												<option value="Full">Full</option>
+												<option value="Limited">Limited</option>
+												<option value="Special">Special</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<select name="nominee2Status" class="form-control">
+												<option value=<%=form.nominee2Status%>><%=form.nominee2Status%></option>
+												<option value="Full">Full</option>
+												<option value="Limited">Limited</option>
+												<option value="Special">Special</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<select name="nominee3Status" class="form-control">
+												<option value=<%=form.nominee3Status%>><%=form.nominee3Status%></option>
+												<option value="Full">Full</option>
+												<option value="Limited">Limited</option>
+												<option value="Special">Special</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<select name="nominee4Status" class="form-control">
+												<option value=<%=form.nominee4Status%>><%=form.nominee4Status%></option>
+												<option value="Full">Full</option>
+												<option value="Limited">Limited</option>
+												<option value="Special">Special</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<select name="nominee5Status" class="form-control">
+												<option value=<%=form.nominee5Status%>><%=form.nominee5Status%></option>
+												<option value="Full">Full</option>
+												<option value="Limited">Limited</option>
+												<option value="Special">Special</option>
+											</select>
+										</div>
+									</div>
+
+								</div>
+								<div class="col-md-1">
+									<% for(var i = 1; i < 6; i++) { %>
+										<div class="form-group row">
+											<div class="col-md-12">
+												<button type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false" autocomplete="off" 
+												id="adviser<%=i%>" onclick=selectAdviser(<%=i%>)>A</button>
+											</div>
+										</div>
+									<% } %>
+								</div>
+								<div class="col-md-1">
+									<% for(var i = 1; i < 6; i++) { %>
+										<div class="form-group row">
+											<div class="col-md-12">
+												<button type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false" autocomplete="off" 
+												id="committee<%=i%>" onclick=selectCommittee(<%=i%>)>C</button>
+											</div>
+										</div>
+									<% } %>
+								</div>
+
+							</div>
+
+
+							<hr></hr>
+
+							
+
+							<div class="row">
+								<div class="col-md-1">
+									<div>Thesis Adviser:</div>
+								</div>
+								<div class="col-md-3">
+									<input type="hidden" class="form-control" name="thesisAdviser" value="<%=form.thesisAdviser%>" id="thesisAdviserInput" required />
+									<%=form.thesisAdviser%>
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-1">
+									<div>Committee chairman:</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="hidden" class="form-control" name="committeeChairman" value="<%=form.committeeChairman%>" id="committeeChairmanInput" required />
+									<%=form.committeeChairman%>
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Director of Graduate Studies Signature:</div>
+									<input type="text" class="form-control" name="directorSignature" value="<%=form.directorSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="directorDateSigned" value="<%=form.directorDateSigned%>" required />
+								</div>
+							</div>
+
+							<div class="verticalSpace" />
+
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+		function selectAdviser(number){
+			for(var i = 1; i < 6; i++){
+				if(i != number){
+					document.getElementById("adviser"+i).classList.remove("active");
+					document.getElementById("adviser"+i).ariaPressed = false;
+				}
+			}
+			var tempName = document.getElementById("nominee"+number+"Name").value;
+			document.getElementById("thesisAdviserInput").value = tempName;
+		}
+
+		function selectCommittee(number){
+			for(var i = 1; i < 6; i++){
+				if(i != number){
+					document.getElementById("committee"+i).classList.remove("active");
+					document.getElementById("committee"+i).ariaPressed = false;
+				}
+			}
+			var tempName = document.getElementById("nominee"+number+"Name").value;
+			document.getElementById("committeeChairmanInput").value = tempName;
+		}
+	</script>
+</html>

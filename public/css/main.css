@@ -114,6 +114,11 @@ table {
 	margin:10px;
 }
 
+.verticalSpace {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
 .fabutton {
 	background: none;
 	padding:0px:
@@ -157,4 +162,8 @@ This is for highlighting search text on index pages
 */
 .searchTextColor {
 	color:#73a073;
+}
+
+.underline {
+	text-decoration: underline;
 }

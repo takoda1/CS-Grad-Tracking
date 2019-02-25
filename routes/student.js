@@ -68,7 +68,9 @@ router.get("/jobs/:_id", authorizeAdvisor, student.jobs);
 
 router.get("/notes/:_id", authorizeAdvisor, student.notesPage);
 
-router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
+router.get("/forms/:_id", authorizeAdvisor, student.formPage);
+//pdf version of forms page route
+//router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
 
 //pdf version of forms
 //router.get("/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
@@ -84,7 +86,7 @@ router.get("/courses/:_id", authorizeAdvisor, student.courses);
 router.get("/uploadCourses/:uploadSuccess", authorizeAdmin, student.uploadCoursePage);
 
 //next two are new form routes
-router.get("/forms/viewForm/:_id/:title", authorizeAdvisor, student.viewForm);
+router.get("/forms/viewForm/:_id/:title/:uploadSuccess", authorizeAdvisor, student.viewForm);
 
 router.post("/forms/update/:_id/:title", authorizeAdvisor, student.updateForm);
 
@@ -104,6 +106,8 @@ router.post("/addJobs", authorizeAdmin, student.addJobs);
 
 router.post("/uploadCourses", authorizeAdmin, student.uploadCourses);
 
-router.post("/notes", authorizeAdmin, student.notesPage);
+router.post("/notes/upload/:_id/:noteId", authorizeAdmin, student.addNotes);
+
+router.post("/notes/delete/:_id", authorizeAdvisor, student.deleteNotes);
 
 module.exports = router;

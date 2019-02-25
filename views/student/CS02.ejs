@@ -1,0 +1,117 @@
+<!-- views/student/CS02.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS02 Course Waiver</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Course Waiver</h3>
+					<h3>CS-02</h3>
+
+					<div align="left">
+						<div>This student is exempt from the breadth requirement listed below.
+						</div>
+
+						<hr></hr>
+
+						<form action="/student/forms/update/<%=student._id%>/CS02" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-4">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+								<div class="col-md-4">
+									<div>Date submitted</div>
+									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Course Number:</div>
+									<input type="text" class="form-control" name="courseNumber" value="<%=form.courseNumber%>" required />
+								</div>
+							</div>
+
+							<div class="verticalSpace" />
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Basis for Waiver</div>
+									<div>Options: Prior course work, More Advanced Course Here, Other</div>
+									<input type="text" class="form-control" name="basisWaiver" value="<%=form.basisWaiver%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Advisor signature:</div>
+									<input type="text" class="form-control" name="advisorSignature" value="<%=form.advisorSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="advisorDateSigned" value="<%=form.advisorDateSigned%>" required />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Designated Instructor Signature:</div>
+									<input type="text" class="form-control" name="instructorSignature" value="<%=form.instructorSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="instructorDateSigned" value="<%=form.instructorDateSigned%>" required />
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>
