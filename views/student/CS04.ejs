@@ -1,0 +1,129 @@
+<!-- views/student/CS04.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS04 Outside Review Option</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Outside Review Option</h3>
+					<h3>CS-04</h3>
+
+					<div align="left">
+						<div>This student has successfully completed a project as a thesis substitute in partial fulfillment of the requirements for the degree of Master of Science in Computer Science.
+						</div>
+
+						<hr></hr>
+
+						<form action="/student/forms/update/<%=student._id%>/CS04" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-4">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+								<div class="col-md-4">
+									<div>Date submitted</div>
+									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div><strong>Brief Description of project:</strong></div>
+									<textarea class="form-control" name="projectDescription" required><%=form.projectDescription%></textarea>
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Is the documentation proprietary?</div>
+									<select name="docProprietary" class="form-control" id="inputStatus">
+										<option value=<%=form.docProprietary%>><%=form.docProprietary%></option>
+										<option value=false>No. The documentation is attached.</option>
+										<option value=true>Yes. A non-disclosure agreement is attached.</option>
+									</select>
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Student signature:</div>
+									<input type="text" class="form-control" name="studentSignature" value="<%=form.studentSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="studentDateSigned" value="<%=form.studentDateSigned%>" required />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Chairman Signature:</div>
+									<input type="text" class="form-control" name="chairmanSignature" value="<%=form.chairmanSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="chairmanDateSigned" value="<%=form.chairmanDateSigned%>" required />
+								</div>
+							</div>
+
+							<div class="verticalSpace" />
+
+							<div>Approved</div>
+							<select name="approved" class="form-control" id="inputStatus">
+								<option value=<%=form.approved%>><%=form.approved%></option>
+								<option value=false>Not approved.</option>
+								<option value=true>Approved</option>
+							</select>
+
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>

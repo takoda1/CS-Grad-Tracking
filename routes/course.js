@@ -10,6 +10,17 @@ router.use(function(req, res, next){
 	});
 });
 
+router.use(function(req, res, next){
+	util.checkAdmin().then(function(result){
+		if(result){
+			next();	
+		}
+		else{
+			res.render("../views/error.ejs", {string:"Not admin"});
+		}
+	});
+});
+
 router.get("/", course.get);
 
 router.get("/edit/:_id", course.edit);

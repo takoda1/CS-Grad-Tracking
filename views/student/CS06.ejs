@@ -1,0 +1,256 @@
+<!-- views/student/CS06.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS06 PhD Program of Study</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>PhD Program of Study</h3>
+					<h3>CS-06</h3>
+
+					<div align="left">
+
+						<form action="/student/forms/update/<%=student._id%>/CS06" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-3">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-3">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+								<div class="col-md-3">
+									<div>Date submitted</div>
+									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
+								</div>
+								<div class="col-md-3">
+									<div>Date entered program</div>
+									<input type="text" class="form-control" name="dateEntered" value="<%=form.dateEntered%>" required />
+								</div>
+
+							</div>
+
+							<hr></hr>
+
+							<strong>Instructions:</strong> 
+							<div>This form details an individual program of study for the PhD Degree.  It should be filed with the Student Services Manager when the PhD program is substantially planned (typically by the <strong>6th semester</strong>) and can be amended subsequently.  Forms mentioned in this program of study can be filed separately and at a later date. </div>
+
+							<div class="verticalSpace" />
+
+							<div class="row">
+								<div class="col-md-2">
+									Title of Dissertation or Topic of Research Area
+								</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="dissTitle" value="<%=form.dissTitle%>" required />
+								</div>
+							</div>
+
+							<hr />
+
+							<strong>I. Course Requirements </strong>
+
+							<div>Note:  For Courses taken other than at UNC-CH, attach at least a catalog description and preferably a syllabus. </div>
+
+							<div class="verticalSpace"/>
+
+							<strong>A. Required Courses</strong>
+
+							<div class="row">
+								<div class="col-md-2">
+									<div>Comp 915: Technical Communication in CS. File CS-02 if waived.</div>
+								</div>
+								<div class="col-md-2">
+									<select name="comp915" class="form-control" id="inputStatus">
+										<option value=<%=form.comp915%>><%=form.comp915%></option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+							</div>
+							<div> Breadth Requirement: List courses below</div>
+
+							<hr />
+
+							<strong>Breadth Requirement Courses</strong>
+							<div>List the 6 courses taken to satisfy the distribution requirement.  Include the following information:</div>
+							<div><a href="https://cs.unc.edu/academics/graduate/ms-requirements/course-categories" target="_blank"> (click link for list of courses & categories)</a></div>
+							<div>T = Theory & Formal Thinking</div>
+							<div>S = Systems & Hardware</div>
+							<div>A = Applications</div>
+							<div>O = Outside of CS</div>
+							<div>-Include the sections numbers with any COMP 790 course listed.</div>
+							<div>-Courses taken outside UNC-CH must be graduate courses and not counted toward an undergraduate degree, and require submission of a <a href="https://cs.unc.edu/academics/graduate/ms-requirements/progress-forms" target="_blank" >course waiver.</a></div>
+							<div>Consult the official <a href="https://cs.unc.edu/academics/graduate/phd-requirements" target="_blank">CS PhD Degree Requirements</a> for eligible course and grade requirements.</div>
+
+							<hr></hr>
+
+							
+
+							<div class="row">
+								<div class="col-md-6">
+									<strong>Nominee (name and department)</strong>
+								</div>
+								<div class="col-md-6">
+									<strong>Graduate Faculty status (full, limited, or special)</strong>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+
+									<div class="form-group row">
+										<label class="col-md-2">1. </label>
+										<div class="col-md-10">
+											<input type="text" class="form-control" name="nominee1" value="<%=form.nominee1%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-2">2. </label>
+										<div class="col-md-10">
+											<input type="text" class="form-control" name="nominee2" value="<%=form.nominee2%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-2">3. </label>
+										<div class="col-md-10">
+											<input type="text" class="form-control" name="nominee3" value="<%=form.nominee3%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-2">4. </label>
+										<div class="col-md-10">
+											<input type="text" class="form-control" name="nominee4" value="<%=form.nominee4%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-2">5. </label>
+										<div class="col-md-10">
+											<input type="text" class="form-control" name="nominee5" value="<%=form.nominee5%>"/>
+										</div>
+									</div>
+
+								</div>
+								<div class="col-md-6">
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee1Status" value="<%=form.nominee1Status%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee2Status" value="<%=form.nominee2Status%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee3Status" value="<%=form.nominee3Status%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee4Status" value="<%=form.nominee4Status%>" />
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="nominee5Status" value="<%=form.nominee5Status%>"/>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+
+							<hr></hr>
+
+							
+
+							<div class="row">
+								<div class="col-md-1">
+									<div>Thesis Adviser:</div>
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="thesisAdviser" value="<%=form.thesisAdviser%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-1">
+									<div>Committee chairman:</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeChairman" value="<%=form.committeeChairman%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Director of Graduate Studies Signature:</div>
+									<input type="text" class="form-control" name="directorSignature" value="<%=form.directorSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="directorDateSigned" value="<%=form.directorDateSigned%>" required />
+								</div>
+							</div>
+
+							<div class="verticalSpace" />
+
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>
