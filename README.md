@@ -6,5 +6,5 @@ The clients of this project are all staff/administrators that work in Sitterson 
 students.
 
 Takoda Ren and Shane Flannigan are the students currently working on this project.
-Please note that most commits are made from the virtual machines that the project is run on and as a result, commits typically appear
+Please note that most commits are made from the virtual machines that the project is run on (it will appear that the commit is made by "root" and as a result, commits typically appear
 without any credit attributed to either student.
