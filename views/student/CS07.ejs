@@ -1,0 +1,89 @@
+<!-- views/student/CS07.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS07 Report of Disapproval of Dissertation Proposal</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Report of Disapproval of Dissertation Proposal</h3>
+					<h3>CS-07</h3>
+
+					<div align="left">
+
+						<hr></hr>
+
+						<form action="/student/forms/update/<%=student._id%>/CS07" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-6">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div>The proposed dissertation project has been investigated by the student’s doctoral committee and the dissertation proposal is judged to be unsatisfactory.</div>
+
+							<strong>COMMENTS:</strong>
+							<textarea class="form-control" name="comments"><%=form.comments%></textarea>
+
+							<hr></hr>
+							<div class="row">
+								<div class="col-md-4">
+									Committee Chairman Signature
+									<input type="text" class="form-control" name="chairmanSignature" value="<%=form.chairmanSignature%>" required />
+								</div>
+								<div class="col-md-4">
+									Date
+									<input type="text" class="form-control" name="chairmanDateSigned" value="<%=form.chairmanDateSigned%>" required />
+								</div>
+							</div>
+
+							<div class="verticalSpace"/>
+							
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>
