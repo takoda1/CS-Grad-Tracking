@@ -8,4 +8,3 @@ students.
 Takoda Ren and Shane Flannigan are the students currently working on this project.
 Please note that most commits are made from the virtual machines that the project is run on and as a result, commits typically appear
 without any credit attributed to either student.
- 
