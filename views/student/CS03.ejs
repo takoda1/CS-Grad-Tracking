@@ -1,0 +1,325 @@
+<!-- views/student/CS04.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS03 M.S. Program of Study</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>M.S. Program of Study</h3>
+					<h3>CS-03</h3>
+
+					<div align="left">
+
+						<hr></hr>
+
+						<form action="/student/forms/update/<%=student._id%>/CS03" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-4">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+								<div class="col-md-4">
+									<div>Date submitted</div>
+									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div>Instructions:  This form details an individual program of study for the MS Degree.  It should be filed with the Student Services Manager when the program is substantially planned <strong>(typically after two semester)</strong>, and can be amended subsequently.  Forms mentioned in this program of study can be filed separately and at a later date. </div>
+
+							<div class="verticalSpace"/>
+
+							<strong>I. Course Requirement</strong>
+							
+								<div>	- Minimum 30 hours total of courses conferring graduate credit, including courses transferred from UNC-CH Continuing Education or another institution.  Courses transferred in must be approved by and on file with the Graduate School.</div>
+								<div>	- Minimum 18 hours of COMP courses. </div>
+								<div>	- Minimum 3 hours of COMP 992 or COMP 993 (formal thesis) - maximum of 6 hours. </div>
+								<div>	- If a minor is elected, see Graduate School Handbook (http://handbook.unc.edu/preface.html)</div>
+							
+							<div>List the courses you expect to use to meet the MS requirements.  Include Section Number for COMP 790 and COMP 990-993 courses.  Do NOT list research team meeting seminars.  Indicate courses used to satisfy the distribution requirement with a mark in the DR column.</div>
+							<div class="row">
+								<div class="col-md-4">A = Applications</div>
+								<div class="col-md-4">S = Systems & Hardware</div>
+								<div class="col-md-4">T = Theory & Formal Thinking</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row">
+								<div class="col-md-1">
+									<div>DR</div>
+									<input type="text" class="form-control" name="DR1" value="<%=form.DR1%>"/>
+									<input type="text" class="form-control" name="DR2" value="<%=form.DR2%>"/>
+									<input type="text" class="form-control" name="DR3" value="<%=form.DR3%>"/>
+									<input type="text" class="form-control" name="DR4" value="<%=form.DR4%>"/>
+									<input type="text" class="form-control" name="DR5" value="<%=form.DR5%>"/>
+									<input type="text" class="form-control" name="DR6" value="<%=form.DR6%>"/>
+									<input type="text" class="form-control" name="DR7" value="<%=form.DR7%>"/>
+									<input type="text" class="form-control" name="DR8" value="<%=form.DR8%>"/>
+									<input type="text" class="form-control" name="DR9" value="<%=form.DR9%>"/>
+									<input type="text" class="form-control" name="DR10" value="<%=form.DR10%>"/>
+								</div>
+
+								<div class="col-md-2">
+									<div>University</div>
+									<input type="text" class="form-control" name="university1" value="<%=form.university1%>"/>
+									<input type="text" class="form-control" name="university2" value="<%=form.university2%>"/>
+									<input type="text" class="form-control" name="university3" value="<%=form.university3%>"/>
+									<input type="text" class="form-control" name="university4" value="<%=form.university4%>"/>
+									<input type="text" class="form-control" name="university5" value="<%=form.university5%>"/>
+									<input type="text" class="form-control" name="university6" value="<%=form.university6%>"/>
+									<input type="text" class="form-control" name="university7" value="<%=form.university7%>"/>
+									<input type="text" class="form-control" name="university8" value="<%=form.university8%>"/>
+									<input type="text" class="form-control" name="university9" value="<%=form.university9%>"/>
+									<input type="text" class="form-control" name="university10" value="<%=form.university10%>"/>
+								</div>
+
+								<div class="col-md-1">
+									<div>Department</div>
+									<input type="text" class="form-control" name="dept1" value="<%=form.dept1%>"/>
+									<input type="text" class="form-control" name="dept2" value="<%=form.dept2%>"/>
+									<input type="text" class="form-control" name="dept3" value="<%=form.dept3%>"/>
+									<input type="text" class="form-control" name="dept4" value="<%=form.dept4%>"/>
+									<input type="text" class="form-control" name="dept5" value="<%=form.dept5%>"/>
+									<input type="text" class="form-control" name="dept6" value="<%=form.dept6%>"/>
+									<input type="text" class="form-control" name="dept7" value="<%=form.dept7%>"/>
+									<input type="text" class="form-control" name="dept8" value="<%=form.dept8%>"/>
+									<input type="text" class="form-control" name="dept9" value="<%=form.dept9%>"/>
+									<input type="text" class="form-control" name="dept10" value="<%=form.dept10%>"/>
+
+								</div>
+								<div class="col-md-2">
+									<div>Course</div>
+									<input type="text" class="form-control" name="course1" value="<%=form.course1%>"/>
+									<input type="text" class="form-control" name="course2" value="<%=form.course2%>"/>
+									<input type="text" class="form-control" name="course3" value="<%=form.course3%>"/>
+									<input type="text" class="form-control" name="course4" value="<%=form.course4%>"/>
+									<input type="text" class="form-control" name="course5" value="<%=form.course5%>"/>
+									<input type="text" class="form-control" name="course6" value="<%=form.course6%>"/>
+									<input type="text" class="form-control" name="course7" value="<%=form.course7%>"/>
+									<input type="text" class="form-control" name="course8" value="<%=form.course8%>"/>
+									<input type="text" class="form-control" name="course9" value="<%=form.course9%>"/>
+									<input type="text" class="form-control" name="course10" value="<%=form.course10%>"/>
+								</div>
+								<div class="col-md-1">
+									<div>Hours</div>
+									<input type="number" class="form-control" name="hours1" value="<%=form.hours1%>"/>
+									<input type="number" class="form-control" name="hours2" value="<%=form.hours2%>"/>
+									<input type="number" class="form-control" name="hours3" value="<%=form.hours3%>"/>
+									<input type="number" class="form-control" name="hours4" value="<%=form.hours4%>"/>
+									<input type="number" class="form-control" name="hours5" value="<%=form.hours5%>"/>
+									<input type="number" class="form-control" name="hours6" value="<%=form.hours6%>"/>
+									<input type="number" class="form-control" name="hours7" value="<%=form.hours7%>"/>
+									<input type="number" class="form-control" name="hours8" value="<%=form.hours8%>"/>
+									<input type="number" class="form-control" name="hours9" value="<%=form.hours9%>"/>
+									<input type="number" class="form-control" name="hours10" value="<%=form.hours10%>"/>
+									
+								</div>
+								<div class="col-md-2">
+									<div>Semester</div>
+									<input type="text" class="form-control" name="semester1" value="<%=form.semester1%>"/>
+									<input type="text" class="form-control" name="semester2" value="<%=form.semester2%>"/>
+									<input type="text" class="form-control" name="semester3" value="<%=form.semester3%>"/>
+									<input type="text" class="form-control" name="semester4" value="<%=form.semester4%>"/>
+									<input type="text" class="form-control" name="semester5" value="<%=form.semester5%>"/>
+									<input type="text" class="form-control" name="semester6" value="<%=form.semester6%>"/>
+									<input type="text" class="form-control" name="semester7" value="<%=form.semester7%>"/>
+									<input type="text" class="form-control" name="semester8" value="<%=form.semester8%>"/>
+									<input type="text" class="form-control" name="semester9" value="<%=form.semester9%>"/>
+									<input type="text" class="form-control" name="semester10" value="<%=form.semester10%>"/>
+								</div>
+								<div class="col-md-3">
+									<div>Brief Title</div>
+									<input type="text" class="form-control" name="title1" value="<%=form.title1%>"/>
+									<input type="text" class="form-control" name="title2" value="<%=form.title2%>"/>
+									<input type="text" class="form-control" name="title3" value="<%=form.title3%>"/>
+									<input type="text" class="form-control" name="title4" value="<%=form.title4%>"/>
+									<input type="text" class="form-control" name="title5" value="<%=form.title5%>"/>
+									<input type="text" class="form-control" name="title6" value="<%=form.title6%>"/>
+									<input type="text" class="form-control" name="title7" value="<%=form.title7%>"/>
+									<input type="text" class="form-control" name="title8" value="<%=form.title8%>"/>
+									<input type="text" class="form-control" name="title9" value="<%=form.title9%>"/>
+									<input type="text" class="form-control" name="title10" value="<%=form.title10%>"/>
+								</div>
+							</div>
+
+							<hr/>
+
+							<strong>II. Additional Requirements</strong>
+							<div>A. Background Preperation</div>
+							<div class="row">
+								<div class="col-md-6">
+									<select name="backgroundPrep" class="form-control" id="inputStatus">
+										<option value=<%=form.backgroundPrep%>><%=form.backgroundPrep%></option>
+										<option value=false>Did not file CS01</option>
+										<option value=true>Filed CS01</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									File Form CS-01
+								</div>
+							</div>
+
+							<div>B. Distribution Requirements</div>
+							<div>Indicate the three courses in the Course List used to satisfy the breadth requirement (consult the official MS degree rule for eligible courses and grade requirements - http://www.cs.unc.edu/cms/academics/graduate-programs/master-of-science-official-degree-requirements ) </div>
+
+							<div>C. Program Product</div>
+							<div class="row">
+								<div class="col-md-6">
+									<select name="programProduct" class="form-control" id="inputStatus">
+										<option value=<%=form.programProduct%>><%=form.programProduct%></option>
+										<option value=false>Did not file CS13</option>
+										<option value=true>Filed CS13</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									File Form CS-13
+								</div>
+							</div>
+							
+
+							<div>D. Writing Requirement(One of the following)</div>
+							<div class="row">
+								<div class="col-md-6">
+									<select name="comprehensivePaper" class="form-control" id="inputStatus">
+										<option value=<%=form.comprehensivePaper%>><%=form.comprehensivePaper%></option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+								<div class="col-md-3">
+									Comprehensive Paper (CS-08)
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-6">
+									<select name="thesis" class="form-control" id="inputStatus">
+										<option value=<%=form.thesis%>><%=form.thesis%></option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									Thesis (CS-05)
+								</div>
+							</div>
+							
+
+							<div class="row">
+								<div class="col-md-6">
+									<select name="outsideReview" class="form-control" id="inputStatus">
+										<option value=<%=form.outsideReview%>><%=form.outsideReview%></option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									Outside Review (CS-04)
+								</div>
+							</div>
+							
+
+							<hr/>
+
+							<strong>III. Comprehensive Exam</strong>
+							<div class="col-md-4">
+								<select name="comprehensiveExam" class="form-control" id="inputStatus">
+									<option value=<%=form.comprehensiveExam%>><%=form.comprehensiveExam%></option>
+									<option value="Comprehensive Paper">Comprehensive Paper(CS-08)</option>
+									<option value="MS Oral Comprehensive Exam">MS Oral Comprehensive Exam</option>
+								</select>
+							</div>
+
+							<hr/>
+
+							<strong>IV. Signatures</strong>
+							<div class="row">
+								<div class="col-md-2">
+									Student signature:
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="studentSignature" value="<%=form.studentSignature%>" required />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-2">
+									Adviser signature:
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="adviserSignature" value="<%=form.adviserSignature%>" required />
+								</div>
+							</div>
+
+							<hr/>
+
+							<div>Approved</div>
+							<select name="approved" class="form-control" id="inputStatus">
+								<option value=<%=form.approved%>><%=form.approved%></option>
+								<option value="Approved by Graduate Studies Committee">Approved by Graduate Studies Committee</option>
+								<option value="Disapproved">Disapproved</option>
+							</select>
+
+							<div>Reason of Diapproval</div>
+							<textarea class="form-control" name="approvalReason" required><%=form.approvalReason%></textarea>
+
+							<hr/>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Director Signature:</div>
+									<input type="text" class="form-control" name="directorSignature" value="<%=form.directorSignature%>" required />
+								</div>
+								<div class="col-md-8">
+									<div>Date signed</div>
+									<input type="text" class="form-control" name="directorDateSigned" value="<%=form.directorDateSigned%>" required />
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>

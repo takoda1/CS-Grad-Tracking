@@ -200,6 +200,32 @@ var gradeSchema = mongoose.Schema({
   instructorSignature: String, instructorDateSigned: String
  })
 
+ var CS03Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number, dateSubmitted: String,
+  DR1: String, university1: String, dept1: String, course1: String, hours1: Number, semester1: String, title1: String,
+  DR2: String, university2: String, dept2: String, course2: String, hours2: Number, semester2: String, title2: String,
+  DR3: String, university3: String, dept3: String, course3: String, hours3: Number, semester3: String, title3: String,
+  DR4: String, university4: String, dept4: String, course4: String, hours4: Number, semester4: String, title4: String,
+  DR5: String, university5: String, dept5: String, course5: String, hours5: Number, semester5: String, title5: String,
+  DR6: String, university6: String, dept6: String, course6: String, hours6: Number, semester6: String, title6: String,
+  DR7: String, university7: String, dept7: String, course7: String, hours7: Number, semester7: String, title7: String,
+  DR8: String, university8: String, dept8: String, course8: String, hours8: Number, semester8: String, title8: String,
+  DR9: String, university9: String, dept9: String, course9: String, hours9: Number, semester9: String, title9: String,
+  DR10: String, university10: String, dept10: String, course10: String, hours10: String, semester10: String, title10: String,
+  backgroundPrep: Boolean,
+  programProduct: Boolean,
+  comprehensivePaper: Boolean,
+  thesis: Boolean,
+  outsideReview: Boolean,
+  comprehensiveExam: String,
+  studentSignature: String,
+  adviserSignature: String,
+  approved: String,
+  approvalReason: String,
+  directorSignature: String, directorDateSigned: String
+ })
+
  var CS04Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number, dateSubmitted: String,
@@ -247,16 +273,20 @@ var gradeSchema = mongoose.Schema({
   note: String,
   otherCourses: String,
   minor: String,
+  backgroundPrepWorkSheet: Boolean,
+  programProductRequirement: Boolean,
+  PHDWrittenExam: Boolean,
+  PHDOralExam: Boolean,
+  committee1: String,
+  committee2: String,
+  committee3: String,
+  committee4: String,
+  committee5: String,
+  committee6: String,
   adviser: String, chairman: String,
-  committeeMember1: String,
-  committeeMember2: String,
-  committeeMember3: String,
-  committeeMember4: String,
-  committeeMember5: String,
-  committeeMember6: String,
-  committeeAdviserSignature: String,
-  PHDProgramApproved: Boolean,
-  disapproveReason: String,
+  chairSignature: String,
+  approved: String,
+  reasonApproved: String,
   directorSignature: String
  })
 
@@ -273,7 +303,7 @@ schema.SemesterReference = mongoose.model("SemesterReference", semesterReference
 schema.Note = mongoose.model("Note", noteSchema);
 schema.CS01 = mongoose.model("CS01", CS01Schema);
 schema.CS02 = mongoose.model("CS02", CS02Schema);
-
+schema.CS03 = mongoose.model("CS03", CS03Schema);
 schema.CS04 = mongoose.model("CS04", CS04Schema);
 schema.CS05 = mongoose.model("CS05", CS05Schema);
 schema.CS06 = mongoose.model("CS06", CS06Schema);
