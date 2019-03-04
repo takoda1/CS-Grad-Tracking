@@ -1,0 +1,144 @@
+<!-- views/student/CS12.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS12 Report of research discussion</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Report of research discussion</h3>
+					<h3>CS-12</h3>
+
+					<div align="left">
+
+						<hr></hr>
+
+						<form action="/student/forms/update/<%=student._id%>/CS12" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=form.name%>" required/>
+								</div>
+								<div class="col-md-6">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Email address</div>
+									<input type="text" class="form-control" name="email" value="<%=form.email%>" required/>
+								</div>
+								<div class="col-md-6">
+									<div>Date met</div>
+									<input type="text" class="form-control" name="dateMet" value="<%=form.dateMet%>" required />
+								</div>
+							</div>
+
+							<hr/>
+							<div>On the date indicated above, I met jointly with the undersigned three or more (potential) members of my doctoral committee to discuss my proposed research.</div>
+
+							<hr/>
+
+							<div class="row">
+								<div class="col-md-3">
+									<div>Committee 1 signature</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeSignature1" value="<%=form.committeeSignature1%>"/>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-3">
+									<div>Committee 2 signature</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeSignature2" value="<%=form.committeeSignature2%>"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div>Committee 3 signature</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeSignature3" value="<%=form.committeeSignature3%>"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div>Committee 4 signature</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeSignature4" value="<%=form.committeeSignature4%>"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<div>Committee 5 signature</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeSignature5" value="<%=form.committeeSignature5%>"/>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-3">
+									<div>Committee 6 signature</div>
+									
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" name="committeeSignature6" value="<%=form.committeeSignature6%>"/>
+								</div>
+							</div>
+							
+							
+
+							<div class="verticalSpace"/>
+							
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+	</script>
+</html>

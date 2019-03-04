@@ -347,6 +347,18 @@ var CS11Schema = mongoose.Schema({
   directorSignature: String, directorDateSigned: String
 })
 
+var CS12Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number, email: String, dateMet: String,
+  committeeSignature1: String,
+  committeeSignature2: String,
+  committeeSignature3: String,
+  committeeSignature4: String,
+  committeeSignature5: String,
+  committeeSignature6: String
+});
+  
+
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
 schema.Student = mongoose.model("Student", studentSchema);
@@ -368,5 +380,6 @@ schema.CS07 = mongoose.model("CS07", CS07Schema);
 schema.CS08 = mongoose.model("CS08", CS08Schema);
 schema.CS09 = mongoose.model("CS09", CS09Schema);
 schema.CS11 = mongoose.model("CS11", CS11Schema);
+schema.CS12 = mongoose.model("CS12", CS12Schema);
 
 module.exports = schema;
