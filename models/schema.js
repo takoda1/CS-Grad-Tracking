@@ -335,6 +335,18 @@ var CS09Schema = mongoose.Schema({
   overallScore: Number
 })
 
+var CS11Schema = mongoose.Schema({
+  student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
+  name: String, pid: Number,
+  fullResponsibility: String,
+  partialResponsibility: String,
+  semester: String, year: Number,
+  supervisor: String, supervisorSignature: String, supervisorDateSigned: String,
+  other: String,
+  approved: String,
+  directorSignature: String, directorDateSigned: String
+})
+
 schema.Admin = mongoose.model("Admin", adminSchema);
 schema.Faculty = mongoose.model("Faculty", facultySchema);
 schema.Student = mongoose.model("Student", studentSchema);
@@ -355,5 +367,6 @@ schema.CS06 = mongoose.model("CS06", CS06Schema);
 schema.CS07 = mongoose.model("CS07", CS07Schema);
 schema.CS08 = mongoose.model("CS08", CS08Schema);
 schema.CS09 = mongoose.model("CS09", CS09Schema);
+schema.CS11 = mongoose.model("CS11", CS11Schema);
 
 module.exports = schema;
