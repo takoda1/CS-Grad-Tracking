@@ -318,6 +318,7 @@ studentController.uploadForm = function(req, res){
 }
 
 studentController.viewForm = function(req, res){
+  var signature = "In place of your signature, please type your full legal name:";
   if(req.params.title != null && req.params._id != null && req.params.uploadSuccess != null){
     var uploadSuccess = false;
     if(req.params.uploadSuccess == "true"){
@@ -333,7 +334,7 @@ studentController.viewForm = function(req, res){
           if(result != null){
             form = result;
           }
-         res.render("../views/student/"+req.params.title, {student: student, form: form, uploadSuccess: uploadSuccess});
+         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess});
         });
       }
       else{

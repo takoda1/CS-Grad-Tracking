@@ -84,20 +84,24 @@
 
 							<hr></hr>
 
+							<div>Student signature:</div>
 							<div class="row">
-								<div class="col-md-4">
-									<div>Student signature:</div>
+								<div class="col-md-5">
+									<i><%=signature%></i>
 									<input type="text" class="form-control" name="studentSignature" value="<%=form.studentSignature%>" required />
 								</div>
-								<div class="col-md-8">
+								<div class="col-md-3">
 									<div>Date signed</div>
 									<input type="text" class="form-control" name="studentDateSigned" value="<%=form.studentDateSigned%>" required />
 								</div>
 							</div>
 
+							<div class="verticalSpace"/>
+
+							<div>Chairman Signature:</div>
 							<div class="row">
-								<div class="col-md-4">
-									<div>Chairman Signature:</div>
+								<div class="col-md-5">
+									<i><%=signature%></i>
 									<input type="text" class="form-control" name="chairmanSignature" value="<%=form.chairmanSignature%>" required />
 								</div>
 								<div class="col-md-8">
