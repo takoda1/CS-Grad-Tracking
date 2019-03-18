@@ -1,9 +1,9 @@
-<!-- views/student/CS01.ejs -->
+<!-- views/student/CS01BSMS.ejs -->
 <!DOCTYPE html>
 
 <html>
 	<head>
-		<title>CS01 Background Preperation Worksheet</title>
+		<title>CS01BSMS Background Preperation Worksheet</title>
 		<%- include("../partials/head.ejs") %>
 	</head>
 	
@@ -33,7 +33,7 @@
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
 					<h3>Background preperation worksheet</h3>
-					<h3>CS-01</h3>
+					<h3>CS-01BSMS</h3>
 
 					<div align="left">
 						<p class="underline">Instructions:</p>
@@ -43,7 +43,7 @@
 						<hr></hr>
 					
 
-						<form action="/student/forms/update/<%=student._id%>/CS01" method="post">
+						<form action="/student/forms/update/<%=student._id%>/CS01BSMS" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
 
@@ -60,68 +60,6 @@
 							<hr></hr>
 
 							<h3>Background Course Information</h3>
-
-							<div class="row">
-								<div class="col-md-4">
-									<div><strong>COMP 283: Discrete Structures:</strong> Introduces discrete structures and the formal math used to establish their properties & those of algorithms that work with them.  Develops problem-solving skills through puzzles & applications central to CS. or <strong>MATH 381: Discrete Mathematics</strong> (see below)</div>
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="comp283Covered" value="<%=form.comp283Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="comp283Date" value="<%=form.comp283Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>COMP: 410:  Data Structures:</strong> The analysis of data structures and their associated algorithms.  Abstract data types, lists, stacks, queues, trees, and graphs.
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="comp410Covered" value="<%=form.comp410Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="comp410Date" value="<%=form.comp410Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>COMP 411: Computer Organization:</strong> Data respresentation, computer architecture and implementation, assembly language programming.
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="comp411Covered" value="<%=form.comp411Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="comp411Date" value="<%=form.comp411Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>COMP 455:  Models of Languages & Computation:</strong> Introduction to the theory of computation.  Boolean functions, finite automata, pushdown automata, & Turing machines.  Unsolvable problems.  The Chomsky hierarchy of formal languages & their acceptors.  Parsing. 
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="comp455Covered" value="<%=form.comp455Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="comp455Date" value="<%=form.comp455Date%>" required />
-								</div>
-							</div>
 
 							<hr></hr>
 
@@ -206,70 +144,7 @@
 									<input type="text" class="form-control" name="comp541Date" value="<%=form.comp541Date%>" required />
 								</div>
 							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>COMP 550:  Algorithms & Analysis:</strong> Formal specification and verification of programs.  Techniques of algorithm analysis.  Problem-Solving paradigms. 
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="comp550Covered" value="<%=form.comp550Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="comp550Date" value="<%=form.comp550Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>MATH 233:  Calculus of Functions of Several Variables:</strong> Vector algebra, solid analytic geometry, partial derivatives, multiple integrals. 
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="math233Covered" value="<%=form.math233Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="math233Date" value="<%=form.math233Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>MATH 381:  Discrete Mathematics:</strong> Topics from the foundations of mathematics; logic, set theory, relations & functions, induction, permutations & combinations, recurrence. or <strong>COMP 283:  Discrete Structures</strong>
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="math381Covered" value="<%=form.math381Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="math381Date" value="<%=form.math381Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>MATH 547:  Linear Algebra for Applications:</strong> Algebra of matrices with applications; determinants; solution of linear systems by Gaussian elimination; Gram-Schmidt procedure; eigenvalues.  Math 116 may not be taken for credit after credit has been granted for Math 147.
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="math547Covered" value="<%=form.math547Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="math547Date" value="<%=form.math547Date%>" required />
-								</div>
-							</div>
+							
 
 							<hr></hr>
 
@@ -284,22 +159,6 @@
 								<div class="col-md-4">
 									<div>Dates:</div>
 									<input type="text" class="form-control" name="math661Date" value="<%=form.math661Date%>" required />
-								</div>
-							</div>
-
-							<hr></hr>
-
-							<div class="row">
-								<div class="col-md-4">
-									<strong>STAT 435:  Introduction to Probability (MATH 146):</strong> Introduction to mathematical theory of probability covering random variables, moments, binomial, Poisson, normal & related distributions, generating functions, sums & sequences of random variables, & statistical applications.
-								</div>
-								<div class="col-md-4">
-									<div>Covered by:</div>
-									<input type="text" class="form-control" name="stat435Covered" value="<%=form.stat435Covered%>" required />
-								</div>
-								<div class="col-md-4">
-									<div>Dates:</div>
-									<input type="text" class="form-control" name="stat435Date" value="<%=form.stat435Date%>" required />
 								</div>
 							</div>
 

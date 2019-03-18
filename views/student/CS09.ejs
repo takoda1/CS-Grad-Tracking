@@ -167,9 +167,10 @@
 
 
 
+							<div>Research Advisor Signature</div>
 							<div class="row">
 								<div class="col-md-4">
-									Research Advisor Signature
+									<i><%=signature%></i>
 									<input type="text" class="form-control" name="advisorSignature" value="<%=form.advisorSignature%>" required />
 								</div>
 								<div class="col-md-4">
@@ -185,9 +186,10 @@
 							<div class="verticalSpace"/>
 
 							<strong>Committee Members</strong>
+							<div>Signature:</div>
 							<div class="row">
 								<div class="col-md-4">
-									<div>Signature</div>
+									<i><%=signature%></i>
 									<input type="text" class="form-control" name="committeeSignature1" value="<%=form.committeeSignature1%>" required />
 									<input type="text" class="form-control" name="committeeSignature2" value="<%=form.committeeSignature2%>" required />
 									<input type="text" class="form-control" name="committeeSignature3" value="<%=form.committeeSignature3%>" required />

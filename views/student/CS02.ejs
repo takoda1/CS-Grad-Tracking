@@ -81,23 +81,28 @@
 
 							<hr></hr>
 
+
+							<div>Advisor signature:</div>
 							<div class="row">
-								<div class="col-md-4">
-									<div>Advisor signature:</div>
+								<div class="col-md-5">
+									<i><%=signature%></i>
 									<input type="text" class="form-control" name="advisorSignature" value="<%=form.advisorSignature%>" required />
 								</div>
-								<div class="col-md-8">
+								<div class="col-md-3">
 									<div>Date signed</div>
 									<input type="text" class="form-control" name="advisorDateSigned" value="<%=form.advisorDateSigned%>" required />
 								</div>
 							</div>
 
+							<div class="verticalSpace"/>
+
+							<div>Designated Instructor Signature:</div>
 							<div class="row">
-								<div class="col-md-4">
-									<div>Designated Instructor Signature:</div>
+								<div class="col-md-5">
+									<i><%=signature%></i>
 									<input type="text" class="form-control" name="instructorSignature" value="<%=form.instructorSignature%>" required />
 								</div>
-								<div class="col-md-8">
+								<div class="col-md-3">
 									<div>Date signed</div>
 									<input type="text" class="form-control" name="instructorDateSigned" value="<%=form.instructorDateSigned%>" required />
 								</div>
