@@ -221,8 +221,8 @@
 								<div class="col-md-3">
 									Integration of concepts
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="conceptIntegration" value="<%=form.conceptIntegration%>" required />
+								<div class="col-md-5">
+									<input type="range" name="conceptIntegration" min="-3" max="3" step=".25" value=<%=form.conceptIntegration%> />
 								</div>
 							</div>
 
@@ -230,17 +230,20 @@
 								<div class="col-md-3">
 									Creativity
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="creativity" value="<%=form.creativity%>" required />
+
+								<div class="col-md-5">
+									<input type="range" name="creativity" min="-3" max="3" step=".25" value=<%=form.creativity%> />
 								</div>
+
 							</div>
+
 
 							<div class="row" align ="center">
 								<div class="col-md-3">
 									Clarity
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="clarity" value="<%=form.clarity%>" required />
+								<div class="col-md-5">
+									<input type="range" name="clarity" min="-3" max="3" step=".25" value=<%=form.clarity%> />
 								</div>
 							</div>
 
@@ -248,8 +251,8 @@
 								<div class="col-md-3">
 									Abstraction and formality
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="abstractionFormality" value="<%=form.abstractionFormality%>" required />
+								<div class="col-md-5">
+									<input type="range" name="abstractionFormality" min="-3" max="3" step=".25" value=<%=form.abstractionFormality%> />
 								</div>
 							</div>
 
@@ -257,8 +260,8 @@
 								<div class="col-md-3">
 									Organiztion
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="organization" value="<%=form.organization%>" required />
+								<div class="col-md-5">
+									<input type="range" name="organization" min="-3" max="3" step=".25" value=<%=form.organization%> />
 								</div>
 							</div>
 
@@ -266,8 +269,9 @@
 								<div class="col-md-3">
 									Writing
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="writing" value="<%=form.writing%>" required />
+								<div class="col-md-5">
+									<input type="range" name="writing" min="-3" max="3" step=".25" value=<%=form.writing%> />
+									
 								</div>
 							</div>
 
@@ -275,8 +279,9 @@
 								<div class="col-md-3">
 									Presentation
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="presentation" value="<%=form.presentation%>" required />
+								<div class="col-md-5">
+									<input type="range" name="presentation" min="-3" max="3" step=".25" value=<%=form.presentation%> />
+									
 								</div>
 							</div>
 
@@ -284,14 +289,14 @@
 								<div class="col-md-3">
 									Answering questions
 								</div>
-								<div class="col-md-1">
-									<input type="number" step=".5" min="-3" max="3" class="form-control numberValue" name="answeringQuestion" value="<%=form.answeringQuestion%>" required />
+								<div class="col-md-5">
+									<input type="range" name="answeringQuestion" min="-3" max="3" step=".25" value=<%=form.answeringQuestion%> />
 								</div>
 							</div>
 
 							<div class="verticalSpace"/>
 
-							<div class="row">
+							<!--<div class="row">
 								<div class="col-md-1">
 									<div>Overall Score:</div>
 									
@@ -304,7 +309,22 @@
 									<div id="displayScore"><%=form.overallScore%>
 									</div>
 								</div>
+							</div> -->
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									<div>Overall Score:</div>
+										
+								</div>
+								<div class="col-md-5">
+									<input type="range" name="overallScore" min="-3" max="3" step=".25" value=<%=form.overallScore%> />
+								</div>
 							</div>
+
+							<div><strong>Feedback on Research, Presentation, and Paper:</strong></div>
+							<textarea class="form-control" name="feedback" ><%=form.feedback%>
+							</textarea>
+
 
 							<div class="verticalSpace"/>
 							
@@ -316,6 +336,10 @@
 		</div>
 		<%- include("../partials/bootstrapScripts.ejs") %>
 	</body>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="/rangeslider.js/dist/rangeslider.min.js"></script>
+	<link rel="stylesheet" href="/rangeslider.js/dist/rangeslider.css">
+	
 	<script type="text/javascript">
 		function average(){
 			var arr = document.getElementsByClassName("numberValue");
@@ -332,5 +356,16 @@
 			document.getElementById("overallScore").value = average;
 			document.getElementById("displayScore").innerHTML = average;
 		}
+	</script>
+	<script>
+		$('input[type="range"]').rangeslider({
+			polyfill:false,
+			onInit : function(){
+				this.output = $('<div class="range-output verticalSpace"/>').insertAfter(this.$range).html(this.$element.val());
+			},
+			onSlide : function(position, value){
+				this.output.html(value);
+			}
+		});
 	</script>
 </html>

@@ -345,7 +345,8 @@ var CS09Schema = mongoose.Schema({
   writing: Number,
   presentation: Number,
   answeringQuestion: Number,
-  overallScore: Number
+  overallScore: Number,
+  feedback: String
 })
 
 var CS11Schema = mongoose.Schema({

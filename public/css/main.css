@@ -167,3 +167,7 @@ This is for highlighting search text on index pages
 .underline {
 	text-decoration: underline;
 }
+
+.slider{
+	background-image:url("../../images/slider.png");
+} 
