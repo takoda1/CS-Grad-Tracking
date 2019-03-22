@@ -44,7 +44,7 @@ courseController.post = function (req, res) {
         res.render("../views/error.ejs", {string: "Please input four letter department code"});
       }
       else {
-        schema.CourseInfo.findOne(input.Course).exec().then(function(result){
+        schema.CourseInfo.findOne({_id:input.courseInfo}).exec().then(function(result){
           if(result != null){
             input.number = result.number;
             input.name = result.name;
@@ -101,12 +101,19 @@ courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
   schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
+    console.log(result);
     result.sort(function(a, b){
       if(a.semester.year == b.semester.year){
         if(a.semester.season < b.semester.season){
           return -1;
         }
         if(a.semester.season > b.semester.season){
+          return 1;
+        }
+        if(a.number < b.number){
+          return -1;
+        }
+        if(a.number > b.number){
           return 1;
         }
         return 0;
@@ -385,10 +392,14 @@ courseController.upload = function(req, res){
                 switch(element.category){
                   case "t":
                   case "T":
+                  case "Theory":
+                  case "theory":
                     element.category = "Theory";
                     break;
                   case "s":
                   case "S":
+                  case "Systems":
+                  case "systems":
                     element.category = "Systems";
                     break;
                   case "a":
@@ -401,7 +412,7 @@ courseController.upload = function(req, res){
                     element.category = "NA";
                     break;
                 }
-                schema.Course.findOne(element).exec().then(function (result) {
+                schema.Course.findOne({number: element.number, section: element.section, univNumber: element.univNumber, faculty: element.faculty, semester: element.semester}).exec().then(function (result) {
                   //if the course doesn't already exist, try to make it
                   if(result == null){
                     var inputCourse = new schema.Course(element);
@@ -416,10 +427,15 @@ courseController.upload = function(req, res){
                     });
                   }
                   else{
-                    count++;
-                    if(count == data.length){
-                      res.redirect("/course/upload/true");
-                    }
+                    schema.Course.update({number: element.number, section: element.section, univNumber: element.univNumber, faculty: element.faculty, semester: element.semester}, element).exec().then(function(result){
+                      count++;
+                      if(count == data.length){
+                        res.redirect("/course/upload/true");
+                      }
+                    }).catch(function(err){
+                      res.render("../views/error.ejs", {string: element.name + " " + element.number+" did not update because something was wrong with it."});
+                      return;
+                    });
                   }
                 });
               }
