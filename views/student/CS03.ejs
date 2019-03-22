@@ -71,7 +71,7 @@
 								<div>	- Minimum 3 hours of COMP 992 or COMP 993 (formal thesis) - maximum of 6 hours. </div>
 								<div>	- If a minor is elected, see Graduate School Handbook (http://handbook.unc.edu/preface.html)</div>
 							
-							<div>List the courses you expect to use to meet the MS requirements.  Include Section Number for COMP 790 and COMP 990-993 courses.  Do NOT list research team meeting seminars.  Indicate courses used to satisfy the distribution requirement with a mark in the DR column.</div>
+							<div>List the courses you expect to use to meet the MS requirements.  Include Section Number for COMP 790 and COMP 990-993 courses.  Do NOT list research team meeting seminars.  Indicate courses used to satisfy the distribution requirement with a mark in the Dist column.</div>
 							<div class="row">
 								<div class="col-md-4">A = Applications</div>
 								<div class="col-md-4">S = Systems & Hardware</div>
@@ -82,7 +82,7 @@
 
 							<div class="row">
 								<div class="col-md-1">
-									<div>DR</div>
+									<div>Dist</div>
 									<input type="text" class="form-control" name="DR1" value="<%=form.DR1%>"/>
 									<input type="text" class="form-control" name="DR2" value="<%=form.DR2%>"/>
 									<input type="text" class="form-control" name="DR3" value="<%=form.DR3%>"/>
@@ -97,7 +97,7 @@
 
 								<div class="col-md-2">
 									<div>University</div>
-									<input type="text" class="form-control" name="university1" value=""<%=form.university1%>""/>
+									<input type="text" class="form-control" name="university1" value="<%=form.university1%>"/>
 									<input type="text" class="form-control" name="university2" value="<%=form.university2%>"/>
 									<input type="text" class="form-control" name="university3" value="<%=form.university3%>"/>
 									<input type="text" class="form-control" name="university4" value="<%=form.university4%>"/>
@@ -183,7 +183,7 @@
 							<strong>II. Additional Requirements</strong>
 							<div>A. Background Preperation</div>
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<select name="backgroundPrep" class="form-control" id="inputStatus">
 										<option value=<%=form.backgroundPrep%>><%=form.backgroundPrep%></option>
 										<option value=false>Did not file CS01</option>
@@ -200,7 +200,7 @@
 
 							<div>C. Program Product</div>
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<select name="programProduct" class="form-control" id="inputStatus">
 										<option value=<%=form.programProduct%>><%=form.programProduct%></option>
 										<option value=false>Did not file CS13</option>
@@ -215,7 +215,7 @@
 
 							<div>D. Writing Requirement(One of the following)</div>
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<select name="comprehensivePaper" class="form-control" id="inputStatus">
 										<option value=<%=form.comprehensivePaper%>><%=form.comprehensivePaper%></option>
 										<option value=false>False</option>
@@ -228,7 +228,7 @@
 							</div>
 							
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<select name="thesis" class="form-control" id="inputStatus">
 										<option value=<%=form.thesis%>><%=form.thesis%></option>
 										<option value=false>False</option>
@@ -242,7 +242,7 @@
 							
 
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<select name="outsideReview" class="form-control" id="inputStatus">
 										<option value=<%=form.outsideReview%>><%=form.outsideReview%></option>
 										<option value=false>False</option>
@@ -258,12 +258,14 @@
 							<hr/>
 
 							<strong>III. Comprehensive Exam</strong>
-							<div class="col-md-4">
-								<select name="comprehensiveExam" class="form-control" id="inputStatus">
-									<option value=<%=form.comprehensiveExam%>><%=form.comprehensiveExam%></option>
-									<option value="Comprehensive Paper">Comprehensive Paper(CS-08)</option>
-									<option value="MS Oral Comprehensive Exam">MS Oral Comprehensive Exam</option>
-								</select>
+							<div class="row">
+								<div class="col-md-3">
+									<select name="comprehensiveExam" class="form-control" id="inputStatus">
+										<option value=<%=form.comprehensiveExam%>><%=form.comprehensiveExam%></option>
+										<option value="Comprehensive Paper">Comprehensive Paper(CS-08)</option>
+										<option value="MS Oral Comprehensive Exam">MS Oral Comprehensive Exam</option>
+									</select>
+								</div>
 							</div>
 
 							<hr/>
@@ -295,14 +297,22 @@
 							<hr/>
 
 							<div>Approved</div>
-							<select name="approved" class="form-control" id="inputStatus">
-								<option value=<%=form.approved%>><%=form.approved%></option>
-								<option value="Approved by Graduate Studies Committee">Approved by Graduate Studies Committee</option>
-								<option value="Disapproved">Disapproved</option>
-							</select>
+							<div class="row">
+								<div class="col-md-3">
+									<select name="approved" class="form-control" id="inputStatus">
+										<option value=<%=form.approved%>><%=form.approved%></option>
+										<option value="Approved by Graduate Studies Committee">Approved by Graduate Studies Committee</option>
+										<option value="Disapproved">Disapproved</option>
+									</select>
+								</div>
+							</div>
 
 							<div>Reason of Diapproval</div>
-							<textarea class="form-control" name="approvalReason" required><%=form.approvalReason%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<textarea class="form-control" name="approvalReason" required><%=form.approvalReason%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
@@ -312,7 +322,7 @@
 									<div>Director Signature:</div>
 									<input type="text" class="form-control" name="directorSignature" value="<%=form.directorSignature%>" required />
 								</div>
-								<div class="col-md-8">
+								<div class="col-md-4">
 									<div>Date signed</div>
 									<input type="text" class="form-control" name="directorDateSigned" value="<%=form.directorDateSigned%>" required />
 								</div>
