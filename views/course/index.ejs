@@ -25,13 +25,13 @@
 						<table align="center" border="1" class="table display-table table-striped table-bordered">
 							<thead>
 								<tr>
-									<th scope="col" class="col-course-department">Department</th>
 									<th scope="col" class="col-course-number">Number</th>
+									<th scope="col" class="col-course-section">Section</th>
 									<th scope="col" class="col-course-univNumber">University course number</th>
 									<th scope="col" class="col-course-name">Name</th>
 									<th scope="col" class="col-course-category">Category</th>
+									<th scope="col" class="col-course-topic">Topic</th>
 									<th scope="col" class="col-course-hours">Hours</th>
-									<th scope="col" class="col-course-section">Section</th>
 									<th scope="col" class="col-course-faculty">Faculty</th>
 									<th scope="col" class="col-course-semester">Semester</th>
 									<th scope="col" class="col-course-delete"></th>
@@ -41,13 +41,13 @@
 
 								<% for(var i=0; i<courses.length; i++) { %>
 									<tr>
-										<td><%= courses[i].department%></td>
 										<td><%= courses[i].number%></td>
+										<td><%= courses[i].section%></td>
 										<td><%= courses[i].univNumber%></td>
 										<td><%= courses[i].name%></td>
 										<td><%= courses[i].category%></td>
+										<td><%= courses[i].topic%></td>
 										<td><%= courses[i].hours%></td>
-										<td><%= courses[i].section%></td>
 										<td><%= courses[i].faculty.lastName%>, <%= courses[i].faculty.firstName%></td>
 										<td><%= courses[i].semester.season%> <%= courses[i].semester.year%></td>
 										<td>
