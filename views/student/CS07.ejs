@@ -1,5 +1,5 @@
-<!-- views/student/CS07.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS07.ejs -->
 
 <html>
 	<head>
@@ -59,7 +59,9 @@
 							<div>The proposed dissertation project has been investigated by the student’s doctoral committee and the dissertation proposal is judged to be unsatisfactory.</div>
 
 							<strong>COMMENTS:</strong>
-							<textarea class="form-control" name="comments"><%=form.comments%></textarea>
+							<div class="col-md-4">
+								<textarea class="form-control" rows="6" name="comments"><%=form.comments%></textarea>
+							</div>
 
 							<hr></hr>
 							<div>Committee Chairman Signature</div>
