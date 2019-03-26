@@ -1,5 +1,5 @@
-<!-- views/student/CS06.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS06.ejs -->
 
 <html>
 	<head>
@@ -285,19 +285,30 @@
 								</div>
 							</div>
 
-							<div>Note:</div>
-							<textarea class="form-control" name="note"><%=form.note%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>Note:</div>
+									<textarea class="form-control" rows="6" name="note"><%=form.note%></textarea>
+								</div>
+							</div>
 
 							<hr/>
-
-							<div>List any other courses here that you believe are relevant to your program of study.</div>
-							<textarea class="form-control" name="otherCourses"><%=form.otherCourses%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>List any other courses here that you believe are relevant to your program of study.</div>
+									<textarea class="form-control" rows="6" name="otherCourses"><%=form.otherCourses%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
 							<strong>D. Formal Minor(if applicable)</strong>
-							<div>See policy in <a href="https://handbook.unc.edu/phd.html">The Graduate School Handbook</a></div>
-							<textarea class="form-control" name="minor"><%=form.minor%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>See policy in <a href="https://handbook.unc.edu/phd.html">The Graduate School Handbook</a></div>
+									<textarea class="form-control" rows="6" name="minor"><%=form.minor%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
@@ -307,32 +318,42 @@
 							<div>(it is not necessary to have all other requirements completed to turn in your program of study)</div>
 
 							<div>A. Background Preperation worksheet</div>
-							<select name="backgroundPrepWorkSheet" class="form-control" id="inputStatus">
-								<option value=<%=form.backgroundPrepWorkSheet%>><%=form.backgroundPrepWorkSheet%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div class="col-md-4">
+								
+								<select name="backgroundPrepWorkSheet" class="form-control" id="inputStatus">
+									<option value=<%=form.backgroundPrepWorkSheet%>><%=form.backgroundPrepWorkSheet%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
 							<div>B. Program Product requirement</div>
-							<select name="programProductRequirement" class="form-control" id="inputStatus">
-								<option value=<%=form.programProductRequirement%>><%=form.programProductRequirement%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div class="col-md-4">
+								
+								<select name="programProductRequirement" class="form-control" id="inputStatus">
+									<option value=<%=form.programProductRequirement%>><%=form.programProductRequirement%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
 							<div>C. PhD. Written Exam(a.k.a. the writing requirement)</div>
-							<select name="PHDWrittenExam" class="form-control" id="inputStatus">
-								<option value=<%=form.PHDWrittenExam%>><%=form.PHDWrittenExam%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div class="col-md-4">
+								<select name="PHDWrittenExam" class="form-control" id="inputStatus">
+									<option value=<%=form.PHDWrittenExam%>><%=form.PHDWrittenExam%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
 							<div>D. PhD Oral Comprehensive Exam</div>
-							<select name="PHDOralExam" class="form-control" id="inputStatus">
-								<option value=<%=form.PHDOralExam%>><%=form.PHDOralExam%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div class="col-md-4">
+								<select name="PHDOralExam" class="form-control" id="inputStatus">
+									<option value=<%=form.PHDOralExam%>><%=form.PHDOralExam%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
 							<hr/>
 
@@ -452,7 +473,9 @@
 							<div><strong>Committee Adviser</strong>(or Chair if different from adviser)</div>
 							<div>By signing here, the chair indicates that all items above have been approved by the majority of the committee.</div>
 							<i><%=signature%></i>
-							<input type="text" class="form-control" name="chairSignature" value="<%=form.chairSignature%>" required />
+							<div class="col-md-4">
+								<input type="text" class="form-control" name="chairSignature" value="<%=form.chairSignature%>" required />
+							</div>
 
 							<hr/>
 
@@ -461,16 +484,22 @@
 							<div><strong>PhD Program of Study APPROVAL PROCESS</strong></div>
 							<div>The PhD Program of Study will be reviewed by the GCS (Graduate Studies Committee).  GSC meets a number of times during each semester.  In order for your Program of Study to be reviewed in a timely manner, it is highly recommended to submit it early, preferably in your 6th semester or around the time you have your proposal meeting</div>
 
-							<select name="approved" class="form-control">
-								<option value=<%=form.comp915%>><%=form.approved%></option>
-								<option value="Approved">Approved</option>
-								<option value="Disapproved">Disapproved</option>
-							</select>
+							<div class="col-md-4">
+								<select name="approved" class="form-control">
+									<option value=<%=form.comp915%>><%=form.approved%></option>
+									<option value="Approved">Approved</option>
+									<option value="Disapproved">Disapproved</option>
+								</select>
+							</div>
 
 							<hr/>
 
-							<div>Reason for Disapproved and Needed Adjustments Stated Here </div>
-							<textarea class="form-control" name="reasonApproved"><%=form.reasonApproved%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>Reason for Disapproved and Needed Adjustments Stated Here </div>
+									<textarea class="form-control" rows="6" name="reasonApproved"><%=form.reasonApproved%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
