@@ -1,5 +1,5 @@
-<!-- views/student/CS08.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS08.ejs -->
 
 <html>
 	<head>
@@ -35,6 +35,8 @@
 					<h3>M.S. Technical Writing Requirement</h3>
 					<h3>CS-08</h3>
 
+					<strong class="verticalSpace">All fields required!</strong>
+
 					<div align="left">
 
 						<hr></hr>
@@ -68,7 +70,7 @@
 
 							<strong>Title of Paper:</strong>
 							<div class="col-md-4">
-								<textarea class="form-control" rows="6" name="title"><%=form.title%>
+								<textarea class="form-control" rows="6" name="title" required><%=form.title%>
 								</textarea>
 							</div>
 
