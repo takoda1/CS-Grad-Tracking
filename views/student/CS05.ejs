@@ -43,15 +43,15 @@
 
 							<div class="row">
 								<div class="col-md-4">
-									<div>Name</div>
+									<div>Name*</div>
 									<input type="text" class="form-control" name="name" value="<%=student.lastName%>, <%=student.firstName%>" required/>
 								</div>
 								<div class="col-md-4">
-									<div>PID</div>
+									<div>PID*</div>
 									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
 								</div>
 								<div class="col-md-4">
-									<div>Date submitted</div>
+									<div>Date submitted*</div>
 									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
 								</div>
 							</div>
@@ -60,7 +60,7 @@
 
 							<div class="row">
 								<div class="col-md-2">
-									<div>Oral Comprehensive Examination</div>
+									<div>Oral Comprehensive Examination*</div>
 								</div>
 								<div class="col-md-2">
 									<select name="oralComprehensiveExam" class="form-control" id="inputStatus">
@@ -75,7 +75,7 @@
 
 							<div class="row">
 								<div class="col-md-2">
-									<div>Thesis</div>
+									<div>Thesis*</div>
 								</div>
 								<div class="col-md-2">
 									<select name="thesis" class="form-control" id="inputStatus">
@@ -286,14 +286,14 @@
 
 							<hr></hr>
 
-							<div>Director of Graduate Studies Signature:</div>
+							<div>Director of Graduate Studies Signature:*</div>
 							<div class="row">
 								<div class="col-md-5">
 									<i><%=signature%></i>
 									<input type="text" class="form-control" name="directorSignature" value="<%=form.directorSignature%>" required />
 								</div>
 								<div class="col-md-3">
-									<div>Date signed</div>
+									<div>Date signed*</div>
 									<input type="text" class="form-control" name="directorDateSigned" value="<%=form.directorDateSigned%>" required />
 								</div>
 							</div>
