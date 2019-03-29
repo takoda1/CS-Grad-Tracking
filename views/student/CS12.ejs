@@ -1,5 +1,5 @@
-<!-- views/student/CS12.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS12.ejs -->
 
 <html>
 	<head>
@@ -45,22 +45,22 @@
 
 							<div class="row">
 								<div class="col-md-6">
-									<div>Name</div>
+									<div>Name*</div>
 									<input type="text" class="form-control" name="name" value="<%=student.lastName%>, <%=student.firstName%>" required/>
 								</div>
 								<div class="col-md-6">
-									<div>PID</div>
+									<div>PID*</div>
 									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-md-6">
-									<div>Email address</div>
+									<div>Email address*</div>
 									<input type="text" class="form-control" name="email" value="<%=form.email%>" required/>
 								</div>
 								<div class="col-md-6">
-									<div>Date met</div>
+									<div>Date met*</div>
 									<input type="text" class="form-control" name="dateMet" value="<%=form.dateMet%>" required />
 								</div>
 							</div>
@@ -73,30 +73,30 @@
 							<i><%=signature%></i>
 							<div class="row">
 								<div class="col-md-3">
-									<div>Committee 1 signature</div>
+									<div>Committee 1 signature*</div>
 									
 								</div>
 								<div class="col-md-3">
-									<input type="text" class="form-control" name="committeeSignature1" value="<%=form.committeeSignature1%>"/>
+									<input type="text" class="form-control" name="committeeSignature1" value="<%=form.committeeSignature1%>" required/>
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-md-3">
-									<div>Committee 2 signature</div>
+									<div>Committee 2 signature*</div>
 									
 								</div>
 								<div class="col-md-3">
-									<input type="text" class="form-control" name="committeeSignature2" value="<%=form.committeeSignature2%>"/>
+									<input type="text" class="form-control" name="committeeSignature2" value="<%=form.committeeSignature2%>" required/>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-md-3">
-									<div>Committee 3 signature</div>
+									<div>Committee 3 signature*</div>
 									
 								</div>
 								<div class="col-md-3">
-									<input type="text" class="form-control" name="committeeSignature3" value="<%=form.committeeSignature3%>"/>
+									<input type="text" class="form-control" name="committeeSignature3" value="<%=form.committeeSignature3%>" required/>
 								</div>
 							</div>
 							<div class="row">
