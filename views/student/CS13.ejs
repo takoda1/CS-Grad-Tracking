@@ -1,0 +1,246 @@
+<!-- views/student/cs13.ejs -->
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>CS13</title>
+		<%- include("../partials/head.ejs") %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+				<div class="col-lg-2 sidebar text-center">
+
+					<%- include("../partials/admin-sidebar.ejs") %>
+
+					<%- include("./search-student.ejs") %>
+
+				</div>
+				<div align ="center" class="col-lg-10 panelbg text-center">
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Submit success!</strong>
+					</div>
+					<% } %>
+
+					<%- include("./studentBarPartial.ejs") %>
+
+					<h4><%=student.lastName%>, <%=student.firstName%></h4>
+
+					<h3>Program Product Requirement</h3>
+					<h3>CS-13</h3>
+
+					<div align="left">
+						<div>Program Product Definition: A program product is a piece of software that is developed for the use of people other than the developer and that is expected to be used and maintained by other developers after the initial developer is no longer working on it.
+						</div>
+						<p class="underline" align="center"><br>Complete only the section that is most appropriate for your Program Product Requirement.<br></p>
+					
+						<form action="/student/forms/update/<%=student._id%>/CS13" method="post">
+
+							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Name</div>
+									<input type="text" class="form-control" name="name" value="<%=student.firstName%> <%=student.lastName%>" required/>
+								</div>
+								<div class="col-md-6">
+									<div>PID</div>
+									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-6">
+									<div>E-mail Address</div>
+									<input type="text" class="form-control" name="email" value="<%=form.email%>" required/>
+								</div>
+								<div class="col-md-6">
+									<div>Date</div>
+									<input type="number" class="form-control" name="dateMet" value="<%=form.dateMet%>" required />
+								</div>
+							</div>
+							<hr size="50" color="black"></hr>
+
+							<h4 class="underline">Comp 523</h4>
+							<div class="row">
+								<div class="col-md-2">
+									<select name="hadJob" class="form-control">
+										<option value=<%=form.hadJob%>
+											<%=form.hadJob%>
+										</option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+								<div class="col-md-10">
+									Or equivalent software engineering course. Syllabus must be provided.
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-6">
+									<div>COMP 523 Instructor Signature</div>
+								</div>
+								<div class="col-md-4">
+									<div>Instructor Printed Name</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="comp523Signature" value="<%=form.comp523Signature%>" required/>
+								</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="comp523Name" value="<%=form.comp523Name%>" required/>
+								</div>
+							</div>
+
+							<hr size="50" color="black"></hr>
+
+							<h4 class="underline">Industry Experience</h4>
+							<div class="row">
+								<div class="col-md-2">
+									<select name="hadJob" class="form-control">
+										<option value=<%=form.hadJob%>
+											<%=form.hadJob%>
+										</option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+								<div class="col-md-10">
+									Student has spent at least 3 months in a software development job in an organization with an established development process and participated substantively in the development of a program product.<br>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-12">
+									<div>Company, Development Experience, and Duration<br></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="textarea" class="form-control" name="jobInfo" value="<%=form.jobInfo%>" required/>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-2">
+									<div>Student Name:</div>
+								</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="name" value="<%=student.firstName%> <%=student.lastName%>" required/>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-2">
+									<div>Adviser Name:</div>
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="adviserName" value="<%=form.adviserName%>" required/>
+								</div>
+								<div class="col-md-2">
+									<div>Adviser Signature:</div>
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="adviserSignature" value="<%=form.adviserSignature%>" required/>
+								</div>
+							</div>
+
+							<hr size="50" color="black"></hr>
+
+							<h4 class="underline">Alternative</h4>
+							<div class="row">
+								<div class="col-md-2">
+									<select name="alternative" class="form-control">
+										<option value=<%=form.alternative%>
+											<%=form.alternative%>
+										</option>
+										<option value=false>False</option>
+										<option value=true>True</option>
+									</select>
+								</div>
+								<div class="col-md-10">
+									Student has developed a program product, as defined above, and has met the expectations of the client, including product delivery and documentation for both users and other developers. <br> Note: two signatures are required below.<br>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-12">
+									<div>Product and Deliverables:<br></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<input type="textarea" class="form-control" name="product" value="<%=form.product%>" required/>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-2">
+									<div>Client:</div>
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="client" value="<%=form.client%>" required/>
+								</div>
+								<div class="col-md-2">
+									<div>Position:</div>
+								</div>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="position" value="<%=form.position%>" required/>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-6">
+									<div>Adviser or CS Faculty Member Signature (required)</div>
+								</div>
+								<div class="col-md-6">
+									<div>Adviser or CS Faculty Member Signature (required)</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="altSignature1" value="<%=form.altSignature1%>" required/>
+								</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="altSignature2" value="<%=form.altSignature2%>" required/>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="row">
+								<div class="col-md-6">
+									<div>Printed Name:</div>
+								</div>
+								<div class="col-md-6">
+									<div>Printed Name:</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="altPrint1" value="<%=form.altPrint1%>" required/>
+								</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control" name="altPrint2" value="<%=form.altPrint2%>" required/>
+								</div>
+							</div>
+							<div class="verticalSpace"> </div>
+							<div class="verticalSpace"> </div>
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>
