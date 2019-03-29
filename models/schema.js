@@ -336,6 +336,7 @@ var CS09Schema = mongoose.Schema({
   committeeSignature1: String, committeeDateSigned1: String,
   committeeSignature2: String, committeeDateSigned2: String,
   committeeSignature3: String, committeeDateSigned3: String,
+  committeeSignature4: String, committeeDateSigned4: String,
   presentationDate: String,
   conceptIntegration: Number,
   creativity: Number,
