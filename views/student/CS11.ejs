@@ -1,5 +1,5 @@
-<!-- views/student/CS11.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS11.ejs -->
 
 <html>
 	<head>
@@ -34,6 +34,8 @@
 
 					<h3>Teaching requirement</h3>
 					<h3>CS-11</h3>
+
+					<strong class="verticalSpace">All fields required!</strong>
 
 					<div align="left">
 
@@ -127,7 +129,9 @@
 							<hr/>
 
 							<strong>Other (please describe and attach supporting material)</strong>
-							<textarea class="form-control" name="other"><%=form.other%></textarea>
+							<div class="col-md-4">
+								<textarea class="form-control" rows="6" name="other"><%=form.other%></textarea>
+							</div>
 
 							<hr/>
 

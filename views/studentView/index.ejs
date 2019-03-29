@@ -324,135 +324,138 @@
 
 				-->
 
-
-					<table align="center" border="1" class="table display-table table-striped table-bordered">
-							<thead>
-								<tr>
-									<th scope="col">Field</th>
-									<th scope="col">Data</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Onyen</td>
-									<td><%= student.onyen%></td>
-								</tr>
-								<tr>
-									<td>Name</td>
-									<td><%= student.lastName%>,
-										<%= student.firstName%>
-									</td>
-								</tr>
-								<tr>
-									<td>PID</td>
-									<td><%= student.pid%></td>
-								</tr>
-								<tr>
-									<td>Active</td>
-									<td><%= student.active%></td>
-								</tr>
-								<tr>
-									<td>Alternative Name</td>
-									<td><%= student.alternativeName%></td>
-								</tr>
-								<tr>
-									<td>Gender</td>
-									<td><%= student.gender%></td>
-								</tr>
-								<tr>
-									<td>Ethnicity</td>
-									<td><%= student.ethnicity%></td>
-								</tr>
-								<tr>
-									<td>Residency</td>
-									<td><%= student.residency%></td>
-								</tr>
-								<tr>
-									<td>Entering Status</td>
-									<td><%= student.enteringStatus%></td>
-								</tr>
-								<tr>
-									<td>Research Area</td>
-									<td><%= student.researchArea%></td>
-								</tr>
-								<tr>
-									<td>Leave Extension</td>
-									<td><%= student.leaveExtension%></td>
-								</tr>
-								<tr>
-									<td>Intended Degree</td>
-									<td><%= student.intendedDegree%></td>
-								</tr>
-								<tr>
-									<td>Hours Completed</td>
-									<td><%= student.hoursCompleted%></td>
-								</tr>
-								<tr>
-									<td>Funding Eligibility</td>
-									<td><%= student.fundingEligibility%></td>
-								</tr>
-								<tr>
-									<td>Funding Status</td>
-									<td><%= student.fundingStatus%></td>
-								</tr>
-								<tr>
-									<td>Background Approved</td>
-									<td><%= student.backgroundApproved%></td>
-								</tr>
-								<tr>
-									<td>Masters Awarded</td>
-									<td><%= student.mastersAwarded%></td>
-								</tr>
-								<tr>
-									<td>PRP Passed</td>
-									<td><%= student.prpPassed%></td>
-								</tr>
-								<tr>
-									<td>Bkgrd Prep Wkst Approved</td>
-									<td><%= student.backgroundPrepWorksheetApproved%></td>
-								</tr>
-								<tr>
-									<td>Program of Study Approved</td>
-									<td><%= student.programOfStudyApproved%></td>
-								</tr>
-								<tr>
-									<td>Research Planning Meeting</td>
-									<td><%= student.researchPlanningMeeting%></td>
-								</tr>
-								<tr>
-									<td>Committee Comp Approved</td>
-									<td><%= student.committeeCompApproved%></td>
-								</tr>
-								<tr>
-									<td>PHD Proposal Approved</td>
-									<td><%= student.phdProposalApproved%></td>
-								</tr>
-								<tr>
-									<td>Oral Exam Passed</td>
-									<td><%= student.oralExamPassed%></td>
-								</tr>
-								<tr>
-									<td>Dissertation Defence Passed</td>
-									<td><%= student.dissertationDefencePassed%></td>
-								</tr>
-								<tr>
-									<td>Dissertation Submitted</td>
-									<td><%= student.dissertationSubmitted%></td>
-								</tr>
-								<tr>
-									<td>Semester Started</td>
-									<td><%= student.semesterStarted%></td>
-								</tr>
-								<tr>
-									<td>advisor</td>
-									<td>
-										<% if(student.advisor != null){ %>
-										<%=student.advisor.lastName%>, <%=student.advisor.firstName%>
-										<% } %>
-										</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="row">
+						<div class="col-md-6 offset-md-3">
+							<table align="center" border="1" class="table display-table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th scope="col">Field</th>
+											<th scope="col">Data</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Onyen</td>
+											<td><%= student.onyen%></td>
+										</tr>
+										<tr>
+											<td>Name</td>
+											<td><%= student.lastName%>,
+												<%= student.firstName%>
+											</td>
+										</tr>
+										<tr>
+											<td>PID</td>
+											<td><%= student.pid%></td>
+										</tr>
+										<tr>
+											<td>Active</td>
+											<td><%= student.active%></td>
+										</tr>
+										<tr>
+											<td>Alternative Name</td>
+											<td><%= student.alternativeName%></td>
+										</tr>
+										<tr>
+											<td>Gender</td>
+											<td><%= student.gender%></td>
+										</tr>
+										<tr>
+											<td>Ethnicity</td>
+											<td><%= student.ethnicity%></td>
+										</tr>
+										<tr>
+											<td>Residency</td>
+											<td><%= student.residency%></td>
+										</tr>
+										<tr>
+											<td>Entering Status</td>
+											<td><%= student.enteringStatus%></td>
+										</tr>
+										<tr>
+											<td>Research Area</td>
+											<td><%= student.researchArea%></td>
+										</tr>
+										<tr>
+											<td>Leave Extension</td>
+											<td><%= student.leaveExtension%></td>
+										</tr>
+										<tr>
+											<td>Intended Degree</td>
+											<td><%= student.intendedDegree%></td>
+										</tr>
+										<tr>
+											<td>Hours Completed</td>
+											<td><%= student.hoursCompleted%></td>
+										</tr>
+										<tr>
+											<td>Funding Eligibility</td>
+											<td><%= student.fundingEligibility%></td>
+										</tr>
+										<tr>
+											<td>Funding Status</td>
+											<td><%= student.fundingStatus%></td>
+										</tr>
+										<tr>
+											<td>Background Approved</td>
+											<td><%= student.backgroundApproved%></td>
+										</tr>
+										<tr>
+											<td>Masters Awarded</td>
+											<td><%= student.mastersAwarded%></td>
+										</tr>
+										<tr>
+											<td>PRP Passed</td>
+											<td><%= student.prpPassed%></td>
+										</tr>
+										<tr>
+											<td>Bkgrd Prep Wkst Approved</td>
+											<td><%= student.backgroundPrepWorksheetApproved%></td>
+										</tr>
+										<tr>
+											<td>Program of Study Approved</td>
+											<td><%= student.programOfStudyApproved%></td>
+										</tr>
+										<tr>
+											<td>Research Planning Meeting</td>
+											<td><%= student.researchPlanningMeeting%></td>
+										</tr>
+										<tr>
+											<td>Committee Comp Approved</td>
+											<td><%= student.committeeCompApproved%></td>
+										</tr>
+										<tr>
+											<td>PHD Proposal Approved</td>
+											<td><%= student.phdProposalApproved%></td>
+										</tr>
+										<tr>
+											<td>Oral Exam Passed</td>
+											<td><%= student.oralExamPassed%></td>
+										</tr>
+										<tr>
+											<td>Dissertation Defence Passed</td>
+											<td><%= student.dissertationDefencePassed%></td>
+										</tr>
+										<tr>
+											<td>Dissertation Submitted</td>
+											<td><%= student.dissertationSubmitted%></td>
+										</tr>
+										<tr>
+											<td>Semester Started</td>
+											<td><%= student.semesterStarted%></td>
+										</tr>
+										<tr>
+											<td>advisor</td>
+											<td>
+												<% if(student.advisor != null){ %>
+												<%=student.advisor.lastName%>, <%=student.advisor.firstName%>
+												<% } %>
+												</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>

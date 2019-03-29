@@ -1,5 +1,5 @@
-<!-- views/student/CS04.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS04.ejs -->
 
 <html>
 	<head>
@@ -39,6 +39,8 @@
 						<div>This student has successfully completed a project as a thesis substitute in partial fulfillment of the requirements for the degree of Master of Science in Computer Science.
 						</div>
 
+						<strong>All fields required!</strong>
+
 						<hr></hr>
 
 						<form action="/student/forms/update/<%=student._id%>/CS04" method="post">
@@ -63,9 +65,9 @@
 							<hr></hr>
 
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-md-6">
 									<div><strong>Brief Description of project:</strong></div>
-									<textarea class="form-control" name="projectDescription" required><%=form.projectDescription%></textarea>
+									<textarea class="form-control" rows="6" name="projectDescription" required><%=form.projectDescription%></textarea>
 								</div>
 							</div>
 
@@ -86,7 +88,7 @@
 
 							<div>Student signature:</div>
 							<div class="row">
-								<div class="col-md-5">
+								<div class="col-md-4">
 									<i><%=signature%></i>
 									<input type="text" class="form-control" name="studentSignature" value="<%=form.studentSignature%>" required />
 								</div>
@@ -100,11 +102,11 @@
 
 							<div>Chairman Signature:</div>
 							<div class="row">
-								<div class="col-md-5">
+								<div class="col-md-4">
 									<i><%=signature%></i>
 									<input type="text" class="form-control" name="chairmanSignature" value="<%=form.chairmanSignature%>" required />
 								</div>
-								<div class="col-md-8">
+								<div class="col-md-3">
 									<div>Date signed</div>
 									<input type="text" class="form-control" name="chairmanDateSigned" value="<%=form.chairmanDateSigned%>" required />
 								</div>
@@ -112,12 +114,18 @@
 
 							<div class="verticalSpace" />
 
-							<div>Approved</div>
-							<select name="approved" class="form-control" id="inputStatus">
-								<option value=<%=form.approved%>><%=form.approved%></option>
-								<option value=false>Not approved.</option>
-								<option value=true>Approved</option>
-							</select>
+							<div class="row">
+								<div class="col-md-4">
+									<div>Approved</div>
+									<select name="approved" class="form-control" id="inputStatus">
+										<option value=<%=form.approved%>><%=form.approved%></option>
+										<option value=false>Not approved.</option>
+										<option value=true>Approved</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="verticalSpace" />
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>

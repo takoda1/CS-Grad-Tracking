@@ -1,5 +1,5 @@
-<!-- views/student/CS06.ejs -->
 <!DOCTYPE html>
+<!-- views/student/CS06.ejs -->
 
 <html>
 	<head>
@@ -43,19 +43,19 @@
 
 							<div class="row">
 								<div class="col-md-3">
-									<div>Name</div>
+									<div>Name*</div>
 									<input type="text" class="form-control" name="name" value="<%=student.lastName%>, <%=student.firstName%>" required/>
 								</div>
 								<div class="col-md-3">
-									<div>PID</div>
+									<div>PID*</div>
 									<input type="number" class="form-control" name="pid" value=<%=student.pid%> required />
 								</div>
 								<div class="col-md-3">
-									<div>Date submitted</div>
+									<div>Date submitted*</div>
 									<input type="text" class="form-control" name="dateSubmitted" value="<%=form.dateSubmitted%>" required />
 								</div>
 								<div class="col-md-3">
-									<div>Date entered program</div>
+									<div>Date entered program*</div>
 									<input type="text" class="form-control" name="dateEntered" value="<%=form.dateEntered%>" required />
 								</div>
 
@@ -70,7 +70,7 @@
 
 							<div class="row">
 								<div class="col-md-2">
-									Title of Dissertation or Topic of Research Area
+									Title of Dissertation or Topic of Research Area*
 								</div>
 								<div class="col-md-6">
 									<input type="text" class="form-control" name="dissTitle" value="<%=form.dissTitle%>" required />
@@ -89,7 +89,7 @@
 
 							<div class="row">
 								<div class="col-md-2">
-									<div>Comp 915: Technical Communication in CS. File CS-02 if waived.</div>
+									<div>Comp 915: Technical Communication in CS. File CS-02 if waived.*</div>
 								</div>
 								<div class="col-md-2">
 									<select name="comp915" class="form-control" id="inputStatus">
@@ -99,7 +99,8 @@
 									</select>
 								</div>
 							</div>
-							<div> Breadth Requirement: List courses below</div>
+
+							<div class="verticalSpace"> Breadth Requirement: List courses below</div>
 
 							<hr />
 
@@ -118,9 +119,9 @@
 
 							<div class="row">
 								<div class="col-md-2">
-									<div>Category</div>
+									<div>Category*</div>
 									<select name="breadthCourseCategory1" class="form-control">
-										<option value=<%=form.breadthCourseCategory1%>><%=form.breadthCourseCategory1%></option>
+										<option value=<%=form.breadthCourseCategory1%>><%=form.breadthCourseCategory1%> required </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -128,7 +129,7 @@
 									</select>
 
 									<select name="breadthCourseCategory2" class="form-control">
-										<option value=<%=form.breadthCourseCategory2%>><%=form.breadthCourseCategory2%></option>
+										<option value=<%=form.breadthCourseCategory2%>><%=form.breadthCourseCategory2%> required </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -136,7 +137,7 @@
 									</select>
 
 									<select name="breadthCourseCategory3" class="form-control">
-										<option value=<%=form.breadthCourseCategory3%>><%=form.breadthCourseCategory3%></option>
+										<option value=<%=form.breadthCourseCategory3%>><%=form.breadthCourseCategory3%> required </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -144,7 +145,7 @@
 									</select>
 
 									<select name="breadthCourseCategory4" class="form-control">
-										<option value=<%=form.breadthCourseCategory4%>><%=form.breadthCourseCategory4%></option>
+										<option value=<%=form.breadthCourseCategory4%>><%=form.breadthCourseCategory4%> required </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -152,7 +153,7 @@
 									</select>
 
 									<select name="breadthCourseCategory5" class="form-control">
-										<option value=<%=form.breadthCourseCategory5%>><%=form.breadthCourseCategory5%></option>
+										<option value=<%=form.breadthCourseCategory5%>><%=form.breadthCourseCategory5%> required </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -160,7 +161,7 @@
 									</select>
 
 									<select name="breadthCourseCategory6" class="form-control">
-										<option value=<%=form.breadthCourseCategory6%>><%=form.breadthCourseCategory6%></option>
+										<option value=<%=form.breadthCourseCategory6%>><%=form.breadthCourseCategory6%> required </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -168,7 +169,7 @@
 									</select>
 								</div>
 								<div class="col-md-6">
-									<div>Course Number, Title, & Name of Univ.</div>
+									<div>Course Number, Title, & Name of Univ.*</div>
 									<input type="text" class="form-control" name="breadthCourseInfo1" value="<%=form.breadthCourseInfo1%>" required />
 
 									<input type="text" class="form-control" name="breadthCourseInfo2" value="<%=form.breadthCourseInfo2%>" required />
@@ -182,7 +183,7 @@
 									<input type="text" class="form-control" name="breadthCourseInfo6" value="<%=form.breadthCourseInfo6%>" required />
 								</div>
 								<div class="col-md-2">
-									<div>Semester/Year</div>
+									<div>Semester/Year*</div>
 									<input type="text" class="form-control" name="breadthCourseDate1" value="<%=form.breadthCourseDate1%>" required />
 
 									<input type="text" class="form-control" name="breadthCourseDate2" value="<%=form.breadthCourseDate2%>" required />
@@ -196,7 +197,7 @@
 									<input type="text" class="form-control" name="breadthCourseDate6" value="<%=form.breadthCourseDate6%>" required />
 								</div>
 								<div class="col-md-2">
-									<div>Grade</div>
+									<div>Grade*</div>
 									<input type="text" class="form-control" name="breadthCourseGrade1" value="<%=form.breadthCourseGrade1%>" required />
 
 									<input type="text" class="form-control" name="breadthCourseGrade2" value="<%=form.breadthCourseGrade2%>" required />
@@ -220,7 +221,7 @@
 							<hr/>
 							<div class="row">
 								<div class="col-md-6">
-									<div>Course Number, Title, & Name of Univ</div>
+									<div>Course Number, Title, & Name of Univ*</div>
 
 									<input type="text" class="form-control" name="concentrationCourseInfo1" value="<%=form.concentrationCourseInfo1%>" required />
 
@@ -233,7 +234,7 @@
 
 								</div>
 								<div class="col-md-3">
-									<div>Semester/Year</div>
+									<div>Semester/Year*</div>
 
 									<input type="text" class="form-control" name="concentrationCourseDate1" value="<%=form.concentrationCourseDate1%>" required />
 
@@ -244,7 +245,7 @@
 									<input type="text" class="form-control" name="concentrationCourseDate4" value="<%=form.concentrationCourseDate4%>" required />
 								</div>
 								<div class="col-md-3">
-									<div>Credit/Hours</div>
+									<div>Credit/Hours*</div>
 
 									<input type="number" class="form-control" name="concentrationCourseHours1" value="<%=form.concentrationCourseHours1%>" required />
 
@@ -263,7 +264,7 @@
 
 							<div class="row">
 								<div class="col-md-4">
-									<div>Course Number & Title</div>
+									<div>Course Number & Title*</div>
 
 									<input type="text" class="form-control" name="otherCourseInfo1" value="<%=form.otherCourseInfo1%>" required />
 
@@ -274,7 +275,7 @@
 									<input type="text" class="form-control" name="otherCourseInfo4" value="<%=form.otherCourseInfo4%>" required />
 								</div>
 								<div class="col-md-2">
-									<div>Credit Hours</div>
+									<div>Credit Hours*</div>
 									<input type="number" class="form-control" name="otherCourseHours1" value="<%=form.otherCourseHours1%>" required />
 
 									<input type="number" class="form-control" name="otherCourseHours2" value="<%=form.otherCourseHours2%>" required />
@@ -285,19 +286,30 @@
 								</div>
 							</div>
 
-							<div>Note:</div>
-							<textarea class="form-control" name="note"><%=form.note%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>Note:</div>
+									<textarea class="form-control" rows="6" name="note"><%=form.note%></textarea>
+								</div>
+							</div>
 
 							<hr/>
-
-							<div>List any other courses here that you believe are relevant to your program of study.</div>
-							<textarea class="form-control" name="otherCourses"><%=form.otherCourses%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>List any other courses here that you believe are relevant to your program of study.</div>
+									<textarea class="form-control" rows="6" name="otherCourses"><%=form.otherCourses%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
 							<strong>D. Formal Minor(if applicable)</strong>
-							<div>See policy in <a href="https://handbook.unc.edu/phd.html">The Graduate School Handbook</a></div>
-							<textarea class="form-control" name="minor"><%=form.minor%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>See policy in <a href="https://handbook.unc.edu/phd.html">The Graduate School Handbook</a></div>
+									<textarea class="form-control" rows="6" name="minor"><%=form.minor%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
@@ -306,33 +318,43 @@
 							<div><strong>Check if completed</strong></div>
 							<div>(it is not necessary to have all other requirements completed to turn in your program of study)</div>
 
-							<div>A. Background Preperation worksheet</div>
-							<select name="backgroundPrepWorkSheet" class="form-control" id="inputStatus">
-								<option value=<%=form.backgroundPrepWorkSheet%>><%=form.backgroundPrepWorkSheet%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div>A. Background Preperation worksheet*</div>
+							<div class="col-md-4">
+								
+								<select name="backgroundPrepWorkSheet" class="form-control" id="inputStatus">
+									<option value=<%=form.backgroundPrepWorkSheet%>><%=form.backgroundPrepWorkSheet%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
-							<div>B. Program Product requirement</div>
-							<select name="programProductRequirement" class="form-control" id="inputStatus">
-								<option value=<%=form.programProductRequirement%>><%=form.programProductRequirement%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div>B. Program Product requirement*</div>
+							<div class="col-md-4">
+								
+								<select name="programProductRequirement" class="form-control" id="inputStatus">
+									<option value=<%=form.programProductRequirement%>><%=form.programProductRequirement%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
-							<div>C. PhD. Written Exam(a.k.a. the writing requirement)</div>
-							<select name="PHDWrittenExam" class="form-control" id="inputStatus">
-								<option value=<%=form.PHDWrittenExam%>><%=form.PHDWrittenExam%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div>C. PhD. Written Exam(a.k.a. the writing requirement)*</div>
+							<div class="col-md-4">
+								<select name="PHDWrittenExam" class="form-control" id="inputStatus">
+									<option value=<%=form.PHDWrittenExam%>><%=form.PHDWrittenExam%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
-							<div>D. PhD Oral Comprehensive Exam</div>
-							<select name="PHDOralExam" class="form-control" id="inputStatus">
-								<option value=<%=form.PHDOralExam%>><%=form.PHDOralExam%></option>
-								<option value=false>False</option>
-								<option value=true>True</option>
-							</select>
+							<div>D. PhD Oral Comprehensive Exam*</div>
+							<div class="col-md-4">
+								<select name="PHDOralExam" class="form-control" id="inputStatus">
+									<option value=<%=form.PHDOralExam%>><%=form.PHDOralExam%></option>
+									<option value=false>False</option>
+									<option value=true>True</option>
+								</select>
+							</div>
 
 							<hr/>
 
@@ -356,37 +378,37 @@
 								<div class="col-md-6">
 
 									<div class="form-group row">
-										<label class="col-md-2">1. </label>
+										<label class="col-md-2">1.* </label>
 										<div class="col-md-10">
-											<input type="text" class="form-control" id="committeeName1" name="committee1" value="<%=form.committee1%>" />
+											<input type="text" class="form-control" id="committeeName1" name="committee1" value="<%=form.committee1%>" required />
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label class="col-md-2">2. </label>
+										<label class="col-md-2">2.* </label>
 										<div class="col-md-10">
-											<input type="text" class="form-control" id="committeeName2" name="committee2" value="<%=form.committee2%>" />
+											<input type="text" class="form-control" id="committeeName2" name="committee2" value="<%=form.committee2%>" required />
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label class="col-md-2">3. </label>
+										<label class="col-md-2">3.* </label>
 										<div class="col-md-10">
-											<input type="text" class="form-control" id="committeeName3" name="committee3" value="<%=form.committee3%>" />
+											<input type="text" class="form-control" id="committeeName3" name="committee3" value="<%=form.committee3%>" required />
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label class="col-md-2">4. </label>
+										<label class="col-md-2">4.* </label>
 										<div class="col-md-10">
-											<input type="text" class="form-control" id="committeeName4" name="committee4" value="<%=form.committee4%>" />
+											<input type="text" class="form-control" id="committeeName4" name="committee4" value="<%=form.committee4%>" required />
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label class="col-md-2">5. </label>
+										<label class="col-md-2">5.* </label>
 										<div class="col-md-10">
-											<input type="text" class="form-control" id="committeeName5" name="committee5" value="<%=form.committee5%>"/>
+											<input type="text" class="form-control" id="committeeName5" name="committee5" value="<%=form.committee5%>"required />
 										</div>
 									</div>
 
@@ -449,35 +471,43 @@
 
 							<hr></hr>
 
-							<div><strong>Committee Adviser</strong>(or Chair if different from adviser)</div>
+							<div><strong>Committee Adviser</strong>(or Chair if different from adviser)*</div>
 							<div>By signing here, the chair indicates that all items above have been approved by the majority of the committee.</div>
 							<i><%=signature%></i>
-							<input type="text" class="form-control" name="chairSignature" value="<%=form.chairSignature%>" required />
+							<div class="col-md-4">
+								<input type="text" class="form-control" name="chairSignature" value="<%=form.chairSignature%>" required />
+							</div>
 
 							<hr/>
 
 							<strong>IV. Approval</strong>
 
-							<div><strong>PhD Program of Study APPROVAL PROCESS</strong></div>
+							<div><strong>PhD Program of Study APPROVAL PROCESS*</strong></div>
 							<div>The PhD Program of Study will be reviewed by the GCS (Graduate Studies Committee).  GSC meets a number of times during each semester.  In order for your Program of Study to be reviewed in a timely manner, it is highly recommended to submit it early, preferably in your 6th semester or around the time you have your proposal meeting</div>
 
-							<select name="approved" class="form-control">
-								<option value=<%=form.comp915%>><%=form.approved%></option>
-								<option value="Approved">Approved</option>
-								<option value="Disapproved">Disapproved</option>
-							</select>
+							<div class="col-md-4">
+								<select name="approved" class="form-control">
+									<option value=<%=form.comp915%>><%=form.approved%></option>
+									<option value="Approved">Approved</option>
+									<option value="Disapproved">Disapproved</option>
+								</select>
+							</div>
 
 							<hr/>
 
-							<div>Reason for Disapproved and Needed Adjustments Stated Here </div>
-							<textarea class="form-control" name="reasonApproved"><%=form.reasonApproved%></textarea>
+							<div class="row">
+								<div class="col-md-4">
+									<div>Reason for Disapproved and Needed Adjustments Stated Here </div>
+									<textarea class="form-control" rows="6" name="reasonApproved"><%=form.reasonApproved%></textarea>
+								</div>
+							</div>
 
 							<hr/>
 
 
 							<div class="row">
 								<div class="col-md-4">
-									<div>Director of Graduate Studies Signature:</div>
+									<div>Director of Graduate Studies Signature:*</div>
 									<i><%=signature%></i>
 									<input type="text" class="form-control" name="directorSignature" value="<%=form.directorSignature%>" required />
 								</div>

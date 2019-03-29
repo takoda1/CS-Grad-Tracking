@@ -206,8 +206,8 @@ _.checkStudent = function(){
 _.listObjectToString = function (input) {
   var result = "Search: ";
   for (var key in input) {
-    result = result + key + ":";
-    result = result + input[key] + ". ";
+    result = result + key + " = ";
+    result = result + input[key] + "; ";
   }
   return result;
 }
