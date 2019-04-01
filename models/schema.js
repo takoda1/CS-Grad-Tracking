@@ -28,6 +28,7 @@ var studentSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   pid: Number,
+  csid: Number,
   status: {
     type: String,
     enum: ["Active", "Inactive", "Leave", "Graduated", "Ineligible"],
@@ -151,7 +152,7 @@ var gradeSchema = mongoose.Schema({
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"}
 });
 
- var semesterReferenceSchema = mongoose.Schema({
+var semesterReferenceSchema = mongoose.Schema({
    name: String,
    semester: {type: mongoose.Schema.Types.ObjectId, ref:"Semester"}
  });
@@ -160,15 +161,15 @@ var grantSchema = mongoose.Schema({
   name: String
 })
 
- var noteSchema = mongoose.Schema({
+var noteSchema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   title: String,
   date: Date,
   note: String
- })
+})
 
- //form schemas
- var CS01Schema = mongoose.Schema({
+//form schemas
+var CS01Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number,
   comp283Covered: String, comp283Date: String,
@@ -188,9 +189,9 @@ var grantSchema = mongoose.Schema({
   stat435Covered: String, stat435Date: String,
   studentSignature: String, studentDateSigned: String,
   advisorSignature: String, advisorDateSigned: String
- });
+});
 
-  var CS01BSMSSchema = mongoose.Schema({
+var CS01BSMSSchema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number,
   comp521Covered: String, comp521Date: String,
@@ -201,18 +202,18 @@ var grantSchema = mongoose.Schema({
   math661Covered: String, math661Date: String,
   studentSignature: String, studentDateSigned: String,
   advisorSignature: String, advisorDateSigned: String
- });
+});
 
- var CS02Schema = mongoose.Schema({
+var CS02Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number, dateSubmitted: String,
   courseNumber: String,
   basisWaiver: String,
   advisorSignature: String, advisorDateSigned: String,
   instructorSignature: String, instructorDateSigned: String
- })
+})
 
- var CS03Schema = mongoose.Schema({
+var CS03Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number, dateSubmitted: String,
   DR1: String, university1: String, dept1: String, course1: String, hours1: Number, semester1: String, title1: String,
@@ -236,9 +237,9 @@ var grantSchema = mongoose.Schema({
   approved: String,
   approvalReason: String,
   directorSignature: String, directorDateSigned: String
- })
+})
 
- var CS04Schema = mongoose.Schema({
+var CS04Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number, dateSubmitted: String,
   projectDescription: String,
@@ -246,9 +247,9 @@ var grantSchema = mongoose.Schema({
   studentSignature: String, studentDateSigned: String,
   chairmanSignature: String, chairmanDateSigned: String,
   approved: Boolean
- })
+})
 
- var CS05Schema = mongoose.Schema({
+var CS05Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number, dateSubmitted: String,
   oralComprehensiveExam: Boolean,
@@ -261,9 +262,9 @@ var grantSchema = mongoose.Schema({
   thesisAdviser: String,
   committeeChairman: String,
   directorSignature: String, directorDateSigned: String
- })
+})
 
-  var CS06Schema = mongoose.Schema({
+var CS06Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
   name: String, pid: Number, dateSubmitted: String, dateEntered: String,
   dissTitle: String,
@@ -300,7 +301,7 @@ var grantSchema = mongoose.Schema({
   approved: String,
   reasonApproved: String,
   directorSignature: String
- })
+})
 
 var CS07Schema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
