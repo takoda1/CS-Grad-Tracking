@@ -27,6 +27,8 @@ var jobController = {};
  */
 jobController.post = function (req, res) {
   var input = req.body;
+  
+  console.log(input);
   input = util.validateModelData(input, schema.Job);
   if(input.position != null && input.supervisor != null){
     //attempt to populate faculty, if they don't exist, error will be caught
@@ -238,7 +240,7 @@ jobController.create = function(req, res){
  */
 jobController.edit = function(req, res){
   if (req.params._id) { //_id from params because passed with job/edit/:_id
-    schema.Job.findOne({_id: req.params._id}).populate("supervisor").populate("course").populate("semester").exec().then(function (result) {
+    schema.Job.findOne({_id: req.params._id}).populate("supervisor").populate("course").populate("semester").populate("fundingSource").exec().then(function (result) {
       if (result != null) {
         var job, faculty, courses, grants;
         job = result;
@@ -496,8 +498,10 @@ jobController.uploadGrant = function(req, res){
 		var count = 0;
 		data.forEach(function(element){
 			//verify that required fields exist
-			if(element.name != null && element.description != null){
-				schema.Grant.findOne(util.validateModelData(element, schema.Grant)).exec().then(function(result){
+			
+			if(element.name != null){
+				console.log(element.name);
+				schema.Grant.findOne({name:element.name}).exec().then(function(result){
 					console.log("ABC")
 					if(result == null){
 					  var inputGrant = new schema.Grant(element);

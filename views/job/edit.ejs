@@ -73,9 +73,9 @@
 							<label for="inputFundingSource" class="col-md-2 offset-md-3">Funding source</label>
 							<div class="col-md-4">
 								<select name="fundingSource" class="form-control" id="inputFundingSource">
-									<option value="<%=job.fundingSource.name%>"><%=job.fundingSource.name%></option>
+									<option value="<%=job.fundingSource.name%>" ><%=job.fundingSource.name%></option>
 									<% for(var i = 0; i < grants.length; i++){ %>
-									<option value="<%=grants[i].name%>"><%=grants[i].name%></option>
+									<option value="<%=grants[i]._id%>"><%=grants[i].name%></option>
 									<% } %>
 								</select>
 							</div>
