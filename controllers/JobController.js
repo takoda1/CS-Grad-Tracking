@@ -205,18 +205,20 @@ jobController.delete = function (req, res) {
  *
  */
 jobController.create = function(req, res){
-  var faculty, courses, jobTitles;
-  jobTitles = schema.Job.schema.path("position").enumValues;
-  getFaculty().then(function(result){
-    faculty = result;
-    getCourses().then(function(result){
-      courses = result;
-      getSemesters().then(function(result){
-        res.render("../views/job/create.ejs", {faculty: faculty, courses: courses, jobTitles: jobTitles, semesters: result});
-      });
-    });
-  });
- 
+	var grants, faculty, courses, jobTitles;
+	jobTitles = schema.Job.schema.path("position").enumValues;
+	getGrants().then(function(result){
+		grants = result;
+		getFaculty().then(function(result){
+			faculty = result;
+			getCourses().then(function(result){
+				courses = result;
+				getSemesters().then(function(result){
+					res.render("../views/job/create.ejs", {faculty: faculty, courses: courses, grants: grants, jobTitles: jobTitles, semesters: result});
+				});
+			});
+		});
+	});
 }
 
 /**
@@ -238,14 +240,17 @@ jobController.edit = function(req, res){
   if (req.params._id) { //_id from params because passed with job/edit/:_id
     schema.Job.findOne({_id: req.params._id}).populate("supervisor").populate("course").populate("semester").exec().then(function (result) {
       if (result != null) {
-        var job, faculty, courses;
+        var job, faculty, courses, grants;
         job = result;
         getFaculty().then(function(result){
           faculty = result;
           getCourses().then(function(result){
             courses = result;
-            getSemesters().then(function(result){
-              res.render("../views/job/edit.ejs", {job: job, faculty: faculty, courses: courses, semesters: result});
+            getGrants().then(function(result){
+            	grants = result;
+        	 	getSemesters().then(function(result){
+	              res.render("../views/job/edit.ejs", {job: job, faculty: faculty, courses: courses, grants: grants, semesters: result});
+	            });
             });
           });
         });
@@ -285,8 +290,10 @@ jobController.upload = function(req, res){
     headers[String.fromCharCode(65)] = "onyen";
     var i = 1;
     for(var field in schema.Job.schema.obj){
-      headers[String.fromCharCode(i+65)] = field;
-      i++;
+    	if(field != "fundingSource"){
+			headers[String.fromCharCode(i+65)] = field;
+			i++;
+		}
     }
     for(z in worksheet) {
         if(z[0] === '!') continue;
@@ -441,6 +448,79 @@ function pushStudentJob(onyen, jobId){
   });
 }
 
+jobController.uploadGrantPage = function(req, res){
+	var faculty, courses;
+	getFaculty().then(function(result){
+		faculty = result;
+		getCourses().then(function(result){
+		  courses = result;
+		  getSemesters().then(function(result){
+		    var uploadSuccess = false;
+		    if(req.params.uploadSuccess == "true"){
+		      uploadSuccess = true;
+		    }
+		    res.render("../views/job/uploadGrant.ejs", {faculty: faculty, courses: courses, semesters:result, uploadSuccess: uploadSuccess});
+		  });
+		});
+	});
+}
+
+jobController.uploadGrant = function(req, res){
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files){
+		var f = files[Object.keys(files)[0]];
+		var workbook = XLSX.readFile(f.path);
+		var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+		var headers = {};
+		var data = [];
+		var i = 0;
+		for(var field in schema.Grant.schema.obj){
+		  headers[String.fromCharCode(i+65)] = field;
+		  i++;
+		}
+		for(z in worksheet) {
+		    if(z[0] === '!') continue;
+		    //parse out the column, row, and value
+		    var col = z.substring(0,1);
+		    var row = parseInt(z.substring(1));
+		    var value = worksheet[z].v;
+
+		    if(!data[row]) data[row]={};
+		    data[row][headers[col]] = value;
+		}
+		//drop those first two rows which are empty
+		data.shift();
+		data.shift();
+		//try to create models
+		//have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
+		var count = 0;
+		data.forEach(function(element){
+			//verify that required fields exist
+			if(element.name != null && element.description != null){
+				schema.Grant.findOne(util.validateModelData(element, schema.Grant)).exec().then(function(result){
+					console.log("ABC")
+					if(result == null){
+					  var inputGrant = new schema.Grant(element);
+					  inputGrant.save().then(function(result){
+				        count++;
+				        if(count == data.length){
+				          res.redirect("/job/uploadGrant/true");
+				        }
+				      }).catch(function(err){
+				        res.render("../views/error.ejs", {string: "Grant "+element.name+" did not save. Make sure there are no strange characters."});
+				      });
+					}
+					else{
+						count++;
+						if(count == data.length){
+				          res.redirect("/job/uploadGrant/true");
+				        }
+					}
+				});
+			}
+		});
+	});
+}
 
 jobController.assignPage = function(req, res){
   var jobId = req.params._id;
@@ -593,6 +673,14 @@ function getSemesters(){
       resolve(result);
     });
   });
+}
+
+function getGrants(){
+	return new Promise((resolve, reject)=>{
+		schema.Grant.find().sort({name: 1}).exec().then(function(result){
+			resolve(result);
+		});
+	});
 }
 
 function getConnectedStudents(){

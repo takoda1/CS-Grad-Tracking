@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- views/job/uploadGrant.ejs -->
+
+<html>
+	<head>
+		<title>Upload Grant</title>
+		<%- include('../partials/head.ejs') %>
+	</head>
+	
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row h-100">
+
+				<div class='col-lg-2 sidebar text-center'>
+
+					<%- include('../partials/admin-sidebar.ejs') %>
+
+					<%- include('./search-job.ejs') %>
+				</div>
+
+				<div class='col-lg-10 panelbg text-center'>
+
+					<% if(uploadSuccess == true) { %>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Upload success!</strong>
+					</div>
+					<% } %>
+					
+					<h1>Upload Grants</h1>
+					<form action="/job/uploadGrant" enctype="multipart/form-data" method="post">
+						<div class="form-group row">
+							<label for="inputSheet" class="col-md-3 offset-md-3">Spreadsheet</label>
+							<div class="col-md-4">
+								<input type="file" name="upload" class="form-control-file" id="inputSheet" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required/>
+							</div>
+						</div>
+						<div class="col-md-4 offset-md-4">
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+						<h3>Upload format</h3>
+						<img src="/images/jobUploadFormat.png">
+						
+						<div class="col-md-4 offset-md-4">
+							<h3>Requirements</h2>
+							<ul class="list-group">
+								<li class="list-group-item">Columns must be in order displayed above, headers don't have to be what is displayed.</li>
+								<li class="list-group-item">onyen, position, supervisor, and semester are required.</li>
+								<li class="list-group-item">Position should be TA, RA, or OTHER, case does not matter.</li>
+								<li class="list-group-item">Supervisor should be LASTNAME, FIRSTNAME. Case does not matter.</li>
+								<li class="list-group-item">Semester should be SEASON, YYYY. Case does not matter.</li>
+								<li class="list-group-item">If a course is provided, the supervisor must match the faculty teaching that course, and semester must match the semester of the course.</li>
+								<li class="list-group-item">Course should be DDDD(department code), CLASS NUMBER, SECTION.</li>
+							</ul>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<%- include("../partials/bootstrapScripts.ejs") %>
+	</body>
+</html>

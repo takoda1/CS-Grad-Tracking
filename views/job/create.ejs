@@ -17,7 +17,7 @@
 					<%- include("./search-job.ejs") %>
 
 				</div>
-				<div align ="center" class="col-lg-10 panelbg text-center">
+				<div align="center" class="col-lg-10 panelbg text-center">
 					<h1>Create job</h1>
 					<form action="/job/post" method="post">
 						<div class="form-group row">
@@ -90,8 +90,12 @@
 						<div class="form-group row" id="fundingSource">
 							<label for="inputFundingSource" class="col-md-2 offset-md-3">Funding source</label>
 							<div class="col-md-4">
-								<input type="text"
-								 name="fundingSource" class="form-control" id="inputFundingSource" />
+								<select name="fundingSource" class="form-control" id="inputFundingSource">
+									<option></option>
+									<% for(var i = 0; i < grants.length; i++){ %>
+									<option value="<%=grants[i].name%>"><%=grants[i].name%></option>
+									<% } %>
+								</select>
 							</div>
 						</div>
 

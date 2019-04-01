@@ -138,8 +138,7 @@ var jobSchema = mongoose.Schema({
   course: {type: mongoose.Schema.Types.ObjectId, ref: "Course"},
   description: String,
   hours: Number,
-  fundingSource: String
-  
+  fundingSource: {type: mongoose.Schema.Types.ObjectId, ref: "Grant"}
 });
 
 // Grades
@@ -157,9 +156,9 @@ var gradeSchema = mongoose.Schema({
    semester: {type: mongoose.Schema.Types.ObjectId, ref:"Semester"}
  });
 
- var grantSchema = mongoose.Schema({
-
- })
+var grantSchema = mongoose.Schema({
+  name: String
+})
 
  var noteSchema = mongoose.Schema({
   student: {type: mongoose.Schema.Types.ObjectId, ref:"Student"},
@@ -403,6 +402,7 @@ schema.Course = mongoose.model("Course", courseSchema);
 schema.CourseInfo = mongoose.model("CourseInfo", courseInfoSchema);
 schema.Job = mongoose.model("Job", jobSchema);
 schema.Grade = mongoose.model("Grade", gradeSchema);
+schema.Grant = mongoose.model("Grant", grantSchema);
 schema.SemesterReference = mongoose.model("SemesterReference", semesterReferenceSchema);
 schema.Note = mongoose.model("Note", noteSchema);
 schema.CS01 = mongoose.model("CS01", CS01Schema);
