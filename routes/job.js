@@ -34,6 +34,8 @@ router.get("/assign/:_id", job.assignPage);
 
 router.get("/download", job.download);
 
+router.get("/uploadGrant/:uploadSuccess", job.uploadGrantPage);
+
 router.post("/post", job.post);
 
 router.post("/put", job.put);
@@ -45,5 +47,7 @@ router.post("/upload", job.upload);
 router.post("/assignPost/:_id", job.assign);
 
 router.post("/unassign", job.unAssign);
+
+router.post("/uploadGrant", job.uploadGrant);
 
 module.exports = router;
