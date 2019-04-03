@@ -412,6 +412,28 @@ courseController.upload = function(req, res){
                     element.category = "NA";
                     break;
                 }
+
+                //check if the course is already in the courseInfo schema
+                //if not, add it
+                // if(element.name == "Internet Services & Protocols"){
+                //   console.log(element.number);
+                //   schema.CourseInfo.findOne({number: element.number, hours: element.hours, name: element.name}).exec().then(function(result){
+                //     console.log(result);
+                //   })
+                // }
+                schema.CourseInfo.findOne({number: element.number, hours: element.hours}).exec().then(function(result){
+                  if(result == null){
+                    var temp = util.validateModelData(element, schema.CourseInfo);
+                    console.log(temp);
+                    
+                    var inputCourseInfo = new schema.CourseInfo(temp);
+                      inputCourseInfo.save().then(function(result){
+                    }).catch(function(err){
+                      console.log("courseInfo upload error in course upload post");
+                    });
+                  }
+                });
+
                 schema.Course.findOne({number: element.number, section: element.section, univNumber: element.univNumber, faculty: element.faculty, semester: element.semester}).exec().then(function (result) {
                   //if the course doesn't already exist, try to make it
                   if(result == null){
