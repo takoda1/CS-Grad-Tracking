@@ -21,7 +21,7 @@ notes
 */
 studentViewController.put = function (req, res) {
   var input = req.body;
-  var editableFields = ["firstName", "lastName", "alternativeName", "gender", "ethnicity", "notes"];
+  var editableFields = ["firstName", "lastName", "alternativeName", "gender", "ethnicity", "notes", "residency"];
   if (input.firstName != null && input.lastName != null && input._id != null) {
     schema.Student.findOne({_id: input._id}, input).exec().then(function(result){
       if(result != null){
