@@ -57,11 +57,15 @@
 								</select>
 							</div>
 						</div>
-									
+
 						<div class="form-group row">
-							<label for="inputNotes" class="col-md-4">Notes</label>
+							<label for="inputResidency" class="col-md-4">Residency</label>
 							<div class="col-md-8">
-								<input type="text" class="form-control" id="inputNotes" name="notes" value="<%=student.notes%>"/>
+								<select name="residency" class="form-control" id="inputResidency">
+									<option value=<%=student.residency%> /><%=student.residency%></option>
+									<option value="NO">NO</option>
+									<option value="APPLIED">APPLIED</option>
+								</select>
 							</div>
 						</div>
 
