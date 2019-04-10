@@ -11,11 +11,18 @@
 		<div class="container-fluid h-100">
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
-
+					
+					<% if(!isStudent) {%>
+					
 					<%- include("../partials/admin-sidebar.ejs") %>
 
 					<%- include("./search-student.ejs") %>
 
+					<% } else{ %>
+
+					<%- include("../partials/logout.ejs") %>
+
+					<% } %>
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
 
@@ -27,8 +34,9 @@
 						<strong>Submit success!</strong>
 					</div>
 					<% } %>
-
+					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
@@ -45,7 +53,7 @@
 						<hr></hr>
 					
 
-						<form action="/student/forms/update/<%=student._id%>/CS01" method="post">
+						<form action="<%=postMethod%>" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
 
@@ -325,6 +333,7 @@
 
 							<div class="verticalSpace"/>
 
+							<% if(!isStudent) { %>
 							<div>Advisor Signature:</div>
 							<div class="row">
 								<div class="col-md-5">
@@ -336,7 +345,7 @@
 									<input type="text" class="form-control" name="advisorDateSigned" value="<%=form.advisorDateSigned%>" required />
 								</div>
 							</div>
-
+							 <% } %>
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>

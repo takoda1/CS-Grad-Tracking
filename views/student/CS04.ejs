@@ -12,9 +12,17 @@
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
 
+					<% if(!isStudent) {%>
+					
 					<%- include("../partials/admin-sidebar.ejs") %>
 
 					<%- include("./search-student.ejs") %>
+
+					<% } else{ %>
+
+					<%- include("../partials/logout.ejs") %>
+
+					<% } %>
 
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
@@ -28,7 +36,9 @@
 					</div>
 					<% } %>
 
+					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 

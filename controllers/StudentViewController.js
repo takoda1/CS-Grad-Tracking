@@ -81,39 +81,106 @@ studentViewController.jobs = function(req, res){
 }
 
 studentViewController.forms = function(req, res){
+  // schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
+  //   var student = result;
+  //   schema.Form.find({student:result._id}).exec().then(function(result){
+  //     var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
+  //     var existingForms = result;
+  //     var uploadSuccess = false;
+  //     if(req.params.uploadSuccess == "true"){
+  //       uploadSuccess = true;
+  //     }
+  //     res.render("../views/studentView/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
+  //   });
+    
+  // });
   schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
     var student = result;
-    schema.Form.find({student:result._id}).exec().then(function(result){
-      var formTitles = schema.Form.schema.path("defaultTitle").enumValues;
-      var existingForms = result;
-      var uploadSuccess = false;
-      if(req.params.uploadSuccess == "true"){
-        uploadSuccess = true;
-      }
-      res.render("../views/studentView/forms", {student: student, formTitles: formTitles, uploadSuccess: uploadSuccess, existingForms: existingForms});
-    });
-    
+    res.render("../views/studentView/forms.ejs", {student: student});
   });
 }
 
 studentViewController.viewForm = function(req, res){
-  if(req.params.title != null && req.params._id != null){
-    //make sure student exists
-    schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+  // if(req.params.title != null && req.params._id != null){
+  //   //make sure student exists
+  //   schema.Student.findOne({_id: req.params._id}).exec().then(function(result){
+  //     if(result != null){
+  //       var filePath = path.join(__dirname, "../data/forms/"+req.params._id+req.params.title+".pdf");
+  //       fs.access(filePath, function(err){
+  //         if(err){
+  //           res.render("../views/error.ejs", {string: "File does not exist."});
+  //         } 
+  //         else{
+  //           var file = fs.createReadStream(filePath);
+  //           res.setHeader("Content-type", "application/pdf");
+  //           file.pipe(res);
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+  var signature = "In place of your signature, please type your full legal name:";
+  if(req.params.title != null && req.params.uploadSuccess != null){
+    var uploadSuccess = false;
+    if(req.params.uploadSuccess == "true"){
+      uploadSuccess = true;
+    }
+    schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
       if(result != null){
-        var filePath = path.join(__dirname, "../data/forms/"+req.params._id+req.params.title+".pdf");
-        fs.access(filePath, function(err){
-          if(err){
-            res.render("../views/error.ejs", {string: "File does not exist."});
-          } 
+        var student = result;
+        console.log(req.params.title);
+        schema[req.params.title].findOne({student: result._id}).exec().then(function(result){
+          console.log(result);
+          var form = {};
+          if(result != null){
+            form = result;
+          }
+          var isStudent = true;
+          var postMethod = "/studentView/forms/update/"+req.params.title;
+          /*Need both an administrator view of form and a student view of form,
+          with varying levels of ability to update data fields, and with minor html
+          changes, so I use EJS and the above two variables to load the correct
+          form version depending on whether it is an administrator/faculty
+          or student viewing the form.
+          */
+         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess, isStudent: isStudent, postMethod: postMethod});
+        });
+      }
+      else{
+        res.render("..views/error.ejs", {string: "Student id not specified."});
+      }
+    });
+  }
+}
+
+studentViewController.updateForm = function(req, res){
+  console.log("ABC");
+  var input = req.body;
+  if(req.params.title != null){
+    schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
+      if(result != null){
+        var studentId = result._id;
+        
+        schema[req.params.title].findOneAndUpdate({student: studentId}, input).exec().then(function(result){
+          if(result != null){
+            res.redirect("/studentView/forms"+"/"+req.params.title+"/true");
+          }
           else{
-            var file = fs.createReadStream(filePath);
-            res.setHeader("Content-type", "application/pdf");
-            file.pipe(res);
+            var inputModel = new schema[req.params.title](input);
+            inputModel.save().then(function(result){
+              console.log(result);
+              res.redirect("/studentView/forms/"+req.params.title+"/true");
+            });
           }
         });
       }
-    });
+      else{
+        res.render("../views/error.ejs", {string: "Student not found"});
+      }
+    })
+  }
+  else{
+    res.render("../views/error.ejs", {string: "Did not include student ID or title of form"});
   }
 }
 

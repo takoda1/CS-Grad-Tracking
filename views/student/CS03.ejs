@@ -12,10 +12,17 @@
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
 
+					<% if(!isStudent) {%>
+					
 					<%- include("../partials/admin-sidebar.ejs") %>
 
 					<%- include("./search-student.ejs") %>
 
+					<% } else{ %>
+
+					<%- include("../partials/logout.ejs") %>
+
+					<% } %>
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
 
@@ -28,7 +35,9 @@
 					</div>
 					<% } %>
 
+					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
@@ -39,7 +48,7 @@
 
 						<hr></hr>
 
-						<form action="/student/forms/update/<%=student._id%>/CS03" method="post">
+						<form action="<%=postMethod%>" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
 
@@ -218,7 +227,7 @@
 							<div>D. Writing Requirement(One of the following)</div>
 							<div class="row">
 								<div class="col-md-3">
-									<select name="comprehensivePaper" class="form-control" id="inputStatus">
+									<select name="comprehensivePaper" class="form-control" id="inputStatus" required>
 										<option value=<%=form.comprehensivePaper%>><%=form.comprehensivePaper%></option>
 										<option value=false>False</option>
 										<option value=true>True</option>
@@ -231,7 +240,7 @@
 							
 							<div class="row">
 								<div class="col-md-3">
-									<select name="thesis" class="form-control" id="inputStatus">
+									<select name="thesis" class="form-control" id="inputStatus" required>
 										<option value=<%=form.thesis%>><%=form.thesis%></option>
 										<option value=false>False</option>
 										<option value=true>True</option>
@@ -245,7 +254,7 @@
 
 							<div class="row">
 								<div class="col-md-3">
-									<select name="outsideReview" class="form-control" id="inputStatus">
+									<select name="outsideReview" class="form-control" id="inputStatus" required>
 										<option value=<%=form.outsideReview%>><%=form.outsideReview%></option>
 										<option value=false>False</option>
 										<option value=true>True</option>
@@ -285,6 +294,8 @@
 							</div>
 
 							<div class="verticalSpace"/>
+
+							<% if(!isStudent){ %>
 
 							<i><%=signature%></i>
 							<div class="row">
@@ -329,6 +340,8 @@
 									<input type="text" class="form-control" name="directorDateSigned" value="<%=form.directorDateSigned%>" required />
 								</div>
 							</div>
+
+							<% } %>
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
