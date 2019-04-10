@@ -334,7 +334,9 @@ studentController.viewForm = function(req, res){
           if(result != null){
             form = result;
           }
-         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess});
+          var isStudent = false;
+          var postMethod = "/student/forms/update/"+student._id+"/"+req.params.title;
+         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess, isStudent: isStudent, postMethod: postMethod});
         });
       }
       else{
