@@ -38,8 +38,10 @@
 
 					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } else { %>
+					<%- include("../partials/studentBarPartial.ejs") %>
 					<% } %>
-
+					
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
 					<h3>Course Waiver</h3>

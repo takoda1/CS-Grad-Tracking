@@ -38,6 +38,8 @@
 
 					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } else { %>
+					<%- include("../partials/studentBarPartial.ejs") %>
 					<% } %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
@@ -53,7 +55,7 @@
 
 						<hr></hr>
 
-						<form action="/student/forms/update/<%=student._id%>/CS04" method="post">
+						<form action="<%=postMethod%>" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
 
@@ -98,7 +100,7 @@
 
 							<div>Student signature:</div>
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-5">
 									<i><%=signature%></i>
 									<input type="text" class="form-control" name="studentSignature" value="<%=form.studentSignature%>" required />
 								</div>
@@ -108,11 +110,13 @@
 								</div>
 							</div>
 
+							<% if(!isStudent) { %>
+
 							<div class="verticalSpace"/>
 
 							<div>Chairman Signature:</div>
 							<div class="row">
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<i><%=signature%></i>
 									<input type="text" class="form-control" name="chairmanSignature" value="<%=form.chairmanSignature%>" required />
 								</div>
@@ -134,6 +138,8 @@
 									</select>
 								</div>
 							</div>
+
+							<% } %>
 
 							<div class="verticalSpace" />
 

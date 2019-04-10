@@ -12,9 +12,17 @@
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
 
+					<% if(!isStudent) {%>
+					
 					<%- include("../partials/admin-sidebar.ejs") %>
 
 					<%- include("./search-student.ejs") %>
+
+					<% } else{ %>
+
+					<%- include("../partials/logout.ejs") %>
+
+					<% } %>
 
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
@@ -28,7 +36,11 @@
 					</div>
 					<% } %>
 
+					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } else { %>
+					<%- include("../partials/studentBarPartial.ejs") %>
+					<% } %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
@@ -41,7 +53,7 @@
 
 						<hr></hr>
 
-						<form action="/student/forms/update/<%=student._id%>/CS08" method="post">
+						<form action="<%=postMethod%>" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
 
@@ -104,6 +116,8 @@
 
 							<hr/>
 
+							<% if(!isStudent) {%>
+
 							<strong>Approval</strong>
 
 							<div>We have judged this paper to be of thesis quality in both substance and presentation. It therefore satisfies the writing requirement for the M.S. in Computer Science.</div>
@@ -131,6 +145,8 @@
 									<input type="text" class="form-control" name="secondarySignedDate" value="<%=form.secondarySignedDate%>" required />
 								</div>
 							</div>
+
+							<% } %>
 
 							<div class="verticalSpace"/>
 							
