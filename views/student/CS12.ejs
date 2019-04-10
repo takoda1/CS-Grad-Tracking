@@ -12,9 +12,17 @@
 			<div class="row h-100">
 				<div class="col-lg-2 sidebar text-center">
 
+					<% if(!isStudent) {%>
+					
 					<%- include("../partials/admin-sidebar.ejs") %>
 
 					<%- include("./search-student.ejs") %>
+
+					<% } else{ %>
+
+					<%- include("../partials/logout.ejs") %>
+
+					<% } %>
 
 				</div>
 				<div align ="center" class="col-lg-10 panelbg text-center">
@@ -28,7 +36,11 @@
 					</div>
 					<% } %>
 
+					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
+					<% } else { %>
+					<%- include("../partials/studentBarPartial.ejs") %>
+					<% } %>
 
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
@@ -39,7 +51,7 @@
 
 						<hr></hr>
 
-						<form action="/student/forms/update/<%=student._id%>/CS12" method="post">
+						<form action="<%=postMethod%>" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
 
@@ -69,6 +81,8 @@
 							<div>On the date indicated above, I met jointly with the undersigned three or more (potential) members of my doctoral committee to discuss my proposed research.</div>
 
 							<hr/>
+
+							<% if(!isStudent) {%>
 
 							<i><%=signature%></i>
 							<div class="row">
@@ -128,7 +142,7 @@
 								</div>
 							</div>
 							
-							
+							<% } %>
 
 							<div class="verticalSpace"/>
 							
