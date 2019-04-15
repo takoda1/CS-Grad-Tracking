@@ -34,7 +34,7 @@
 						<strong>Submit success!</strong>
 					</div>
 					<% } %>
-					
+
 					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
 					<% } else { %>
@@ -311,7 +311,7 @@
 
 							<hr/>
 
-							<div>Approved</div>
+							<div>Approved:</div>
 							<div class="row">
 								<div class="col-md-3">
 									<select name="approved" class="form-control" id="inputStatus" required>
@@ -322,7 +322,7 @@
 								</div>
 							</div>
 
-							<div>Reason of Diapproval</div>
+							<div>Reason of Diapproval:</div>
 							<div class="row">
 								<div class="col-md-4">
 									<textarea class="form-control" rows="6" name="approvalReason"><%=form.approvalReason%></textarea>
@@ -343,6 +343,45 @@
 								</div>
 							</div>
 
+							<% } else { %>
+							<div class="row">
+								<div class="col-md-2">
+									Adviser signature:
+								</div>
+								<div class="col-md-4">
+									<%=form.adviserSignature%>
+								</div>
+							</div>
+
+							<hr/>
+
+							<div>Approved:</div>
+							<div class="row">
+								<div class="col-md-3">
+										<%=form.approved%>
+									</select>
+								</div>
+							</div>
+
+							<div>Reason of Diapproval:</div>
+							<div class="row">
+								<div class="col-md-4">
+									<%=form.approvalReason%>
+								</div>
+							</div>
+
+							<hr/>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Director Signature:</div>
+									<%=form.directorSignature%>
+								</div>
+								<div class="col-md-4">
+									<div>Date signed</div>
+									<%=form.directorDateSigned%>
+								</div>
+							</div>
 							<% } %>
 
 							<button type="submit" class="btn btn-primary">Submit</button>

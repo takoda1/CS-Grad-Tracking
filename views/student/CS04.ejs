@@ -130,12 +130,36 @@
 
 							<div class="row">
 								<div class="col-md-4">
-									<div>Approved</div>
+									<div>Approved:</div>
 									<select name="approved" class="form-control" id="inputStatus">
 										<option value=<%=form.approved%>><%=form.approved%></option>
 										<option value=false>Not approved.</option>
 										<option value=true>Approved</option>
 									</select>
+								</div>
+							</div>
+
+							<% } else { %>
+							<div class="verticalSpace"/>
+
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div>Chairman Signature:</div>
+									<%=form.chairmanSignature%>
+								</div>
+								<div class="col-md-3">
+									<div>Date signed</div>
+									<%=form.chairmanDateSigned%>
+								</div>
+							</div>
+
+							<div class="verticalSpace" />
+
+							<div class="row">
+								<div class="col-md-4">
+									<div>Approved:</div>
+									<%=form.approved%>
 								</div>
 							</div>
 

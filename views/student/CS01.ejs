@@ -34,7 +34,7 @@
 						<strong>Submit success!</strong>
 					</div>
 					<% } %>
-					
+
 					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
 					<% } else { %>
@@ -348,7 +348,23 @@
 									<input type="text" class="form-control" name="advisorDateSigned" value="<%=form.advisorDateSigned%>" required />
 								</div>
 							</div>
-							 <% } %>
+
+							 <% } else { %>
+
+
+							
+							<div class="row">
+								<div class="col-md-5">
+									<div>Advisor Signature:</div>
+									<%=form.advisorSignature%>
+								</div>
+								<div class="col-md-2">
+									<div>Date signed:</div>
+									<%=form.advisorDateSigned%>
+								</div>
+							</div>
+
+							<% } %>
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
