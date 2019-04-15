@@ -50,6 +50,18 @@
 								</div>
 
 								<div class="form-group row">
+									<label for="inputPronouns" class="col-md-4">Pronouns</label>
+									<div class="col-md-8">
+										<select name="pronouns" class="form-control" id="inputPronouns">
+											<option value=""></option>
+											<% for(var i=0; i<pronouns.length; i++) { %>
+												<option value="<%= pronouns[i]%>"> <%=pronouns[i]%> </option>
+											<% } %>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group row">
 									<label for="inputPid" class="col-md-4">PID *</label>
 									<div class="col-md-8">
 										<input type="number" class="form-control" id="inputPid" name="pid" placeholder="PID" required/>

@@ -25,10 +25,15 @@ var facultySchema = mongoose.Schema({
 // Students
 var studentSchema = mongoose.Schema({
   onyen: String,
+  csid: String,
   firstName: String,
   lastName: String,
+  pronouns: {
+  	type: String,
+  	enum: ["she, her", "he, him", "they, them", "ze, zie", "hir, hirs", "xe, xem", "pe, per", "e/ey, em", "(f)ae, (f)aer", "None"],
+  	default: "None"
+  },
   pid: Number,
-  csid: Number,
   status: {
     type: String,
     enum: ["Active", "Inactive", "Leave", "Graduated", "Ineligible"],
