@@ -41,7 +41,7 @@
 					<% } else { %>
 					<%- include("../partials/studentBarPartial.ejs") %>
 					<% } %>
-					
+
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 
 					<h3>Course Waiver</h3>
@@ -119,6 +119,34 @@
 								<div class="col-md-3">
 									<div>Date signed</div>
 									<input type="text" class="form-control" name="instructorDateSigned" value="<%=form.instructorDateSigned%>" required />
+								</div>
+							</div>
+
+							<% } else { %>
+
+							
+							<div class="row">
+								<div class="col-md-5">
+									<div>Advisor signature:</div>
+									<%=form.advisorSignature%>
+								</div>
+								<div class="col-md-3">
+									<div>Date signed</div>
+									<%=form.advisorDateSigned%>
+								</div>
+							</div>
+
+							<div class="verticalSpace"/>
+
+							<div></div>
+							<div class="row">
+								<div class="col-md-5">
+									<div>Designated Instructor Signature:</div>
+									<%=form.instructorSignature%>
+								</div>
+								<div class="col-md-3">
+									<div>Date signed</div>
+									<%=form.instructorDateSigned%>
 								</div>
 							</div>
 

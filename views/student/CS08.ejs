@@ -134,7 +134,7 @@
 								</div>
 							</div>
 
-							<div>Secondary Reader signature</div>
+							<div>Secondary Reader signature:</div>
 							<div class="row">
 								<div class="col-md-6">
 									<i><%=signature%></i>
@@ -146,6 +146,34 @@
 								</div>
 							</div>
 
+							<% } else { %>
+							<strong>Approval</strong>
+
+							<div>We have judged this paper to be of thesis quality in both substance and presentation. It therefore satisfies the writing requirement for the M.S. in Computer Science.</div>
+
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div>Primary Reader signature:</div>
+									<%=form.primarySignature%>
+								</div>
+								<div class="col-md-6">
+									<div>Date</div>
+									<%=form.primarySignedDate%>
+								</div>
+							</div>
+
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div>Secondary Reader signature:</div>
+									<%=form.secondarySignature%>
+								</div>
+								<div class="col-md-6">
+									<div>Date</div>
+									<%=form.secondarySignedDate%>
+								</div>
+							</div>
 							<% } %>
 
 							<div class="verticalSpace"/>

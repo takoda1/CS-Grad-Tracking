@@ -273,7 +273,7 @@
 
 							<div class="row" align ="center">
 								<div class="col-md-3">
-									Organiztion*
+									Organization*
 								</div>
 								<div class="col-md-5">
 									<input type="range" name="organization" min="-3" max="3" step=".25" value=<%=form.organization%> />
@@ -342,6 +342,161 @@
 								</textarea>
 							</div>
 
+							<% } else{ %>
+
+							<strong>Advisor Section:</strong>
+							<div>I have reviewed the PRP report and will review the student's PRP presentation.</div>
+							
+							<div class="row">
+								<div class="col-md-5">
+									<div>Research Advisor Signature*</div>
+									<%=form.advisorSignature%>
+								</div>
+								<div class="col-md-2">
+									<div>Date*</div>
+									<%=form.advisorDateSigned%>
+								</div>
+							</div>
+
+							<hr/>
+
+							<strong>Part 2. Each of us has read ( and reviewed in writing) the PRP Report.</strong>
+
+							<div class="verticalSpace"/>
+
+							<strong>Committee Members</strong>
+							<div class="row">
+								<div class="col-md-5">
+									Signature:*
+								</div>
+								<div class="col-md-2">
+									Date:*
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-5">
+									<div><%=form.committeeSignature1%></div>
+									<div><%=form.committeeSignature2%></div>
+									<div><%=form.committeeSignature3%></div>
+									<div><%=form.committeeSignature4%></div>
+								</div>
+									
+								<div class="col-md-2">
+									
+									<div><%=form.committeeDateSigned1%></div>
+									<div><%=form.committeeDateSigned2%></div>
+									<div><%=form.committeeDateSigned3%></div>
+									<div><%=form.committeeDateSigned4%></div>
+								</div>
+							</div>
+
+							<hr/>
+
+							<strong>Part 3. PRP Committee Joint Report</strong>
+							<div class="row">
+								<div class="col-md-4">
+									Preliminary research presentation date*:
+								</div>
+								<div class="col-md-2">
+									<%=form.presentationDate%>
+								</div>
+							</div>
+
+							<div class="verticalSpace"/>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Integration of concepts*
+								</div>
+								<div class="col-md-5">
+								<%=form.conceptIntegration%>
+								</div>
+							</div>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Creativity*
+								</div>
+
+								<div class="col-md-5">
+									<%=form.creativity%>
+								</div>
+
+							</div>
+
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Clarity*
+								</div>
+								<div class="col-md-5">
+									<%=form.clarity%>
+								</div>
+							</div>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Abstraction and formality*
+								</div>
+								<div class="col-md-5">
+									<%=form.abstractionFormality%>
+								</div>
+							</div>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Organization*
+								</div>
+								<div class="col-md-5">
+									<%=form.organization%>
+								</div>
+							</div>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Writing*
+								</div>
+								<div class="col-md-5">
+									<%=form.writing%>
+									
+								</div>
+							</div>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Presentation*
+								</div>
+								<div class="col-md-5">
+									<%=form.presentation%>
+									
+								</div>
+							</div>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									Answering questions*
+								</div>
+								<div class="col-md-5">
+									<%=form.answeringQuestion%>
+								</div>
+							</div>
+
+							<div class="verticalSpace"/>
+
+							<div class="row" align ="center">
+								<div class="col-md-3">
+									<div>Overall Score*</div>
+										
+								</div>
+								<div class="col-md-5">
+									<%=form.overallScore%>
+								</div>
+							</div>
+
+							<div><strong>Feedback on Research, Presentation, and Paper:</strong></div>
+							<div class="col-md-4">
+								<%=form.feedback%>
+							</div>
 							<% } %>
 
 							<div class="verticalSpace"/>

@@ -35,7 +35,7 @@
 						<strong>Submit success!</strong>
 					</div>
 					<% } %>
-				
+
 					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
 					<% } else { %>
@@ -132,8 +132,8 @@
 							<div class="row">
 								<div class="col-md-2">
 									<div>Category*</div>
-									<select name="breadthCourseCategory1" class="form-control">
-										<option value=<%=form.breadthCourseCategory1%>><%=form.breadthCourseCategory1%> required </option>
+									<select name="breadthCourseCategory1" class="form-control" required>
+										<option value=<%=form.breadthCourseCategory1%> ><%=form.breadthCourseCategory1%> </option>
 										<option value="T">T</option>
 										<option value="S">S</option>
 										<option value="A">A</option>
@@ -526,6 +526,13 @@
 								</div>
 							</div>
 
+							<% } else { %>
+							<div class="row">
+								<div class="col-md-4">
+									<div>Director of Graduate Studies Signature:*</div>
+									<%=form.directorSignature%>
+								</div>
+							</div>
 							<% } %>
 
 							<div class="verticalSpace" />
