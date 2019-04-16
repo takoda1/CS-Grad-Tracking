@@ -191,6 +191,35 @@ _.checkAdvisor = function(studentID){
   });
 }
 
+_.checkAdvisorAdmin = function(studentID){
+  return new Promise((resolve, reject)=>{
+    schema.Faculty.findOne({pid: process.env.userPID}).exec().then(function(result){
+      if(result.admin == true){
+        resolve(true);
+      }
+      else{
+        schema.Student.findOne({_id: studentID}).exec().then(function(result){
+          if(result != null){
+            if(result.advisor != null){
+              schema.Faculty.findOne({_id: result.advisor}).exec().then(function(result){
+                if(result.pid == process.env.userPID){
+                  resolve(true);
+                } else {
+                  resolve(false);
+                }
+              });
+            } else {
+              resolve(false);
+            }
+          } else {
+            resolve(false);
+          }
+        });
+      }
+    });
+  });
+}
+
 _.checkStudent = function(){
   return new Promise((resolve, reject)=>{
     schema.Student.findOne({pid: process.env.userPID}).exec().then(function(result){
