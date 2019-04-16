@@ -86,9 +86,16 @@
 								</textarea>
 							</div>
 
+
+
 							<hr/>
+
+							
+
 							<strong>Agreement to Review</strong>
 							<div>The final draft to the primary reader must be delivered 4 weeks before the last day of classes of the semester in which the student plans to graduate.  We recommend that you work with the primary reader throughout the semester, first creating an outline, and then iterating over several drafts.</div>
+
+							<% if(!isStudent) {%>
 
 							<div class="row">
 								<div class="col-md-6">
@@ -116,7 +123,7 @@
 
 							<hr/>
 
-							<% if(!isStudent) {%>
+							
 
 							<strong>Approval</strong>
 
@@ -147,6 +154,33 @@
 							</div>
 
 							<% } else { %>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Primary Reader</div>
+									<%=form.primaryReader%>
+								</div>
+								<div class="col-md-6">
+									<div>Date Draft Received</div>
+									<%=form.primaryDate%>
+								</div>
+							</div>
+
+							<div>The final draft to the secondary reader must be delivered 2 weeks before the last day of classes of the semester in which the student plans to graduate.</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div>Secondary Reader</div>
+									<%=form.secondaryReader%>
+								</div>
+								<div class="col-md-6">
+									<div>Date Draft Received</div>
+									<%=form.secondaryDate%>
+								</div>
+							</div>
+
+							<hr/>
+
 							<strong>Approval</strong>
 
 							<div>We have judged this paper to be of thesis quality in both substance and presentation. It therefore satisfies the writing requirement for the M.S. in Computer Science.</div>

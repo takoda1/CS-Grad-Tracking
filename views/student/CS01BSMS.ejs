@@ -36,7 +36,6 @@
 					</div>
 					<% } %>
 
-					<% } %>
 					<% if(!isStudent) {%>
 					<%- include("./studentBarPartial.ejs") %>
 					<% } else { %>
@@ -56,7 +55,8 @@
 
 						<strong>All fields required!</strong>
 						<hr></hr>
-					
+						
+						<% if(hasAccess) { %>
 
 						<form action="<%=postMethod%>" method="post">
 
@@ -224,6 +224,10 @@
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
+
+						<% } else{%>
+						<div> You do not have access</div>
+						<% } %>
 					</div>
 				</div>
 			</div>

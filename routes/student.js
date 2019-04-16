@@ -62,13 +62,13 @@ router.get('/', authorizeFaculty, student.get);
 
 router.get('/create', authorizeAdmin, student.create);
 
-router.get('/edit/:_id', authorizeAdvisor, student.edit);
+router.get('/edit/:_id', authorizeFaculty, student.edit);
 
 router.get("/jobs/:_id", authorizeAdvisor, student.jobs);
 
 router.get("/notes/:_id", authorizeAdvisor, student.notesPage);
 
-router.get("/forms/:_id", authorizeAdvisor, student.formPage);
+router.get("/forms/:_id", authorizeFaculty, student.formPage);
 //pdf version of forms page route
 //router.get("/forms/:_id/:uploadSuccess", authorizeAdvisor, student.formPage);
 
@@ -86,9 +86,15 @@ router.get("/courses/:_id", authorizeAdvisor, student.courses);
 router.get("/uploadCourses/:uploadSuccess", authorizeAdmin, student.uploadCoursePage);
 
 //next two are new form routes
-router.get("/forms/viewForm/:_id/:title/:uploadSuccess", authorizeAdvisor, student.viewForm);
+router.get("/forms/viewForm/:_id/:title/:uploadSuccess", authorizeFaculty, student.viewForm);
 
-router.post("/forms/update/:_id/:title", authorizeAdvisor, student.updateForm);
+/*
+It is "bad" practice to theoretically allow any faculty to update any students'
+form. On a form by form basis, the form will be hidden depending on who
+is required to fill out the form. (If only student/advisor, hidden to everyone else)
+(if student/advisor/otherFaculty the form will show to otherFaculty)
+*/
+router.post("/forms/update/:_id/:title", authorizeFaculty, student.updateForm);
 
 router.post('/post', authorizeAdmin, student.post);
 

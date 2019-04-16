@@ -66,7 +66,10 @@ studentController.get = function (req, res) {
 
       }
       else{
-        input.advisor = result._id;
+        //originally here to allow only students that a faculty is an advisor for
+        //to be seen, but now, to uncomplicate other user signatures on forms, we
+        //allow all faculty to see all students
+        //input.advisor = result._id;
       }
       schema.Student.find(input).sort({lastName:1, firstName:1}).exec().then(function (result) {
         res.render("../views/student/index.ejs", {students: result, admin: admin, search: search});
@@ -337,8 +340,14 @@ studentController.viewForm = function(req, res){
             form = result;
           }
           var isStudent = false;
-          var postMethod = "/student/forms/update/"+student._id+"/"+req.params.title;
-         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess, isStudent: isStudent, postMethod: postMethod});
+          util.checkAdvisorAdmin(req.params._id).then(function(result){
+            var hasAccess;
+            if(result){hasAccess = true;}
+            else{hasAccess = false;}
+            var postMethod = "/student/forms/update/"+student._id+"/"+req.params.title;
+            res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess, isStudent: isStudent, postMethod: postMethod, hasAccess: hasAccess});
+          });
+          
         });
       }
       else{

@@ -49,6 +49,9 @@
 
 					<div align="left">
 
+
+						<% if(hasAccess) { %>
+						
 						<form action="/student/forms/update/<%=student._id%>/CS05" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
@@ -72,7 +75,7 @@
 
 							<div class="row">
 								<div class="col-md-2">
-									<div>Oral Comprehensive Examination*</div>
+									<div>Appointment for Oral Comprehensive Examination*</div>
 								</div>
 								<div class="col-md-2">
 									<select name="oralComprehensiveExam" class="form-control" id="inputStatus">
@@ -190,6 +193,8 @@
 										</div>
 									</div>
 								</div>
+
+								<% if(!isStudent) { %>
 								<div class="col-md-3">
 									<div class="form-group row">
 										<div class="col-md-12">
@@ -247,6 +252,8 @@
 									</div>
 
 								</div>
+								<% } %>
+
 								<div class="col-md-1">
 									<% for(var i = 1; i < 6; i++) { %>
 										<div class="form-group row">
@@ -332,6 +339,10 @@
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
+
+						<% } else{%>
+						<div> You do not have access</div>
+						<% } %>
 					</div>
 				</div>
 			</div>

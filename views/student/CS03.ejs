@@ -50,6 +50,8 @@
 
 						<hr></hr>
 
+						<% if(hasAccess) { %>
+
 						<form action="<%=postMethod%>" method="post">
 
 							<input type="hidden" class="form-control" name="student" value=<%=student._id%> />
@@ -386,6 +388,11 @@
 
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
+
+						<% } else{%>
+						<div> You do not have access</div>
+						<% } %>
+						
 					</div>
 				</div>
 			</div>
