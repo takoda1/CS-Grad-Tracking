@@ -1,5 +1,5 @@
-<!-- views/job/notes.ejs -->
 <!DOCTYPE html>
+<!-- views/job/notes.ejs -->
 
 <html>
 	<head>
@@ -21,10 +21,13 @@
 					<h4><%=student.lastName%>, <%=student.firstName%></h4>
 					<h1>Notes</h1>
 
+
 					<% for(var i = 0; i < notes.length; i++) { %>
-					<form action="/student/notes/upload/<%=student._id%>/<%=notes[i]._id%>" method="post">
-						<div class="form-group row">
-							<div class="col-md-12">
+
+					<div class="row verticalSpace">
+						<div class="col-md-10">
+							<form action="/student/notes/upload/<%=student._id%>/<%=notes[i]._id%>" method="post">
+								
 								<div class="row">
 									<label class="col-md-1">Title</label>
 									<div class="col-md-4">
@@ -44,36 +47,41 @@
 								</div>
 
 								<div class="col-md-8 offset-md-2">
-									<button type="submit" class="btn btn-success">Update</button>
+									<button type="submit" class="btn btn-success verticalSpace">Update</button>
 								</div>
-							</div>
+							</form>
 						</div>
-					</form>
-					<form action="/student/notes/delete/<%=student._id%>" method="post">
-						<input type="hidden" name="noteID" value=<%=notes[i]._id%> />
-						<div class="col-md-8 offset-md-2">
-							<button type="submit" class="btn btn-default">Delete</button>
+						<div class="col-md-2">
+							<form action="/student/notes/delete/<%=student._id%>" method="post">
+								<input type="hidden" name="noteID" value=<%=notes[i]._id%> />
+								<div class="col-md-8 offset-md-2">
+									<button type="submit" class="btn btn-default">Delete</button>
+								</div>
+							</form>
 						</div>
-					</form>
+					</div>
+					<hr/>
 					<% } %>
+
+					
 
 					<form action="/student/notes/upload/<%=student._id%>" method="post">
 						<div class="form-group row">
 							<div class="col-md-12">
 								<div class="row">
 									<label class="col-md-1">Title</label>
-									<div class="col-md-4">
+									<div class="col-md-3">
 										<input type="text" class="form-control" name="title" required/>
 									</div>
 									<label class="col-md-1 offset-md-1">Date</label>
-									<div class="col-md-4">
+									<div class="col-md-3">
 										<input type="Date" class="form-control" name="date" value="<%=Date().toString()%>" required/>
 									</div>
 								</div>
 
 								<div class="row">
 									<label class="col-md-1">Note</label>
-									<div class="col-md-11">
+									<div class="col-md-9">
 										<input type="text" class="form-control" name="note" required/>
 									</div>
 								</div>
