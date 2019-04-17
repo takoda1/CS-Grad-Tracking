@@ -171,3 +171,8 @@ This is for highlighting search text on index pages
 .slider{
 	background-image:url("../../images/slider.png");
 } 
+
+#departmentInput{
+	font-size:10px;
+	height:38px;
+}
