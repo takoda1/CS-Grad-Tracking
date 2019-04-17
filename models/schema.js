@@ -113,7 +113,7 @@ var semesterSchema = mongoose.Schema({
 // Courses
 var courseSchema = mongoose.Schema({
   department: String,
-  number: Number,
+  number: String,
   univNumber: Number,
   name: String,
   category: {
@@ -128,7 +128,7 @@ var courseSchema = mongoose.Schema({
 });
 
 var courseInfoSchema = mongoose.Schema({
-  number: Number,
+  number: String,
   name: String,
   hours: Number
 })

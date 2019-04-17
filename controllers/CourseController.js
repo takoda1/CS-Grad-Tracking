@@ -30,6 +30,7 @@ var courseController = {};
  * 
  * @throws {Object} RequiredParamNotFound (should not occur if frontend done correctly)
  */
+ 
 courseController.post = function (req, res) {
   var input = req.body;
   if(input.department != null && input.courseInfo != null &&
@@ -537,30 +538,33 @@ courseController.uploadInfo = function(req, res){
     var data = [];
     var i = 0;
     var j = 0;
+    console.log("Here1");
     for(var field in schema.CourseInfo.schema.obj){
       headers[String.fromCharCode(i+65)] = field;
       i++;
     }
     for(z in worksheet) {
-        if(z[0] === '!') continue;
-        //parse out the column, row, and value
-        var col = z.substring(0,1);
-        var row = parseInt(z.substring(1));
-        var value = worksheet[z].v;
+      if(z[0] === '!') continue;
+      //parse out the column, row, and value
+      var col = z.substring(0,1);
+      var row = parseInt(z.substring(1));
+      var value = worksheet[z].v;
 
-        if(!data[row]) data[row]={};
-        data[row][headers[col]] = value;
+      if(!data[row]) data[row]={};
+      data[row][headers[col]] = value;
     }
     //drop those first two rows which are empty
     data.shift();
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
-    //console.log(data);
+    console.log(data);
     var count = 0;
     data.forEach(function(element){
       //verify that all fields exist
+      console.log("Here2");
       if(util.allFieldsExist(element, schema.CourseInfo)){
+        console.log("Here3");
         var inputCourseInfo = new schema.CourseInfo(element);
         inputCourseInfo.save().then(function(result){
           count++;
