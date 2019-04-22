@@ -39,6 +39,9 @@ facultyController.post = function (req, res) {
   if(input.admin == null){
     input.admin = false;
   }
+  if(input.email == null){
+    input.email = "None";
+  }
   //Verify that all fields exist. Should be though if front end is done correctly.
   if(util.allFieldsExist(input, schema.Faculty)){
     /*onyen and pid are unique, so look for faculty using those two fields to check
