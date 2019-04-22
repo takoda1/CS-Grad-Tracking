@@ -102,7 +102,6 @@ courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
   schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
-    console.log(result);
     result.sort(function(a, b){
       if(a.semester.year == b.semester.year){
         if(a.semester.season < b.semester.season){
@@ -125,7 +124,6 @@ courseController.get = function (req, res) {
     });
     var courses = result;
     schema.Semester.findOne({_id:input.semester}).exec().then(function(result){
-      console.log(result);
       if(result != null){
         input.semester = result.season + " " + result.year;
       }
@@ -422,10 +420,10 @@ courseController.upload = function(req, res){
                 //     console.log(result);
                 //   })
                 // }
+
                 schema.CourseInfo.findOne({number: element.number, hours: element.hours}).exec().then(function(result){
                   if(result == null){
                     var temp = util.validateModelData(element, schema.CourseInfo);
-                    console.log(temp);
                     
                     var inputCourseInfo = new schema.CourseInfo(temp);
                       inputCourseInfo.save().then(function(result){
@@ -538,7 +536,6 @@ courseController.uploadInfo = function(req, res){
     var data = [];
     var i = 0;
     var j = 0;
-    console.log("Here1");
     for(var field in schema.CourseInfo.schema.obj){
       headers[String.fromCharCode(i+65)] = field;
       i++;
@@ -558,13 +555,10 @@ courseController.uploadInfo = function(req, res){
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
-    console.log(data);
     var count = 0;
     data.forEach(function(element){
       //verify that all fields exist
-      console.log("Here2");
       if(util.allFieldsExist(element, schema.CourseInfo)){
-        console.log("Here3");
         var inputCourseInfo = new schema.CourseInfo(element);
         inputCourseInfo.save().then(function(result){
           count++;

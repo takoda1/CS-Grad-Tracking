@@ -36,16 +36,22 @@
 								</div>
 
 								<% if (student.csid != student.onyen) {%>
+									<div id="hidecsid" class="form-group row">
+										<label class="col-md-4">CSID</label>
+										<div class="col-md-8">
+											<div><%=student.csid%></div>
+											<input type="hidden" class="form-control" name="csid" value="<%=student.csid%>" required/>
+										</div>
+									</div>
+								<%}%>
 
-								<div id="hidecsid" class="form-group row">
-									<label class="col-md-4">CSID</label>
+								<div class="form-group row">
+									<label class="col-md-4">Email</label>
 									<div class="col-md-8">
-										<div><%=student.csid%></div>
-										<input type="hidden" class="form-control" name="csid" value="<%=student.csid%>" required/>
+										<div><%=student.email%></div>
+										<input type="hidden" class="form-control" name="email" value="<%=student.email%>" required/>
 									</div>
 								</div>
-
-								<%}%>
 
 								<div class="form-group row">
 									<label for="inputFirstname" class="col-md-4">First name *</label>
