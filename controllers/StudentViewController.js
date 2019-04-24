@@ -136,6 +136,7 @@ studentViewController.viewForm = function(req, res){
             form = result;
           }
           var isStudent = true;
+          var hasAccess = true;
           var postMethod = "/studentView/forms/update/"+req.params.title;
           /*Need both an administrator view of form and a student view of form,
           with varying levels of ability to update data fields, and with minor html
@@ -143,7 +144,7 @@ studentViewController.viewForm = function(req, res){
           form version depending on whether it is an administrator/faculty
           or student viewing the form.
           */
-         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess, isStudent: isStudent, postMethod: postMethod});
+         res.render("../views/student/"+req.params.title, {student: student, form: form, signature: signature, uploadSuccess: uploadSuccess, isStudent: isStudent, postMethod: postMethod, hasAccess: hasAccess});
         });
       }
       else{

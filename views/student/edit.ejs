@@ -1,5 +1,5 @@
-<!-- views/student/edit.ejs -->
 <!DOCTYPE html>
+<!-- views/student/edit.ejs -->
 
 <html>
 	<head>
@@ -219,15 +219,16 @@
 									</div>
 								</div>
 
-							</div>
-							<div class="col-md-4">
-
 								<div class="form-group row">
 									<label for="inputProgramOfStudyApproved" class="col-md-4">Program of study approved</label>
 									<div class="col-md-8">
 										<input type="date" class="form-control" id="inputProgramOfStudyApproved" name="programOfStudyApproved" <% if(student.programOfStudyApproved != null) { %> value=<%=student.programOfStudyApproved.toISOString().substring(0,10)%> <% } %>/>
 									</div>
 								</div>
+
+							</div>
+							<div class="col-md-4">
+								
 
 								<div class="form-group row">
 									<label for="inputResearchPlanningMeeting" class="col-md-4">Research planning meeting</label>
@@ -268,6 +269,13 @@
 									<label for="inputDissertationSubmitted" class="col-md-4">Dissertation submitted</label>
 									<div class="col-md-8">
 										<input type="date" class="form-control" id="inputDissertationSubmitted" name="dissertationSubmitted" <% if(student.dissertationSubmitted != null) { %> value=<%=student.dissertationSubmitted.toISOString().substring(0,10)%> <% } %>/>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPHDAwarded" class="col-md-4">PhD. Awarded</label>
+									<div class="col-md-8">
+										<input type="date" class="form-control" id="inputPHDAwarded" name="phdAwardedDate" <% if(student.phdAwardedDate != null) { %> value=<%=student.phdAwardedDate.toISOString().substring(0,10)%> <% } %> />
 									</div>
 								</div>
 
