@@ -11,7 +11,12 @@ var studentController = {}
 
 studentController.post = function (req, res) {
   var input = req.body;
+  console.log(input);
   input = verifyBoolean(input);
+
+  if(input.phdAwardedDate != ""){
+    input.status = "Graduated";
+  }
   //verify that the required fields are not null
   if(input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN && input.advisor != null){
     //try to find a student by unique identifiers: onyen or PID, display error page if one found
@@ -83,6 +88,9 @@ studentController.get = function (req, res) {
 studentController.put = function (req, res) {
   var input = req.body;
   input = verifyBoolean(input);
+  if(input.phdAwardedDate != ""){
+    input.status = "Graduated";
+  }
   var input = util.validateModelData(input, schema.Student);
   if (input.onyen != null && input.firstName != null && input.lastName != null && input.pid != null && input.pid != NaN) {
     schema.Student.findOneAndUpdate({_id: input._id}, input).exec().then(function(result){
@@ -98,7 +106,7 @@ studentController.put = function (req, res) {
 }
 
 studentController.delete = function (req, res) {
-  var id = req.params._id
+  var id = req.params._id;
   if (id != null) {
     /*Documents reference students; since documents are
     personal student documents, just delete the documents. 
