@@ -13,7 +13,8 @@ var adminSchema = mongoose.Schema({
 // Faculty
 var facultySchema = mongoose.Schema({
   onyen: String,
-  csID: String,
+  csid: String,
+  email: String,
   firstName: String,
   lastName: String,
   pid: Number,
@@ -26,6 +27,7 @@ var facultySchema = mongoose.Schema({
 var studentSchema = mongoose.Schema({
   onyen: String,
   csid: String,
+  email: String,
   firstName: String,
   lastName: String,
   pronouns: {
@@ -114,7 +116,7 @@ var semesterSchema = mongoose.Schema({
 // Courses
 var courseSchema = mongoose.Schema({
   department: String,
-  number: Number,
+  number: String,
   univNumber: Number,
   name: String,
   category: {
@@ -129,7 +131,7 @@ var courseSchema = mongoose.Schema({
 });
 
 var courseInfoSchema = mongoose.Schema({
-  number: Number,
+  number: String,
   name: String,
   hours: Number
 })

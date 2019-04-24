@@ -30,6 +30,7 @@ var courseController = {};
  * 
  * @throws {Object} RequiredParamNotFound (should not occur if frontend done correctly)
  */
+ 
 courseController.post = function (req, res) {
   var input = req.body;
   if(input.department != null && input.courseInfo != null &&
@@ -101,7 +102,6 @@ courseController.get = function (req, res) {
   var input = req.query;
   input = util.validateModelData(input, schema.Course); //remove fields that are empty/not part of course definition
   schema.Course.find(input).populate("faculty").populate("semester").sort({number:1}).exec().then(function(result){
-    console.log(result);
     result.sort(function(a, b){
       if(a.semester.year == b.semester.year){
         if(a.semester.season < b.semester.season){
@@ -124,7 +124,6 @@ courseController.get = function (req, res) {
     });
     var courses = result;
     schema.Semester.findOne({_id:input.semester}).exec().then(function(result){
-      console.log(result);
       if(result != null){
         input.semester = result.season + " " + result.year;
       }
@@ -421,10 +420,10 @@ courseController.upload = function(req, res){
                 //     console.log(result);
                 //   })
                 // }
+
                 schema.CourseInfo.findOne({number: element.number, hours: element.hours}).exec().then(function(result){
                   if(result == null){
                     var temp = util.validateModelData(element, schema.CourseInfo);
-                    console.log(temp);
                     
                     var inputCourseInfo = new schema.CourseInfo(temp);
                       inputCourseInfo.save().then(function(result){
@@ -542,21 +541,20 @@ courseController.uploadInfo = function(req, res){
       i++;
     }
     for(z in worksheet) {
-        if(z[0] === '!') continue;
-        //parse out the column, row, and value
-        var col = z.substring(0,1);
-        var row = parseInt(z.substring(1));
-        var value = worksheet[z].v;
+      if(z[0] === '!') continue;
+      //parse out the column, row, and value
+      var col = z.substring(0,1);
+      var row = parseInt(z.substring(1));
+      var value = worksheet[z].v;
 
-        if(!data[row]) data[row]={};
-        data[row][headers[col]] = value;
+      if(!data[row]) data[row]={};
+      data[row][headers[col]] = value;
     }
     //drop those first two rows which are empty
     data.shift();
     data.shift();
     //try to create models
     //have to use foreach because of asynchronous nature of mongoose stuff (the loop would increment i before it could save the appropriate i)
-    //console.log(data);
     var count = 0;
     data.forEach(function(element){
       //verify that all fields exist
