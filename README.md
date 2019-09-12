@@ -1,4 +1,5 @@
 # CS-Grad-Tracking
+# NOW ON GITLAB: https://gitlab.com/unc-cs-toolsmiths/CS-Grad-Tracking
 Code Closer project for UNC-CH grad department
 
 This project is assigned as part of the Code Closer Work-Study program at The Univsersity of North Carolina at Chapel Hill. 
