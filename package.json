@@ -9,7 +9,7 @@
     "authenticate-pam": "^1.0.2",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
-    "bootstrap": "^4.1.2",
+    "bootstrap": "^4.3.1",
     "client-sessions": "^0.8.0",
     "compression": "^1.7.3",
     "connect-multiparty": "^2.1.1",
